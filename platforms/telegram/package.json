@@ -1,0 +1,7 @@
+{
+  "name": "@lastgram/telegram",
+  "version": "1.0.0",
+  "dependencies": {
+    "@lastgram/logging": "^1.0.0"
+  }
+}
