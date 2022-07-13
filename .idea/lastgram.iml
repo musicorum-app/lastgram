@@ -9,6 +9,13 @@
       <excludeFolder url="file://$MODULE_DIR$/.yarn/cache" />
       <excludeFolder url="file://$MODULE_DIR$/platforms/telegram/dist" />
       <excludeFolder url="file://$MODULE_DIR$/essentials/database/prisma-client" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/database/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/platforms/telegram/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/core/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/core/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/database/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/logging/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/essentials/logging/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

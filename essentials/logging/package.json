@@ -1,5 +1,12 @@
 {
   "name": "@lastgram/logging",
   "version": "1.0.0",
-  "main": "index.js"
+  "main": "dist/Logger.js",
+  "type": "module",
+  "dependencies": {
+    "chalk": "^5.0.1"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
 }

@@ -191,3 +191,4 @@ dist
 
 **/**/dist
 essentials/database/prisma-client
+**/**/.turbo

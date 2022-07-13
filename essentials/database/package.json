@@ -1,14 +1,16 @@
 {
   "name": "@lastgram/database",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "yarn prisma generate"
-  },
+  "main": "dist/Database.js",
+  "type": "module",
   "dependencies": {
     "@lastgram/logging": "workspace:^"
+  },
+  "scripts": {
+    "build": "yarn prisma generate && tsc"
   },
   "devDependencies": {
     "prisma": "^4.0.0"
   }
 }
+

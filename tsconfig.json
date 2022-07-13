@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "es2022",
+    "target": "es2022",
+    "sourceMap": true,
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "resolveJsonModule": true
+  }
+}

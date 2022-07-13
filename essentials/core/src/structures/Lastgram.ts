@@ -25,7 +25,9 @@ export class Lastgram {
         .join('') + '.js'
 
     try {
-      const Command = await import(`../commands/${fixedName}`)
+      const Command = await import(
+        `./essentials/core/src/commands/${fixedName}`
+      )
       const cmd = new Command(this)
       this.#commandRegistry.set(name, cmd)
       return cmd

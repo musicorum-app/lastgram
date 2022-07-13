@@ -3,12 +3,18 @@
   "packageManager": "yarn@3.2.1",
   "type": "module",
   "private": true,
+  "scripts": {
+    "build": "yarn turbo run build"
+  },
   "workspaces": [
     "essentials/*",
     "platforms/*"
   ],
   "devDependencies": {
-    "prisma": "^4.0.0"
+    "@types/node": "^18.0.4",
+    "prisma": "^4.0.0",
+    "turbo": "^1.3.1",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@prisma/client": "4.0.0"

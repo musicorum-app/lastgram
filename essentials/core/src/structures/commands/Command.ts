@@ -34,5 +34,5 @@ export class Command {
     }
   }
 
-  beforeRun() {}
+  beforeRun(ctx) {}
 }
