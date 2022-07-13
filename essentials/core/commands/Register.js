@@ -1,11 +1,9 @@
-import { Command } from "../structures/commands/Command.js";
+import { Command } from '../structures/commands/Command.js'
 
-export class Register extends Command {
-  aliases = ["reg"];
-  name = "register";
-  filter = undefined;
+export default class Register extends Command {
+  name = 'register'
 
-  execute(ctx) {
-    return "que registruda";
+  run(ctx) {
+    return 'que registruda'
   }
 }

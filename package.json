@@ -1,6 +1,7 @@
 {
   "name": "@lastgram/root",
   "packageManager": "yarn@3.2.1",
+  "type": "module",
   "private": true,
   "workspaces": [
     "essentials/*",

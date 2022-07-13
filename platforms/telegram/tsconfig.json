@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es2022",
+    "sourceMap": true,
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "rootDir": "./src"
+  }
+}
