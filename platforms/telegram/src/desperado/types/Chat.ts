@@ -1,6 +1,6 @@
 export interface Chat {
   id: number
   type: string
-  title?: String
-  username?: String
+  title?: string
+  username?: string
 }

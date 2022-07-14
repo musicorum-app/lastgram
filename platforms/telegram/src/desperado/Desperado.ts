@@ -3,6 +3,8 @@ import EventEmitter from 'node:events'
 import { Update } from './types/Update.js'
 import { Logger } from '@lastgram/logging'
 import { User } from './types/User.js'
+import Utils from './structures/Utils.js'
+import { Message } from './types/Message.js'
 
 interface ITGResponse {
   ok: boolean
@@ -12,6 +14,8 @@ interface ITGResponse {
 
 export class DesperadoClient extends EventEmitter {
   apiUrl = 'https://api.telegram.org/bot'
+  utils: Utils
+  me: User
 
   #token: string
   #currentOffset: number | undefined
@@ -25,7 +29,7 @@ export class DesperadoClient extends EventEmitter {
         'Desperado',
         'Please add the TELEGRAM_TOKEN var to your environment.'
       )
-      process.emit('exit', 1)
+      process.exit(1)
     }
     this.#token = token
 
@@ -33,7 +37,11 @@ export class DesperadoClient extends EventEmitter {
     this.#currentOffset = undefined
     this.getMe()
       .then((me) => {
-        Logger.info('Desperado', `Logged in as ${me.first_name}`)
+        Logger.info(
+          'Desperado',
+          `Logged in as ${me.first_name} (@${me.username})`
+        )
+        this.me = me
       })
       .catch(() => {
         Logger.error(
@@ -42,17 +50,19 @@ export class DesperadoClient extends EventEmitter {
         )
         process.emit('exit', 1)
       })
+
+    this.utils = new Utils(this)
   }
 
-  start(): Promise<boolean> {
+  startPolling(): Promise<void> {
     return this.fetchUpdates().then((ups) => {
-      if (this.#shouldStop) return true
-
+      if (this.#shouldStop) return
+      if (!this.me) return this.startPolling()
       ups.forEach((up) => {
         const type = DesperadoClient.#getUpdateType(up)
         this.emit(type[0], up[type[1]])
       })
-      return this.start()
+      return this.startPolling()
     })
   }
 
@@ -68,6 +78,18 @@ export class DesperadoClient extends EventEmitter {
       this.#currentOffset = r[r.length - 1].update_id + 1
       return r
     })
+  }
+
+  sendMessage(
+    chatId: number,
+    text: string,
+    replyingTo: number
+  ): Promise<Message> {
+    return this.#request('sendMessage', {
+      chat_id: chatId,
+      text,
+      reply_to_message_id: replyingTo
+    }) as Promise<Message>
   }
 
   getMe(): Promise<User> {

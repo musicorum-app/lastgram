@@ -4,11 +4,12 @@
   "main": "dist/index.js",
   "type": "module",
   "dependencies": {
+    "@lastgram/database": "workspace:^",
     "@lastgram/logging": "workspace:^",
-    "@lastgram/database": "workspace:^"
+    "dotenv": "^16.0.1",
+    "find-up": "^6.3.0"
   },
   "scripts": {
     "build": "tsc"
   }
 }
-

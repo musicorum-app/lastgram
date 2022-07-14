@@ -4,7 +4,8 @@
   "main": "./dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "run": "node dist/index"
   },
   "dependencies": {
     "@lastgram/core": "workspace:^",

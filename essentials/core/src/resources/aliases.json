@@ -1,5 +1,7 @@
 {
   "ln": "listen",
   "lt": "listen",
-  "lp": "listen"
+  "lp": "listen",
+  "reg": "register",
+  "registrar": "register"
 }

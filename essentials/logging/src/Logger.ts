@@ -5,6 +5,10 @@ export class Logger {
     console.log(fun(`[${level.toUpperCase()}/${label}] `) + msg)
   }
 
+  static debug(label: string, msg: string) {
+    if (process.env.DEBUGGING) Logger.log(chalk.black, 'debug', label, msg)
+  }
+
   static info(label: string, msg: string) {
     Logger.log(chalk.blue, 'info', label, msg)
   }

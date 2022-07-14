@@ -1,5 +1,5 @@
+import '../env.js'
 import { Lastgram } from './structures/Lastgram.js'
 
-const lg = new Lastgram()
-
-export default lg
+export * from './structures/Lastgram.js'
+export const core = new Lastgram()

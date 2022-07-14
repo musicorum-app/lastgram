@@ -7,10 +7,11 @@
     "@lastgram/logging": "workspace:^"
   },
   "scripts": {
-    "build": "yarn prisma generate && tsc"
+    "build": "yarn prisma generate && tsc",
+    "migrate": "yarn prisma migrate dev",
+    "reset": "yarn prisma migrate reset"
   },
   "devDependencies": {
     "prisma": "^4.0.0"
   }
 }
-

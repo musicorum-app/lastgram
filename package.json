@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "yarn turbo run build"
+    "build": "yarn turbo run build",
+    "migrate": "yarn turbo run migrate"
   },
   "workspaces": [
     "essentials/*",
