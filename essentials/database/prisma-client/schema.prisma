@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int             @id @default(autoincrement())
+  createdAt         DateTime        @default(now())
+  platformId        String          @unique @db.VarChar(255)
+  account           FMAccount       @relation(fields: [accountId], references: [id])
+  preferences       UserPreferences @relation(fields: [userPreferencesId], references: [id])
+  accountId         Int             @unique
+  userPreferencesId Int             @unique
+}
+
+model FMAccount {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  username  String   @db.VarChar(255)
+  banned    Boolean  @default(false)
+  token     String?
+  user      User?
+}
+
+model UserPreferences {
+  id                 Int     @id @default(autoincrement())
+  sendAsPhoto        Boolean @default(false)
+  addTags            Boolean @default(false)
+  addArtistScrobbles Boolean @default(false)
+  addAlbumScrobbles  Boolean @default(false)
+  hideName           Boolean @default(false)
+  user               User?
+}

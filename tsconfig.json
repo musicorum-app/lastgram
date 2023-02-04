@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "NodeNext",
+    "strictNullChecks": true,
+    "noImplicitAny": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "outDir": "dist"
+}

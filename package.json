@@ -1,0 +1,37 @@
+{
+  "name": "@lyricalsoul/lastgram",
+  "version": "2.0.0-alpha.1",
+  "description": "lastgram made simple",
+  "main": "dist/index.js",
+  "type": "module",
+  "author": "lyricalsoul <lyricalsoul@pm.me>",
+  "scripts": {
+    "build:watch": "esbuild ./src/multiplatform/platforms/*.ts ./src/commandEngine/commands/**/*.ts ./src/index.ts --watch --bundle --platform=node --target=node19 --color=true --packages=external --format=esm --outdir=dist --splitting",
+    "start": "node dist/index.js",
+    "start:watch": "nodemon --watch dist dist/index.js -r dotenv/config",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "src/**"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "dotenv": "^10.0.0",
+    "esbuild": "^0.17.5",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "@musicorum/lastfm": "^0.1.1",
+    "@polka/parse": "^1.0.0-next.0",
+    "@polka/send-type": "^0.5.2",
+    "country-emoji": "^1.5.6",
+    "date-fns": "^2.29.3",
+    "marked": "^4.2.12",
+    "piscina": "^3.2.0",
+    "polka": "^0.5.2",
+    "prom-client": "^14.1.1",
+    "redis": "^4.6.4"
+  }
+}
