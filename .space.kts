@@ -26,7 +26,7 @@ job("Build and push Docker") {
             // image tags
             tags {
                 // use current job run number as a tag - '0.0.run_number'
-                +"musicorum.registry.jetbrains.space/p/prjkey/mydocker/lastgram:1.0.${"$"}JB_SPACE_EXECUTION_NUMBER"
+                +"musicorum.registry.jetbrains.space/p/main/containers/lastgram:0.0.${"$"}JB_SPACE_EXECUTION_NUMBER"
             }
         }
     }
