@@ -4,7 +4,11 @@ import { client } from '../../../fmEngine/index.js'
 export default async (ctx: Context) => {
   const data = await client.user.getRecentTracks<true>(ctx.userData.fmUsername)
   const current = data.tracks[0]
-  ctx.reply(`${current.nowPlaying ? 'Now playing' : 'Last played'}: ${current.name} by ${current.artist.name}`)
+  ctx.reply(`**{{userName}}** is listening to **{{trackName}}** by **{{artistName}}**`, {
+    userName: ctx.author.name,
+    trackName: current.name,
+    artistName: current.artist.name
+  })
 }
 
 export const info = {
