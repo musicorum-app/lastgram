@@ -4,12 +4,21 @@ import { Replyable } from '../protocols.js'
 import { buildFromTelegramUser, User } from './user.js'
 import { client } from '../../database.js'
 import { Prisma } from '@prisma/client'
+import { client as i18n } from '../../translationEngine/index.js'
+import { marked } from 'marked'
+import { Command } from '../../commandEngine/command.js'
 
 export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }>
+
+interface ReplyOptions {
+  noTranslation?: boolean
+}
 
 export class Context {
   replyWith?: Replyable
   private cachedResult: CachedUserData | null
+  public replyMarkup?: string
+  public command?: Command
 
   constructor (
     public message: Message,
@@ -21,6 +30,10 @@ export class Context {
 
   get userData () {
     return this.cachedResult!
+  }
+
+  get language () {
+    return this.userData?.language || this.author.languageCode || 'en'
   }
 
   private get userPlatformId (): string {
@@ -66,8 +79,29 @@ export class Context {
     })
   }
 
-  reply (content: Replyable) {
-    this.replyWith = content
+  setCommand (command: Command) {
+    this.command = command
+  }
+
+  t (translationKey: string, data: Record<string, any> = {}) {
+    return i18n.__({
+      phrase: translationKey,
+      locale: this.language
+    }, data)
+  }
+
+  reply (translationKey: string, data: Record<string, any> = {}, options: ReplyOptions = {}) {
+    this.replyWith = (options.noTranslation || data.noTranslation) ? translationKey : i18n.__({
+      phrase: translationKey,
+      locale: this.language
+    }, data)
+
+    // detect markdown
+    const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('_') || (this.replyWith as string).includes('`')
+    if (hasMarkdown) this.replyMarkup = 'markdown'
+    if (hasMarkdown && this.message.platform === 'telegram') {
+      this.replyWith = marked.parseInline(this.replyWith as string)
+    }
   }
 }
 

@@ -1,11 +1,13 @@
 import { Command } from './command.js'
 import { loadCommands } from './loader.js'
 import { Context } from '../multiplatformEngine/common/context.js'
-import { debug, error } from '../loggingEngine/logging.js'
+import { debug, error, info } from '../loggingEngine/logging.js'
 import { newHistogram } from '../loggingEngine/metrics.js'
 import { Histogram } from 'prom-client'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
+import { platformManager } from '../multiplatformEngine/index.js'
+import Telegram from '../multiplatformEngine/platforms/telegram.js'
 
 class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
@@ -22,12 +24,13 @@ class CommandRunner {
   async runCommand (name: string, ctx: Context) {
     const command = this.findCommand(name)
     if (!command) throw new Error(`Command ${name} not found. Ensure that it exists before running it.`)
+    ctx.setCommand({ ...command, run: undefined })
 
     switch (command.protectionLevel) {
       case 'registered':
         const u = await ctx.getUserData()
         if (!u) {
-          ctx.reply('core:error.notRegistered')
+          ctx.reply('This command is only available to registered users. Use `/reg` to register.')
           return
         }
         break
@@ -38,8 +41,8 @@ class CommandRunner {
     if (command.args) {
       try {
         command.args.forEach((arg, i) => {
-          if (arg.required && !ctx.args[i]) throw new MissingArgumentError(arg.name)
-          if (arg.guard && !arg.guard(ctx.args[i])) throw new InvalidArgumentError(arg.name)
+          if (arg.required && !ctx.args[i]) throw new MissingArgumentError(ctx)
+          if (arg.guard && !arg.guard(ctx.args[i])) throw new InvalidArgumentError(ctx)
           args[arg.name] = arg.parse ? arg.parse(ctx.args[i]) : ctx.args[i]
         })
       } catch (error) {
@@ -52,7 +55,7 @@ class CommandRunner {
 
     const end = this.metric.startTimer({ name: command.name, platform: ctx.message.platform })
     try {
-      const r = await command.run(ctx, args)
+      const r = await command.run!(ctx, args)
       end({ error: 'false' })
       return r
     } catch (err) {
@@ -72,15 +75,32 @@ class CommandRunner {
 
   private handleError (error: Error, ctx: Context) {
     if (error instanceof CommandError) {
-      ctx.reply(error.translationKey)
+      ctx.reply(error.display, { noTranslation: true })
       return false
     }
     if (error instanceof LastfmError) {
-      ctx.reply(`core:error.fmError${error.response.error}`)
+      if (error.error === 6) {
+        ctx.reply('Sorry, this user doesn\'t exist on last.fm. Please, check the username and try again.')
+        return false
+      }
+      // internal errors
+      if ([2, 11].includes(error.error)) {
+        ctx.reply('Sorry, last.fm seems to be offline right now. Please, try again later.\nFor more information, check @lastfmstatus at Twitter.')
+        return false
+      }
+
+      if ([3, 4, 5, 6, 7, 10, 26].includes(error.error)) {
+        ctx.reply('Sorry, a serious error occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
+        const tg = platformManager.findPlatform('telegram')! as Telegram
+        tg.sendMessage(process.env.TG_NOTIFICATION_CHAT_ID || '1001538521717', `Last.fm error ${error.error} (${error.message})\n\n@mcthaa`).then(() => info('commandEngine.handleError', 'sent notification to @lastgramsupport'))
+
+        return true
+      }
+      ctx.reply(`Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })
       return false
     }
 
-    ctx.reply('core:error.unknown')
+    ctx.reply('An unknown error occoured. Please, try again.')
     return true
   }
 }

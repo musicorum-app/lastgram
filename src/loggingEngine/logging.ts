@@ -1,6 +1,6 @@
 // @ts-ignore
-import { isWorkerThread } from 'piscina'
-import { threadId } from 'node:worker_threads'
+/*import { isWorkerThread } from 'piscina'
+import { threadId } from 'node:worker_threads'*/
 import { isDevelopment } from '../utils.js'
 
 const reset = '\x1b[0m'
@@ -13,7 +13,7 @@ const log = (level: string, asciiColor: string, scope: string, message: string) 
   const date = new Date()
   // hh:mm:ss format
   const time = `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-  const thread = isWorkerThread ? `${royalBlue}worker ${threadId}` : `${green}main`
+  const thread = `${green}main`
   console.log(`${grey}${time}${reset} ${thread}${reset} ${asciiColor}[${level}]${reset} (${italics}${scope}${reset}): ${message}`)
 }
 

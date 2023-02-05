@@ -9,13 +9,14 @@ type Args = {
 export default async (ctx: Context, { fmUsername }: Args) => {
   const data = await client.user.getInfo(fmUsername)
   await ctx.createUserData(fmUsername, fixTelegramLanguageCode(ctx.author.languageCode))
-  ctx.reply(`Hello, ${fmUsername}!`)
+  ctx.reply(`\`{{fmUsername}}\`, got it. You are now registered!`, { fmUsername })
 }
 
 export const info = {
   aliases: ['register'],
   args: [{
     name: 'fmUsername',
-    required: true
+    required: true,
+    displayName: 'last.fm username'
   }]
 }

@@ -1,5 +1,5 @@
 import { Platform } from '../platform.js'
-import { warn } from '../../loggingEngine/logging.js'
+import { error, warn } from '../../loggingEngine/logging.js'
 import { buildFromTelegramUser, User } from '../common/user.js'
 import { handleTelegramMessage } from '../utilities/telegram.js'
 import { Context } from '../common/context.js'
@@ -15,10 +15,12 @@ export default class Telegram extends Platform {
   constructor () {
     super('telegram')
     if (!process.env.TELEGRAM_TOKEN) {
-      throw new Error('TELEGRAM_TOKEN environment variable not set')
+      error('telegram.main', 'TELEGRAM_TOKEN environment variable not set')
+      process.exit(1)
     }
 
     this.createCounter('telegram_requests', 'Telegram request count', ['success', 'method'])
+    console.log('done')
   }
 
   getUpdates (offset?: number): Promise<void> {
@@ -52,13 +54,14 @@ export default class Telegram extends Platform {
 
   deliverMessage (ctx: Context, text: Replyable) {
     const id = ctx.channel?.id || ctx.author.id
-    return this.sendMessage(id, text.toString())
+    return this.sendMessage(id, text.toString(), ctx.replyMarkup === 'markdown' ? 'HTML' : undefined)
   }
 
-  sendMessage (chatId: string, text: string) {
+  public sendMessage (chatId: string, text: string, parseMode?: 'MarkdownV2' | 'HTML') {
     return this.request('sendMessage', {
       chat_id: chatId,
-      text
+      text,
+      parse_mode: parseMode
     })
   }
 

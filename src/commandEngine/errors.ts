@@ -1,18 +1,24 @@
+import { buildCommandUsage } from './command.js'
+import { Context } from '../multiplatformEngine/common/context.js'
+
 export class CommandError extends Error {
-  constructor (public translationKey: string, public data?: Record<string, any>) {
+  constructor (public ctx: Context) {
     super(`Command error`)
+  }
+
+  get display () {
+    return `Something went wrong.`
   }
 }
 
 export class MissingArgumentError extends CommandError {
-  constructor (public argName: string) {
-    super('core:error.missingArgument', { argName })
+  get display () {
+    return this.ctx.t('Missing argument. This command should be used like this: `{{{usage}}}`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
   }
 }
 
 export class InvalidArgumentError extends CommandError {
-  constructor (public argName: string) {
-
-    super('core:error.invalidArgument', { argName })
+  get display () {
+    return this.ctx.t('Invalid argument. This command should be used like this: `{{{usage}}}`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
   }
 }
