@@ -1,7 +1,7 @@
 import { I18n } from 'i18n'
 
 export const client = new I18n({
-  locales: ['en', 'pt'],
+  locales: ['en', 'pt-br'],
   directory: './assets/locales',
   defaultLocale: 'en',
   api: {

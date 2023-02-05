@@ -1,8 +1,0 @@
-{
-  "last.fm username": "last.fm username",
-  "Missing argument. This command should be used like this: `{{{usage}}}`": "Missing argument. This command should be used like this: `{{{usage}}}`",
-  "`{{fmUsername}}`, got it. You are now registered!": "`{{fmUsername}}`, got it. You are now registered!",
-  "**{{userName}}** is listening to **{{trackName}}** by **{{artistName}}**": "**{{userName}}** is listening to **{{trackName}}** by **{{artistName}}**",
-  "User not found": "User not found",
-  "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.": "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later."
-}

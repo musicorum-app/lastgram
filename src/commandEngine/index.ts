@@ -1,13 +1,11 @@
 import { Command } from './command.js'
 import { loadCommands } from './loader.js'
 import { Context } from '../multiplatformEngine/common/context.js'
-import { debug, error, info } from '../loggingEngine/logging.js'
+import { debug, error } from '../loggingEngine/logging.js'
 import { newHistogram } from '../loggingEngine/metrics.js'
 import { Histogram } from 'prom-client'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
-import { platformManager } from '../multiplatformEngine/index.js'
-import Telegram from '../multiplatformEngine/platforms/telegram.js'
 
 class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
@@ -91,9 +89,6 @@ class CommandRunner {
 
       if ([3, 4, 5, 6, 7, 10, 26].includes(error.error)) {
         ctx.reply('Sorry, a serious error occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
-        const tg = platformManager.findPlatform('telegram')! as Telegram
-        tg.sendMessage(process.env.TG_NOTIFICATION_CHAT_ID || '1001538521717', `Last.fm error ${error.error} (${error.message})\n\n@mcthaa`).then(() => info('commandEngine.handleError', 'sent notification to @lastgramsupport'))
-
         return true
       }
       ctx.reply(`Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })

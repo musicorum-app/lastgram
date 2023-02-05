@@ -41,7 +41,7 @@ export default class Telegram extends Platform {
           offset = update.update_id + 1
         }
 
-        if (update.message) {
+        if (update.message && update.message.text) {
           handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
             if (ctx?.replyWith) return this.deliverMessage(ctx, ctx.replyWith)
           })

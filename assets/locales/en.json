@@ -4,5 +4,6 @@
   "Missing argument. This command should be used like this: `{{{usage}}}`": "Missing argument. This command should be used like this: `{{{usage}}}`",
   "`{{fmUsername}}`, got it. You are now registered!": "`{{fmUsername}}`, got it. You are now registered!",
   "User not found": "User not found",
-  "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.": "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later."
+  "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.": "Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.",
+  "This command is only available to registered users. Use `/reg` to register.": "This command is only available to registered users. Use `/reg` to register."
 }
