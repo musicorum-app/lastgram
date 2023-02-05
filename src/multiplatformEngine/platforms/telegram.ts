@@ -76,6 +76,7 @@ export default class Telegram extends Platform {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json()).then(response => {
+      // TODO: turn this counter onto a histogram 
       this.getCounter('telegram_requests').inc({
         success: response.ok ? 'true' : 'false',
         method
