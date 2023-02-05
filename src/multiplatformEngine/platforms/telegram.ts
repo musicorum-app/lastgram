@@ -54,14 +54,19 @@ export default class Telegram extends Platform {
 
   deliverMessage (ctx: Context, text: Replyable) {
     const id = ctx.channel?.id || ctx.author.id
-    return this.sendMessage(id, text.toString(), ctx.replyMarkup === 'markdown' ? 'HTML' : undefined)
+    const replyTo = ctx.message.replyingTo ? ctx.message.id : undefined
+    return this.sendMessage(id, text.toString(), {
+      parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
+      replyTo
+    })
   }
 
-  public sendMessage (chatId: string, text: string, parseMode?: 'MarkdownV2' | 'HTML') {
+  public sendMessage (chatId: string, text: string, options: { parseMode?: 'MarkdownV2' | 'HTML', replyTo?: string }) {
     return this.request('sendMessage', {
       chat_id: chatId,
       text,
-      parse_mode: parseMode
+      parse_mode: options?.parseMode,
+      reply_to_message_id: options?.replyTo
     })
   }
 

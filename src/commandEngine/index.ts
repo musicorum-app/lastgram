@@ -67,10 +67,6 @@ class CommandRunner {
     return this.commands.find(command => command.name === name || command.aliases?.includes?.(name))
   }
 
-  async reloadCommands () {
-    this.commands = await loadCommands()
-  }
-
   private handleError (error: Error, ctx: Context) {
     if (error instanceof CommandError) {
       ctx.reply(error.display, { noTranslation: true })
@@ -88,14 +84,14 @@ class CommandRunner {
       }
 
       if ([3, 4, 5, 6, 7, 10, 26].includes(error.error)) {
-        ctx.reply('Sorry, a serious error occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
+        ctx.reply('Sorry, a serious error has occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
         return true
       }
-      ctx.reply(`Sorry, an error with last.fm occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })
+      ctx.reply(`Sorry, an error with last.fm has occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })
       return false
     }
 
-    ctx.reply('An unknown error occoured. Please, try again.')
+    ctx.reply('An unknown error has occoured. Please, try again.')
     return true
   }
 }

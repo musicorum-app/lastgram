@@ -1,3 +1,4 @@
 {
-  "This command is only available to registered users. Use `/reg` to register.": "This command is only available to registered users. Use `/reg` to register."
+  "This command is only available to registered users. Use `/reg` to register.": "This command is only available to registered users. Use `/reg` to register.",
+  "**{{userName}}** is listening to **{{trackName}}** by **{{artistName}}**": "**{{userName}}** is listening to **{{trackName}}** by **{{artistName}}**"
 }
