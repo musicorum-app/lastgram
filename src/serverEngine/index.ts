@@ -19,7 +19,7 @@ server.get('/metrics', async (req: Request, res: MonitoredRequest) => {
 })
 
 /**
- server.post('/generate', async (req, res) => {
+ serverEngine.post('/generate', async (req, res) => {
   const data = req.body as GenerateData
   const { error, message, id, time } = await generate(data)
   if (error) {
@@ -31,6 +31,6 @@ server.get('/metrics', async (req: Request, res: MonitoredRequest) => {
 
 export const start = async () => {
   server.listen(PORT, () => {
-    info('server.start', `listening on port ${PORT}`)
+    info('serverEngine.start', `listening on port ${PORT}`)
   })
 }
