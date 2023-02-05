@@ -19,7 +19,7 @@ export class Context {
   ) {
   }
 
-  get userData (): CachedUserData {
+  get userData () {
     return this.cachedResult!
   }
 
@@ -27,7 +27,7 @@ export class Context {
     return `${this.author.platform}_${this.author.id}`
   }
 
-  static fromTelegramMessage (message: Record<string, any>, args: string[]): Context {
+  static fromTelegramMessage (message: Record<string, any>, args: string[]) {
     return new Context(
       buildFromTelegramMessage(message),
       buildFromTelegramUser(message.from),
@@ -66,7 +66,7 @@ export class Context {
     })
   }
 
-  reply (content: Replyable): void {
+  reply (content: Replyable) {
     this.replyWith = content
   }
 }

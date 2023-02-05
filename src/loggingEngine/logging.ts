@@ -13,11 +13,11 @@ const log = (level: string, asciiColor: string, scope: string, message: string) 
   const date = new Date()
   // hh:mm:ss format
   const time = `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-  const thread = !isWorkerThread ? `${green}main` : `${royalBlue}worker ${threadId}`
+  const thread = isWorkerThread ? `${royalBlue}worker ${threadId}` : `${green}main`
   console.log(`${grey}${time}${reset} ${thread}${reset} ${asciiColor}[${level}]${reset} (${italics}${scope}${reset}): ${message}`)
 }
 
-const pad = (str: number, length: number = 2): string => {
+const pad = (str: number, length = 2) => {
   return '0'.repeat(length - str.toString().length) + str
 }
 export const info = (scope: string, message: string) => log('INFO', '\x1b[32m', scope, message)

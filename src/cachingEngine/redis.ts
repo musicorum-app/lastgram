@@ -17,7 +17,7 @@ export default class RedisBackend extends CachingBackend {
     })
   }
 
-  async start (): Promise<boolean> {
+  async start () {
     try {
       await this.client!.connect()
       while (!this.client!.isOpen) {
@@ -38,21 +38,21 @@ export default class RedisBackend extends CachingBackend {
     return this.client!.get(key)
   }
 
-  async setTTL (key: string, value: any, ttl: number): Promise<void> {
+  async setTTL (key: string, value: any, ttl: number) {
     await this.client!.set(key, value, {
       EX: ttl
     })
   }
 
-  async set (key: string, value: any): Promise<void> {
+  async set (key: string, value: any) {
     await this.client!.set(key, value)
   }
 
-  async delete (key: string): Promise<void> {
+  async delete (key: string) {
     await this.client!.del(key)
   }
 
-  async clear (): Promise<void> {
+  async clear () {
     // UNIMPLEMENTED
   }
 

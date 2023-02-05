@@ -28,8 +28,8 @@ export default class Telegram extends Platform {
       offset
     }).then(async (response: Record<string, any>) => {
       if (!(response instanceof Array)) {
-        warn('platforms.telegram', 'getUpdates did not return an array. waiting 5 seconds before trying again...')
-        await new Promise(resolve => setTimeout(resolve, 5000))
+        warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
+        await new Promise(resolve => setTimeout(resolve, 1000))
         return this.getUpdates(offset)
       }
 
@@ -40,9 +40,8 @@ export default class Telegram extends Platform {
         }
 
         if (update.message) {
-          handleTelegramMessage(this.bot.username!, update.message).then((ctx) => {
-            if (!ctx || !ctx.replyWith) return
-            return this.deliverMessage(ctx, ctx.replyWith)
+          handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
+            if (ctx?.replyWith) return this.deliverMessage(ctx, ctx.replyWith)
           })
         }
       }

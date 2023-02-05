@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs'
 import { debug, italic } from '../loggingEngine/logging.js'
 import { Platform } from './platform.js'
 
-export const loadPlatforms = async (): Promise<Platform[]> => {
+export const loadPlatforms = async () => {
   debug('multiplatformEngine.loader', 'Loading platforms...')
   const platforms: Platform[] = []
   const files = readdirSync('./dist/multiplatformEngine/platforms', { withFileTypes: true })

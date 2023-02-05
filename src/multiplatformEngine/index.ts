@@ -22,7 +22,7 @@ class PlatformManager {
     })
   }
 
-  findPlatform (name: string): Platform | undefined {
+  findPlatform (name: string) {
     return this.platforms.find(platform => platform.name === name)
   }
 }

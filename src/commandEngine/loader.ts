@@ -2,7 +2,7 @@ import { Command } from './command.js'
 import { readdirSync } from 'node:fs'
 import { bold, debug, italic } from '../loggingEngine/logging.js'
 
-export const loadCommands = async (): Promise<Command[]> => {
+export const loadCommands = async () => {
   debug('commandEngine.loader', 'Loading commands...')
   const commands: Command[] = []
   const levels = readdirSync('./dist/commandEngine/commands', { withFileTypes: true })

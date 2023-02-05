@@ -5,7 +5,7 @@ import RedisBackend from './redis.js'
 
 let internalBackend: CachingBackend | undefined
 
-export const start = async (): Promise<void> => {
+export const start = async () => {
   debug('cachingEngine.start', 'starting cachingEngine engine')
   let redisBackend: RedisBackend | undefined = new RedisBackend()
   if (await redisBackend!.start()) {
@@ -17,7 +17,7 @@ export const start = async (): Promise<void> => {
   }
 }
 
-export const backend = (): CachingBackend => {
+export const backend = () => {
   if (!internalBackend) {
     error('cachingEngine.backend', 'backend was not initialized! stop!')
     throw new Error('backend was not initialized')

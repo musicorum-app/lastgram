@@ -36,7 +36,7 @@ export class Platform {
     return this.internalCounters[name]
   }
 
-  protected incrementMessages (increment: number = 1) {
+  protected incrementMessages (increment = 1) {
     this.counter.inc(increment)
   }
 }

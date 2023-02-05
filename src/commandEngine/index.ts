@@ -62,7 +62,15 @@ class CommandRunner {
     }
   }
 
-  private handleError (error: Error, ctx: Context): boolean {
+  findCommand (name: string) {
+    return this.commands.find(command => command.name === name || command.aliases?.includes?.(name))
+  }
+
+  async reloadCommands () {
+    this.commands = await loadCommands()
+  }
+
+  private handleError (error: Error, ctx: Context) {
     if (error instanceof CommandError) {
       ctx.reply(error.translationKey)
       return false
@@ -74,14 +82,6 @@ class CommandRunner {
 
     ctx.reply('core:error.unknown')
     return true
-  }
-
-  findCommand (name: string): Command | undefined {
-    return this.commands.find(command => command.name === name || command.aliases?.includes?.(name))
-  }
-
-  async reloadCommands (): Promise<void> {
-    this.commands = await loadCommands()
   }
 }
 
