@@ -7,7 +7,7 @@ export interface Channel extends Base {
 
 export const buildFromTelegramChannel = (channel: Record<string, any>): Channel => {
   return {
-    id: channel.id,
+    id: channel.id.toString(),
     name: channel.title,
     type: channel.type,
     platform: 'telegram'

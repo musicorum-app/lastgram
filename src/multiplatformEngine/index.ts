@@ -10,14 +10,14 @@ class PlatformManager {
 
   startAll () {
     this.platforms.forEach(async platform => {
-      debug('multiplatform.manager', `Starting platform ${bold(platform.name)}`)
+      debug('multiplatformEngine.manager', `Starting platform ${bold(platform.name)}`)
       await platform.start()
     })
   }
 
   stopAll () {
     this.platforms.forEach(platform => {
-      debug('multiplatform.manager', `Stopping platform ${bold(platform.name)}`)
+      debug('multiplatformEngine.manager', `Stopping platform ${bold(platform.name)}`)
       platform.stop()
     })
   }

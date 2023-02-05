@@ -1,4 +1,4 @@
-import { Context } from '../../../multiplatform/common/context.js'
+import { Context } from '../../../multiplatformEngine/common/context.js'
 
 export default (ctx: Context) => {
   ctx.reply('Hello, world!')

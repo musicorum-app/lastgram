@@ -6,7 +6,7 @@ export const handleTelegramMessage = async (botUser: string, data: Record<string
   const [name, ...args] = data.text.replace('/', '').replace(`@${botUser}`, '').split(' ')
   if (!commandRunner.hasCommand(name)) return
 
-  const ctx = Context.fromTelegramMessage(data)
+  const ctx = Context.fromTelegramMessage(data, args || [])
   await commandRunner.runCommand(name, ctx)
 
   return ctx

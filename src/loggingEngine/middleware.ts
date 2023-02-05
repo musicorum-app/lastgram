@@ -1,4 +1,6 @@
-import { httpRequest } from './metrics.js'
+import { newHistogram } from './metrics.js'
+
+const httpRequest = newHistogram('http_request_duration_seconds', 'Duration of HTTP requests in seconds', ['method', 'route', 'code'])
 
 export interface MonitoredRequest extends Request {
   data: {

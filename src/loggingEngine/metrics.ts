@@ -21,6 +21,3 @@ export const newHistogram = (name: string, help: string, labelNames: string[]) =
   register.registerMetric(histogram)
   return histogram
 }
-
-export const httpRequest = newHistogram('http_request_duration_seconds', 'Duration of HTTP requests in seconds', ['method', 'route', 'code'])
-export const lastfmRequest = newHistogram('lastfm_request_duration_seconds', 'Duration of last.fm requests in seconds', ['route', 'code'])

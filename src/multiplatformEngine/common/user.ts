@@ -10,7 +10,7 @@ export interface User extends Base {
 
 export const buildFromTelegramUser = (user: Record<string, any>): User => {
   return {
-    id: user.id,
+    id: user.id.toString(),
     username: user.username,
     name: user.first_name,
     lastName: user.last_name,
