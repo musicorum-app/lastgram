@@ -13,5 +13,7 @@
   "Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\nArguments between `< >` are required, while arguments between `[ ]` are optional.": "Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\nArguments between `< >` are required, while arguments between `[ ]` are optional.",
   "Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\n\n*Arguments between `< >` are required, while arguments between `[ ]` are optional.*": "Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\n\n*Arguments between `< >` are required, while arguments between `[ ]` are optional.*",
   "Registers your last.fm username.": "Registers your last.fm username.",
-  "Hello, world!": "Hello, world!"
+  "Hello, world!": "Hello, world!",
+  "lastgram {{mode}}\n?? Memory usage: {{rss}} MB (RSS) / {{heapTotal}} MB (heap total) / {{heapUsed}} MB (heap used)\n📩 {{updates}} messages from Telegram": "lastgram {{mode}}\n?? Memory usage: {{rss}} MB (RSS) / {{heapTotal}} MB (heap total) / {{heapUsed}} MB (heap used)\n📩 {{updates}} messages from Telegram",
+  "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram": "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram"
 }
