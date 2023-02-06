@@ -14,6 +14,7 @@ export default async (ctx: Context, { fmUsername }: Args) => {
 
 export const info = {
   aliases: ['register'],
+  description: 'Registers your last.fm username.',
   args: [{
     name: 'fmUsername',
     required: true,

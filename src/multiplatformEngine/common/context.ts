@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client'
 import { client as i18n } from '../../translationEngine/index.js'
 import { marked } from 'marked'
 import { Command } from '../../commandEngine/command.js'
+import { CommandRunner } from '../../commandEngine/index.js'
 
 export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }>
 
@@ -24,7 +25,8 @@ export class Context {
     public message: Message,
     public author: User,
     public channel: Channel,
-    public args: string[]
+    public args: string[],
+    public runner: CommandRunner
   ) {
   }
 
@@ -40,12 +42,13 @@ export class Context {
     return `${this.author.platform}_${this.author.id}`
   }
 
-  static fromTelegramMessage (message: Record<string, any>, args: string[]) {
+  static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
     return new Context(
       buildFromTelegramMessage(message),
       buildFromTelegramUser(message.from),
       buildFromTelegramChannel(message.chat),
-      args
+      args,
+      runner
     )
   }
 

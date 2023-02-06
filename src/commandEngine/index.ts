@@ -1,5 +1,5 @@
 import { Command } from './command.js'
-import { loadCommands } from './loader.js'
+import { findCommand, loadedCommands } from './loader.js'
 import { Context } from '../multiplatformEngine/common/context.js'
 import { debug, error } from '../loggingEngine/logging.js'
 import { newHistogram } from '../loggingEngine/metrics.js'
@@ -7,7 +7,7 @@ import { Histogram } from 'prom-client'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
 
-class CommandRunner {
+export class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
 
   constructor (
@@ -64,7 +64,7 @@ class CommandRunner {
   }
 
   findCommand (name: string) {
-    return this.commands.find(command => command.name === name || command.aliases?.includes?.(name))
+    return findCommand(name)
   }
 
   private handleError (error: Error, ctx: Context) {
@@ -96,7 +96,7 @@ class CommandRunner {
   }
 }
 
-export const commandRunner = new CommandRunner(await loadCommands())
+export const commandRunner = new CommandRunner(loadedCommands)
 
 export const start = () => {
 }

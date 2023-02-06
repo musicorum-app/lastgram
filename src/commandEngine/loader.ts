@@ -2,7 +2,7 @@ import { Command } from './command.js'
 import { readdirSync } from 'node:fs'
 import { bold, debug, italic } from '../loggingEngine/logging.js'
 
-export const loadCommands = async () => {
+const loadCommands = async () => {
   debug('commandEngine.loader', 'Loading commands...')
   const commands: Command[] = []
   const levels = readdirSync('./dist/commandEngine/commands', { withFileTypes: true })
@@ -26,4 +26,10 @@ export const loadCommands = async () => {
   }
 
   return commands
+}
+
+export const loadedCommands = await loadCommands()
+
+export const findCommand = (name: string) => {
+  return loadedCommands.find(command => command.name === name || command.aliases?.includes?.(name))
 }

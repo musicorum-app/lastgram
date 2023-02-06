@@ -5,5 +5,6 @@ export default (ctx: Context) => {
 }
 
 export const info = {
-  aliases: ['hi']
+  aliases: ['lastgraminfo'],
+  description: 'Shows information about the bot.'
 }
