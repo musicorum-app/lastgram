@@ -38,24 +38,10 @@ export class Context {
     return this.userData?.language || this.author.languageCode || 'en'
   }
 
-  private get userPlatformId (): string {
-    return `${this.author.platform}_${this.author.id}`
-  }
-
-  static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
-    return new Context(
-      buildFromTelegramMessage(message),
-      buildFromTelegramUser(message.from),
-      buildFromTelegramChannel(message.chat),
-      args,
-      runner
-    )
-  }
-
-  async getUserData (): Promise<Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }> | null> {
+  async getUserData (user = this.author): Promise<Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }> | null> {
     const r = await client.user.findFirst({
       where: {
-        platformId: this.userPlatformId
+        platformId: this.userPlatformId(user)
       },
       select: {
         id: true,
@@ -68,18 +54,37 @@ export class Context {
     return r
   }
 
-  createUserData (fmUsername: string, languageCode?: string) {
+  static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
+    return new Context(
+      buildFromTelegramMessage(message),
+      buildFromTelegramUser(message.from),
+      buildFromTelegramChannel(message.chat),
+      args,
+      runner
+    )
+  }
+
+  /**
+   * Creates or updates user data.
+   * > ⚠ **WARNING**
+   * > This method uses `Context.userPlatformId`.
+   */
+  createUserData (fmUsername: string, languageCode?: string, user = this.author) {
     const data = { fmUsername, language: languageCode }
     return client.user.upsert({
       create: {
-        platformId: this.userPlatformId,
+        platformId: this.userPlatformId(user),
         ...data
       },
       update: data,
       where: {
-        platformId: this.userPlatformId
+        platformId: this.userPlatformId(user)
       }
     })
+  }
+
+  private userPlatformId (user = this.author): string {
+    return `${user.platform}_${user.id}`
   }
 
   setCommand (command: Command) {

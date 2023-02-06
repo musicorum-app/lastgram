@@ -6,6 +6,7 @@ import { newHistogram } from '../loggingEngine/metrics.js'
 import { Histogram } from 'prom-client'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
+import { runExecutionGuard } from './guards.js'
 
 export class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
@@ -24,16 +25,8 @@ export class CommandRunner {
     if (!command) throw new Error(`Command ${name} not found. Ensure that it exists before running it.`)
     ctx.setCommand({ ...command, run: undefined })
 
-    switch (command.protectionLevel) {
-      case 'registered':
-        const u = await ctx.getUserData()
-        if (!u) {
-          ctx.reply('This command is only available to registered users. Use `/reg` to register.')
-          return
-        }
-        break
-      default:
-    }
+    const guardResult = await runExecutionGuard(command.protectionLevel, ctx)
+    if (!guardResult) return
 
     const args: Record<string, any> = {}
     if (command.args) {

@@ -15,5 +15,8 @@
   "Registers your last.fm username.": "Registers your last.fm username.",
   "Hello, world!": "Hello, world!",
   "lastgram {{mode}}\n?? Memory usage: {{rss}} MB (RSS) / {{heapTotal}} MB (heap total) / {{heapUsed}} MB (heap used)\n📩 {{updates}} messages from Telegram": "lastgram {{mode}}\n?? Memory usage: {{rss}} MB (RSS) / {{heapTotal}} MB (heap total) / {{heapUsed}} MB (heap used)\n📩 {{updates}} messages from Telegram",
-  "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram": "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram"
+  "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram": "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram",
+  "The user you mentioned has not registered themselves yet. Use `/reg <last.fm username>` to register.": "The user you mentioned has not registered themselves yet. Use `/reg <last.fm username>` to register.",
+  "This command is only available to registered users. Use `/reg <last.fm username>` to register.": "This command is only available to registered users. Use `/reg <last.fm username>` to register.",
+  "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram since last restar": "lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram since last restar"
 }
