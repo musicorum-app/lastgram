@@ -13,6 +13,7 @@ export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boole
 
 interface ReplyOptions {
   noTranslation?: boolean
+  imageURL?: string
 }
 
 export class Context {
@@ -108,7 +109,8 @@ export class Context {
     const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('_') || (this.replyWith as string).includes('`')
     if (hasMarkdown) this.replyMarkup = 'markdown'
     if (hasMarkdown && this.message.platform === 'telegram') {
-      this.replyWith = marked.parseInline(this.replyWith as string)
+      const url = options.imageURL ? `[\u200B](${options.imageURL})` : ''
+      this.replyWith = marked.parseInline(this.replyWith as string + url)
     }
   }
 }
