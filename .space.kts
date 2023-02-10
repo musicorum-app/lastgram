@@ -14,12 +14,13 @@ job("Build and push Docker") {
     }
 
     host("Get build version") {
-        shellScript {
-            content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
-        }
+
     }
 
     host("Build and push a Docker image") {
+        shellScript {
+            content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
+        }
         dockerBuildPush {
             // by default, the step runs not only 'docker build' but also 'docker push'
             // to disable pushing, add the following line:
