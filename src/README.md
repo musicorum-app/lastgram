@@ -3,7 +3,7 @@
 lastgram is extremely overengineered, but it results in a very modular and scalable bot.
 This document will explain the architecture of the bot, and how it works.
 
-> ⚠ **Warning**
+> **Warning**
 >
 > The bot is still under heavy development, and new engines and/or concepts may be added at any time. Therefore, this
 > document may be outdated at any time.
