@@ -38,4 +38,15 @@ job("Build and push Docker") {
             }
         }
     }
+    container("Deploy to stage", image = "gradle:7.1-jre11") {
+        kotlinScript { api ->
+            // ...
+
+            api.space().projects.automation.deployments.schedule(
+                project = api.projectIdentifier(),
+                targetIdentifier = TargetIdentifier.Key("stage"),
+                version = "0.1-test",
+            )
+        }
+    }
 }
