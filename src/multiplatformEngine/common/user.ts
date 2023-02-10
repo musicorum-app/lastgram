@@ -1,5 +1,6 @@
 import { Base } from './base.js'
 import { User as DiscordUser } from 'discord.js'
+import { fixLanguageFormat } from '../../commandEngine/helpers.js'
 
 export interface User extends Base {
   username?: string
@@ -15,7 +16,7 @@ export const buildFromTelegramUser = (user: Record<string, any>): User => {
     username: user.username,
     name: user.first_name,
     lastName: user.last_name,
-    languageCode: user.language_code,
+    languageCode: fixLanguageFormat(user.language_code),
     isBot: user.is_bot,
     platform: 'telegram'
   }
