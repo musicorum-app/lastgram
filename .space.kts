@@ -13,27 +13,24 @@ job("Build and push Docker") {
         }
     }
 
-    job("Build and push a Docker image") {
-        kaniko {
-            beforeBuildScript {
-                content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
-            }
+    kaniko {
+        beforeBuildScript {
+            content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
+        }
 
-           build {
-               context = "docker"
-               dockerfile = "Dockerfile"
-               labels["vendor"] = "musicorum"
-           }
+        build {
+            dockerfile = "Dockerfile"
+            labels["vendor"] = "musicorum"
+        }
 
-            push("musicorum.registry.jetbrains.space/p/main/containers/lastgram") {
-                tags {
-                    // use current job run number as a tag - '0.0.run_number'
-                    +"\$BUILD_VERSION-\$JB_SPACE_EXECUTION_ID"
-                    +"latest"
-                }
+        push("musicorum.registry.jetbrains.space/p/main/containers/lastgram") {
+            tags {
+                +"\$BUILD_VERSION-\$JB_SPACE_EXECUTION_ID"
+                +"latest"
             }
         }
     }
+
     container("Deploy to stage", image = "gradle:7.1-jre11") {
         kotlinScript { api ->
             // ...
