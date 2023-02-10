@@ -13,10 +13,13 @@ job("Build and push Docker") {
         }
     }
 
-    host("Build and push a Docker image") {
+    host("Get build version") {
         shellScript {
             content = "BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
         }
+    }
+
+    host("Build and push a Docker image") {
         dockerBuildPush {
             // by default, the step runs not only 'docker build' but also 'docker push'
             // to disable pushing, add the following line:
@@ -52,9 +55,6 @@ job("Build and push Docker") {
                 targetIdentifier = TargetIdentifier.Key("stage"),
                 version = "\$BUILD_VERSION",
             )
-        }
-         shellScript {
-            content = "echo \"Deployed stage @ \$BUILD_VERSION\""
         }
     }
 }
