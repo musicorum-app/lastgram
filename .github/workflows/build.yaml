@@ -34,7 +34,9 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: "ghcr.io/${{ github.repository }}/latest"
+          tags: |
+            "ghcr.io/${{ github.repository }}:latest"
+            "ghcr.io/${{ github.repository }}:${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
           labels: "version=${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
   
   deploy-stage:
@@ -67,8 +69,8 @@ jobs:
       - name: Promote build image to production
         run: |
           docker buildx imagetools create \
-            --tag ghcr.io/${{ github.repository }}/production \
-            ghcr.io/${{ github.repository }}/latest
+            --tag ghcr.io/${{ github.repository }}:production \
+            ghcr.io/${{ github.repository }}:latest
 
       - name: TODO
         run: echo "deployed to prod!"
