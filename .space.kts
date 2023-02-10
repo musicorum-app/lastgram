@@ -15,9 +15,7 @@ job("Build and push Docker") {
 
     host("Build and push a Docker image") {
         shellScript {
-            content = """
-                BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[", ]//g')
-            """
+            content = "BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
         }
         dockerBuildPush {
             // by default, the step runs not only 'docker build' but also 'docker push'
@@ -56,9 +54,7 @@ job("Build and push Docker") {
             )
         }
          shellScript {
-            content = """
-                echo "Deployed stage @ \$BUILD_VERSION"
-            """
+            content = "echo \"Deployed stage @ \$BUILD_VERSION\""
         }
     }
 }
