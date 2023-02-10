@@ -7,18 +7,24 @@ export class CommandError extends Error {
   }
 
   get display () {
-    return `Something went wrong.`
+    return this.ctx.t('errors:command.generic')
   }
 }
 
 export class MissingArgumentError extends CommandError {
   get display () {
-    return this.ctx.t('Missing argument. This command should be used like this: `{{{usage}}}`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
+    return this.ctx.t('errors:command.missingArgument`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
   }
 }
 
 export class InvalidArgumentError extends CommandError {
   get display () {
-    return this.ctx.t('Invalid argument. This command should be used like this: `{{{usage}}}`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
+    return this.ctx.t('errors:command.invalidArgument', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
+  }
+}
+
+export class NoScrobblesError extends CommandError {
+  get display () {
+    return this.ctx.t('errors:command.noScrobbles')
   }
 }

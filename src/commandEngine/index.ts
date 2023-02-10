@@ -1,12 +1,12 @@
 import { Command } from './command.js'
 import { findCommand, loadedCommands } from './loader.js'
 import { Context } from '../multiplatformEngine/common/context.js'
-import { debug, error } from '../loggingEngine/logging.js'
+import { debug, error, grey } from '../loggingEngine/logging.js'
 import { newHistogram } from '../loggingEngine/metrics.js'
 import { Histogram } from 'prom-client'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
-import { runExecutionGuard } from './guards.js'
+import * as guards from './guards.js'
 
 export class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
@@ -14,6 +14,13 @@ export class CommandRunner {
   constructor (
     public commands: Command[]
   ) {
+  }
+
+  runGuard (protectionLevel: string, ctx: Context): Promise<boolean> {
+    // @ts-ignore
+    const guard = guards[protectionLevel]
+    if (!guard) throw new Error(`Guard ${protectionLevel} not found. Ensure that it exists before running it.`)
+    return guard(ctx)
   }
 
   hasCommand (name: string): boolean {
@@ -25,7 +32,7 @@ export class CommandRunner {
     if (!command) throw new Error(`Command ${name} not found. Ensure that it exists before running it.`)
     ctx.setCommand({ ...command, run: undefined })
 
-    const guardResult = await runExecutionGuard(command.protectionLevel, ctx)
+    const guardResult = await this.runGuard(command.protectionLevel, ctx)
     if (!guardResult) return
 
     const args: Record<string, any> = {}
@@ -52,7 +59,7 @@ export class CommandRunner {
     } catch (err) {
       const important = this.handleError(err, ctx)
       end({ error: 'true', important: important ? 'true' : 'false' })
-      important && error('commandEngine.runCommand', `notable exception while running command ${name}: ${err}`)
+      important && error('commandEngine.runCommand', `notable exception while running command ${name}\n${grey(err.stack)}`)
     }
   }
 
@@ -67,24 +74,28 @@ export class CommandRunner {
     }
     if (error instanceof LastfmError) {
       if (error.error === 6) {
-        ctx.reply('Sorry, this user doesn\'t exist on last.fm. Please, check the username and try again.')
+        ctx.reply('errors:lastfm.userNotFound')
         return false
       }
       // internal errors
       if ([2, 11].includes(error.error)) {
-        ctx.reply('Sorry, last.fm seems to be offline right now. Please, try again later.\nFor more information, check @lastfmstatus at Twitter.')
+        //ctx.reply('Sorry, last.fm seems to be offline right now. Please, try again later.\nFor more information, check @lastfmstatus at Twitter.')
+        ctx.reply('errors:lastfm.serviceUnavailable')
         return false
       }
 
       if ([3, 4, 5, 6, 7, 10, 26].includes(error.error)) {
-        ctx.reply('Sorry, a serious error has occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
+        // ctx.reply('Sorry, a serious error has occoured while communicating with last.fm. Please, join @lastgramsupport for further information.')
+        ctx.reply('errors:lastfm.seriousError')
         return true
       }
-      ctx.reply(`Sorry, an error with last.fm has occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })
+      // ctx.reply(`Sorry, an error with last.fm has occoured ({{error}})\nPlease, try again later.`, { error: ctx.t(error.message) })
+      ctx.reply('errors:lastfm.genericError', { error: error.error })
       return false
     }
 
-    ctx.reply('An unknown error has occoured. Please, try again.')
+    // ctx.reply('An unknown error has occurred. Please, try again.')
+    ctx.reply('errors:unknownError')
     return true
   }
 }

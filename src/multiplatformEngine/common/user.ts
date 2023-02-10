@@ -1,4 +1,5 @@
 import { Base } from './base.js'
+import { User as DiscordUser } from 'discord.js'
 
 export interface User extends Base {
   username?: string
@@ -17,5 +18,15 @@ export const buildFromTelegramUser = (user: Record<string, any>): User => {
     languageCode: user.language_code,
     isBot: user.is_bot,
     platform: 'telegram'
+  }
+}
+
+export const buildFromDiscordUser = (user: DiscordUser): User => {
+  return {
+    id: user.id,
+    username: user.username,
+    name: user.username,
+    isBot: user.bot,
+    platform: 'discord'
   }
 }

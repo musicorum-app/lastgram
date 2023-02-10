@@ -12,13 +12,14 @@ export default async (ctx: Context) => {
     return v[v.length - 1]
   })
 
-  ctx.reply('lastgram {{mode}}\n💻 **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages from Telegram since last restar', {
+  ctx.reply('commands:botinfo', {
     mode: isDevelopment ? 'development' : 'stable',
     rss: rss.toFixed(2),
     heapTotal: heapTotal.toFixed(2),
     heapUsed: heapUsed.toFixed(2),
     updates: totalTelegramMessages
-  })
+  }, { noTranslation: true })
+  // TODO: remove noTranslation
 }
 
 export const info = {

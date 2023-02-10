@@ -20,7 +20,6 @@ export default class Telegram extends Platform {
     }
 
     this.createCounter('telegram_requests', 'Telegram request count', ['success', 'method'])
-    console.log('done')
   }
 
   getUpdates (offset?: number): Promise<void> {

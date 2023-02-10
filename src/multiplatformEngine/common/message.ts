@@ -1,5 +1,6 @@
 import { Base } from './base.js'
 import { buildFromTelegramUser, User } from './user.js'
+import { ChatInputCommandInteraction } from 'discord.js'
 
 export interface Message extends Base {
   content: string
@@ -21,3 +22,14 @@ export const buildFromTelegramMessage = (message: Record<string, any>): Message 
   }
 }
 
+export const buildFromDiscordMessage = (message: ChatInputCommandInteraction): Message => {
+  return {
+    content: '',
+    id: message.id,
+    sentAt: message.createdTimestamp,
+    isAnonymous: false,
+    platform: 'discord',
+    replyingTo: undefined,
+    replyingToUser: undefined
+  }
+}

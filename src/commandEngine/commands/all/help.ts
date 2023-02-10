@@ -8,9 +8,9 @@ type Args = {
 export default (ctx: Context, { command }: Args) => {
   if (command) {
     const cmd = ctx.runner.findCommand(command)
-    if (!cmd) return ctx.reply('Command not found.')
+    if (!cmd) return ctx.reply('commands:help.notFound')
     const usage = buildCommandUsage(cmd, ctx.language)
-    return ctx.reply('Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\n\n*Arguments between `< >` are required, while arguments between `[ ]` are optional.*', {
+    return ctx.reply('commands:help.commandInfo', {
       name: cmd.name,
       description: ctx.t(cmd.description || 'No description available'),
       usage

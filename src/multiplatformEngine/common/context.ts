@@ -1,15 +1,16 @@
-import { buildFromTelegramMessage, Message } from './message.js'
-import { buildFromTelegramChannel, Channel } from './channel.js'
+import { buildFromDiscordMessage, buildFromTelegramMessage, Message } from './message.js'
+import { buildFromDiscordChannel, buildFromTelegramChannel, Channel } from './channel.js'
 import { Replyable } from '../protocols.js'
-import { buildFromTelegramUser, User } from './user.js'
+import { buildFromDiscordUser, buildFromTelegramUser, User } from './user.js'
 import { client } from '../../database.js'
 import { Prisma } from '@prisma/client'
-import { client as i18n } from '../../translationEngine/index.js'
 import { marked } from 'marked'
 import { Command } from '../../commandEngine/command.js'
 import { CommandRunner } from '../../commandEngine/index.js'
+import { ChatInputCommandInteraction } from 'discord.js'
+import { lt } from '../../translationEngine/index.js'
 
-export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }>
+export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean, revealUser: boolean, isBanned: boolean }; where: any }>
 
 interface ReplyOptions {
   noTranslation?: boolean
@@ -18,9 +19,11 @@ interface ReplyOptions {
 
 export class Context {
   replyWith?: Replyable
+  replyOptions?: ReplyOptions
   private cachedResult: CachedUserData | null
   public replyMarkup?: string
   public command?: Command
+  public targetedUser?: User
 
   constructor (
     public message: Message,
@@ -39,20 +42,14 @@ export class Context {
     return this.userData?.language || this.author.languageCode || 'en'
   }
 
-  async getUserData (user = this.author): Promise<Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean }; where: any }> | null> {
-    const r = await client.user.findFirst({
-      where: {
-        platformId: this.userPlatformId(user)
-      },
-      select: {
-        id: true,
-        fmUsername: true,
-        language: true
-      }
-    })
-
-    this.cachedResult = r
-    return r
+  static fromDiscordMessage (message: ChatInputCommandInteraction, args: string[], runner: CommandRunner) {
+    return new Context(
+      buildFromDiscordMessage(message),
+      buildFromDiscordUser(message.user),
+      buildFromDiscordChannel(message.channel),
+      args,
+      runner
+    )
   }
 
   static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
@@ -63,6 +60,24 @@ export class Context {
       args,
       runner
     )
+  }
+
+  async getUserData (user = this.author): Promise<CachedUserData | null> {
+    const r = await client.user.findFirst({
+      where: {
+        platformId: this.userPlatformId(user)
+      },
+      select: {
+        id: true,
+        fmUsername: true,
+        language: true,
+        isBanned: true,
+        revealUser: true
+      }
+    })
+
+    this.cachedResult = r
+    return r
   }
 
   /**
@@ -93,17 +108,11 @@ export class Context {
   }
 
   t (translationKey: string, data: Record<string, any> = {}) {
-    return i18n.__({
-      phrase: translationKey,
-      locale: this.language
-    }, data)
+    return lt(this.language, translationKey, data)
   }
 
   reply (translationKey: string, data: Record<string, any> = {}, options: ReplyOptions = {}) {
-    this.replyWith = (options.noTranslation || data.noTranslation) ? translationKey : i18n.__({
-      phrase: translationKey,
-      locale: this.language
-    }, data)
+    this.replyWith = (options.noTranslation || data.noTranslation) ? translationKey : this.t(translationKey, data)
 
     // detect markdown
     const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('_') || (this.replyWith as string).includes('`')
@@ -112,6 +121,8 @@ export class Context {
       const url = options.imageURL ? `[\u200B](${options.imageURL})` : ''
       this.replyWith = marked.parseInline(this.replyWith as string + url)
     }
+
+    this.replyOptions = options
   }
 }
 

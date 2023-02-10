@@ -3,8 +3,16 @@
 * This Kotlin-script file lets you automate build activities
 * For more info, see https://www.jetbrains.com/help/space/automation.html
 */
-
 job("Build and push Docker") {
+    startOn {
+        // trigger the job on every push to the master branch
+        gitPush {
+            branchFilter {
+                + "refs/heads/main"
+            }
+        }
+    }
+
     host("Build and push a Docker image") {
         dockerBuildPush {
             // by default, the step runs not only 'docker build' but also 'docker push'
