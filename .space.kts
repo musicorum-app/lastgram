@@ -36,14 +36,6 @@ job("Build and push Docker") {
     }
 
     container("Deploy to stage", image = "gradle:7.1-jre11") {
-        shellScript {
-            content = packageVersionScript
-        }
-
-        shellScript {
-            content = "echo \"Deploying for stage @ \$BUILD_VERSION\""
-        }
-
         kotlinScript { api ->
 
             api.space().projects.automation.deployments.schedule(
