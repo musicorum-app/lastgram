@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.module.kotlin.kotlinModule
+
 /**
 * JetBrains Space Automation
 * This Kotlin-script file lets you automate build activities
@@ -13,9 +15,14 @@ job("Build and push Docker") {
         }
     }
 
+    val version = "unknown"
+
+
+
     kaniko {
         beforeBuildScript {
-            content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')"
+            content = "export BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[\", ]//g')" +
+                    "echo \$BUILD_VERSION > version.txt"
         }
 
         build {
@@ -29,16 +36,16 @@ job("Build and push Docker") {
                 +"latest"
             }
         }
+
     }
 
     container("Deploy to stage", image = "gradle:7.1-jre11") {
         kotlinScript { api ->
-            // ...
 
             api.space().projects.automation.deployments.schedule(
                 project = api.projectIdentifier(),
                 targetIdentifier = TargetIdentifier.Key("stage"),
-                version = "\$BUILD_VERSION",
+                version = System.getenv("BUILD_VERSION"),
             )
         }
     }
