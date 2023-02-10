@@ -34,9 +34,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            "ghcr.io/${{ github.repository }}/${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
-            "ghcr.io/${{ github.repository }}/latest"
+          tags: "ghcr.io/${{ github.repository }}/latest"
+          labels: "version=${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
   
   deploy-stage:
     name: "Staging deploy"
