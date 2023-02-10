@@ -4,6 +4,7 @@ on:
   push: 
     branches:
       - main
+    workflow_dispatch:
 
 jobs:
   build:
@@ -33,3 +34,8 @@ jobs:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: "ghcr.io/${{ github.repository }}/${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
+  deploy:
+    environment: staging
+    steps:
+      - name: TODO
+        run: echo "deployed! (or not)"
