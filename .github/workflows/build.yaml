@@ -32,4 +32,4 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: "ghcr.io/${{ github.repository }}/${{ steps.package-version.outputs.current-version}}-${{ github.run_id }}"
+          tags: "ghcr.io/${{ github.repository }}/${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
