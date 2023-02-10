@@ -14,6 +14,11 @@ job("Build and push Docker") {
     }
 
     host("Build and push a Docker image") {
+        shellScript {
+            content = """
+                BUILD_VERSION=\$(cat package.json|grep version|head -1|awk -F: '{ print \$2 }'|sed 's/[", ]//g')
+            """
+        }
         dockerBuildPush {
             // by default, the step runs not only 'docker build' but also 'docker push'
             // to disable pushing, add the following line:
@@ -32,9 +37,11 @@ job("Build and push Docker") {
             // to add a raw list of additional push arguments, use
             // extraArgsForPushCommand = listOf("...")
             // image tags
+            val repository = "musicorum.registry.jetbrains.space/p/main/containers/lastgram"
             tags {
                 // use current job run number as a tag - '0.0.run_number'
-                +"musicorum.registry.jetbrains.space/p/main/containers/lastgram:0.0.${"$"}JB_SPACE_EXECUTION_NUMBER"
+                +"$repository:\$BUILD_VERSION"
+                +"$repository:latest"
             }
         }
     }
@@ -45,8 +52,13 @@ job("Build and push Docker") {
             api.space().projects.automation.deployments.schedule(
                 project = api.projectIdentifier(),
                 targetIdentifier = TargetIdentifier.Key("stage"),
-                version = "0.1-test",
+                version = "\$BUILD_VERSION",
             )
+        }
+         shellScript {
+            content = """
+                echo "Deployed stage @ \$BUILD_VERSION"
+            """
         }
     }
 }
