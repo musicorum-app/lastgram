@@ -1,4 +1,4 @@
-name: Build CD
+name: Build and deploy
 
 on:
   push: 
@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: "Build image"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,10 +36,22 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: "ghcr.io/${{ github.repository }}/${{ steps.version.outputs.current-version}}-${{ github.run_id }}"
   
-  deploy:
+  deploy-stage:
+    name: "Staging deploy"
     runs-on: ubuntu-latest
     needs: build
+    environment: staging
     
     steps:
       - name: TODO
-        run: echo "deployed! (or not)"
+        run: echo "deployed to stage!"
+  
+  deploy-prod:
+    name: "Production deploy"
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    
+    steps:
+      - name: TODO
+        run: echo "deployed to prod!"
