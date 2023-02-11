@@ -90,7 +90,7 @@ export class MinimalContext {
   }
 
   reply (translationKey: string, data: Record<string, any> = {}, options: ReplyOptions = {}) {
-    this.replyWith = (options.noTranslation || data.noTranslation) ? translationKey : this.t(translationKey, data)
+    this.replyWith = options.noTranslation ? translationKey : this.t(translationKey, data)
 
     // detect markdown
     const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')
