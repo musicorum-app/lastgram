@@ -1,0 +1,34 @@
+{
+  "common": {
+    "useRegister": "Use `/register <last.fm username>` to register.",
+    "consultSupport": "Consult lastgram support at @lastgramsupport for more information.",
+    "checkFmStatus": "For more information, check @lastfmstatus at Twitter or @lastgramsupport at Telegram.",
+    "tryAgain": "Please try again.",
+    "checkSpelling": "Please check your spelling and try again."
+  },
+  "guards": {
+    "targetable": {
+      "userNotRegistered": "$t(errors:guards.registered.userNotRegistered)",
+      "userBanned": "$t(errors:guards.registered.userBanned)",
+      "userMentionedNotRegistered": "The user you mentioned has not registered themselves yet. $t(errors:common.useRegister)",
+      "userMentionedBanned": "Sorry, the user you mentioned has been banned from using this bot. $t(errors:common.consultSupport)"
+    },
+    "registered": {
+      "userNotRegistered": "This command is only available to registered users. $t(errors:common.useRegister)",
+      "userBanned": "Sorry, you have been banned from using this bot. $t(errors:common.consultSupport)"
+    }
+  },
+  "command": {
+    "missingArgument": "Missing arguments.\nThis command should be used like this: `{{- usage}}`",
+    "generic": "Sorry, an unknown error occurred while processing your command. $t(errors:common.consultSupport)",
+    "invalidArgument": "Invalid argument.\nThis command should be used like this: `{{- usage}}`"
+  },
+  "lastfm": {
+    "genericError": "Sorry, an unknown error occurred with last.fm. $t(errors:common.tryAgain)",
+    "serviceUnavailable": "Sorry, last.fm seems to be currently unavailable. $t(errors:common.checkFmStatus)",
+    "seriousError": "Sorry, a serious error occurred with last.fm. $t(errors:common.consultSupport)",
+    "userNotFound": "Sorry, the last.fm username you specified was not found. $t(errors:common.checkSpelling)",
+    "noScrobbles": "Sorry, the last.fm user you specified has not scrobbled anything yet."
+  },
+  "unknown": "Sorry, an unknown error occurred. $t(errors:common.tryAgain)"
+}
