@@ -2,6 +2,7 @@ import { loadedCommands } from '../../commandEngine/loader.js'
 import { CommandArgs } from '../../commandEngine/command.js'
 import { REST, Routes } from 'discord.js'
 import { error, grey, info } from '../../loggingEngine/logging.js'
+import { lt } from '../../translationEngine/index.js'
 
 const regex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u
 
@@ -23,7 +24,7 @@ interface DiscordCommandOption {
 const commandArgToDiscordOption = (arg: CommandArgs): DiscordCommandOption => {
   return {
     name: arg.name,
-    description: 'The ' + (arg.displayName ?? arg.name),
+    description: 'The ' + lt('en', `args:${arg.name}`, {}),
     type: discordTypeMapping[arg.type ?? 'string'],
     required: arg.required
   }
@@ -38,7 +39,7 @@ export const generateDiscordCommandList = () => {
     }
     return {
       name: command.name,
-      description: command.description,
+      description: lt('en', `descriptions:${command.name}.description`, {}),
       options: command.args?.map?.(commandArgToDiscordOption) ?? []
     }
   })

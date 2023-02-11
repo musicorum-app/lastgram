@@ -1,9 +1,11 @@
 import { Platform } from '../platform.js'
-import { error, info } from '../../loggingEngine/logging.js'
-import { Context } from '../common/context.js'
+import { error, grey, info } from '../../loggingEngine/logging.js'
+import { Context, MinimalContext } from '../common/context.js'
 import { Replyable } from '../protocols.js'
-import { ChatInputCommandInteraction, Client, Interaction } from 'discord.js'
+import { ButtonInteraction, ChatInputCommandInteraction, Client, Interaction } from 'discord.js'
 import { commandRunner } from '../../commandEngine/index.js'
+import { buildFromDiscordUser } from '../common/user.js'
+import { eventEngine } from '../../eventEngine/index.js'
 
 export default class Discord extends Platform {
   private client: Client<boolean>
@@ -11,8 +13,8 @@ export default class Discord extends Platform {
   constructor () {
     super('discord')
     if (!process.env.DISCORD_TOKEN) {
-      error('discord.main', 'DISCORD environment variable not set')
-      process.exit(1)
+      error('discord.main', 'DISCORD_TOKEN environment variable not set. Discord will not be available.')
+      return
     }
 
     this.client = new Client({ intents: ['Guilds'] })
@@ -35,7 +37,27 @@ export default class Discord extends Platform {
   }
 
   async onInteraction (interaction: Interaction) {
-    if (!interaction.isChatInputCommand()) return
+    if (interaction.isChatInputCommand()) return this.onChatInputCommand(interaction)
+    if (interaction.isButton()) return this.onButtonInteraction(interaction)
+  }
+
+  async onButtonInteraction (interaction: ButtonInteraction) {
+    info('discord.onInteraction', `received button interaction`)
+    const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), interaction.customId)
+    try {
+      await eventEngine.dispatchEvent({
+        userID: interaction.user.id,
+        channelID: interaction.channelId,
+        platform: 'discord'
+      }, 'buttonClick', minimalCtx)
+
+      if (minimalCtx.replyWith) await this.deliverMessage(minimalCtx, minimalCtx.replyWith, interaction)
+    } catch (e) {
+      error('discord.onButtonInteraction', `error while handling button interaction\n${grey(e.stack)}`)
+    }
+  }
+
+  async onChatInputCommand (interaction: ChatInputCommandInteraction) {
     info('discord.onInteraction', `received interaction ${interaction.commandName}`)
     const cmd = commandRunner.hasCommand(interaction.commandName)
     if (!cmd) return
@@ -54,14 +76,22 @@ export default class Discord extends Platform {
     if (ctx.replyWith) await this.deliverMessage(ctx, ctx.replyWith, interaction)
   }
 
-  deliverMessage (ctx: Context, text: Replyable, interaction: ChatInputCommandInteraction) {
+  deliverMessage (ctx: MinimalContext, text: Replyable, interaction: ChatInputCommandInteraction | ButtonInteraction) {
+    if (interaction.isButton()) {
+      interaction.editReply = interaction.update
+    }
     if (ctx.replyOptions?.imageURL) {
       return interaction.editReply({
         content: text.toString(),
         files: [ctx.replyOptions.imageURL]
       })
     } else {
-      return interaction.editReply(text.toString())
+      return interaction.editReply({
+        content: text.toString(),
+        // @ts-ignore
+        components: ctx.components.components,
+        ephemeral: ctx.replyOptions?.ephemeral ?? false
+      })
     }
   }
 

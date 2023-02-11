@@ -9,29 +9,32 @@ import { Command } from '../../commandEngine/command.js'
 import { CommandRunner } from '../../commandEngine/index.js'
 import { ChatInputCommandInteraction } from 'discord.js'
 import { lt } from '../../translationEngine/index.js'
+import { CommandComponentBuilder } from './components/builder.js'
 
 export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean, revealUser: boolean, isBanned: boolean }; where: any }>
 
 interface ReplyOptions {
   noTranslation?: boolean
   imageURL?: string
+  editOriginal?: boolean
+  ephemeral?: boolean
 }
 
-export class Context {
+export class MinimalContext {
   replyWith?: Replyable
   replyOptions?: ReplyOptions
-  private cachedResult: CachedUserData | null
+  public components: CommandComponentBuilder
   public replyMarkup?: string
+  protected cachedResult: CachedUserData | null
   public command?: Command
   public targetedUser?: User
 
   constructor (
-    public message: Message,
+    public channelID: string,
     public author: User,
-    public channel: Channel,
-    public args: string[],
-    public runner: CommandRunner
+    public interactionData?: string
   ) {
+    this.components = new CommandComponentBuilder(this)
   }
 
   get userData () {
@@ -40,26 +43,6 @@ export class Context {
 
   get language () {
     return this.userData?.language || this.author.languageCode || 'en'
-  }
-
-  static fromDiscordMessage (message: ChatInputCommandInteraction, args: string[], runner: CommandRunner) {
-    return new Context(
-      buildFromDiscordMessage(message),
-      buildFromDiscordUser(message.user),
-      buildFromDiscordChannel(message.channel),
-      args,
-      runner
-    )
-  }
-
-  static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
-    return new Context(
-      buildFromTelegramMessage(message),
-      buildFromTelegramUser(message.from),
-      buildFromTelegramChannel(message.chat),
-      args,
-      runner
-    )
   }
 
   async getUserData (user = this.author): Promise<CachedUserData | null> {
@@ -99,14 +82,6 @@ export class Context {
     })
   }
 
-  private userPlatformId (user = this.author): string {
-    return `${user.platform}_${user.id}`
-  }
-
-  setCommand (command: Command) {
-    this.command = command
-  }
-
   t (translationKey: string, data: Record<string, any> = {}) {
     return lt(this.language, translationKey, data)
   }
@@ -117,12 +92,52 @@ export class Context {
     // detect markdown
     const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('_') || (this.replyWith as string).includes('`')
     if (hasMarkdown) this.replyMarkup = 'markdown'
-    if (hasMarkdown && this.message.platform === 'telegram') {
+    if (hasMarkdown && this.author.platform === 'telegram') {
       const url = options.imageURL ? `[\u200B](${options.imageURL})` : ''
       this.replyWith = marked.parseInline(this.replyWith as string + url)
     }
 
     this.replyOptions = options
+  }
+
+  private userPlatformId (user = this.author): string {
+    return `${user.platform}_${user.id}`
+  }
+}
+
+export class Context extends MinimalContext {
+  constructor (
+    public message: Message,
+    public author: User,
+    public channel: Channel,
+    public args: string[],
+    public runner: CommandRunner
+  ) {
+    super(channel.id, author)
+  }
+
+  static fromDiscordMessage (message: ChatInputCommandInteraction, args: string[], runner: CommandRunner) {
+    return new Context(
+      buildFromDiscordMessage(message),
+      buildFromDiscordUser(message.user),
+      buildFromDiscordChannel(message.channel),
+      args,
+      runner
+    )
+  }
+
+  static fromTelegramMessage (message: Record<string, any>, args: string[], runner: CommandRunner) {
+    return new Context(
+      buildFromTelegramMessage(message),
+      buildFromTelegramUser(message.from),
+      buildFromTelegramChannel(message.chat),
+      args,
+      runner
+    )
+  }
+
+  setCommand (command: Command) {
+    this.command = command
   }
 }
 

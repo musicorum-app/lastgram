@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  SERVICE_NAME: lastgrambot_bot
+  SERVICE_NAME: lastgram-stage_bot
   TIMEOUT: 10000
 
 jobs:
