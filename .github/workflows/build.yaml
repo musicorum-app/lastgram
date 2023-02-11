@@ -59,7 +59,7 @@ jobs:
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
           timeout: 15000
-          data: '{"service": "$SERVICE_NAME", "timeout": $TIMEOUT, "webhook": "$WEBHOOK_URL"}'
+          data: "{\"service\": \"$SERVICE_NAME\", \"timeout\": $TIMEOUT, \"webhook\": \"$WEBHOOK_URL\"}"
   
   deploy-prod:
     name: "Production deploy"
