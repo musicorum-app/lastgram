@@ -13,7 +13,6 @@ export interface CommandButtonComponent extends CommandBaseComponent {
   emoji?: string
   url?: string
   disabled?: boolean
-  data: string
   type?: CommandButtonComponentType
 }
 
