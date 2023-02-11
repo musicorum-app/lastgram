@@ -6,10 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  SERVICE_NAME: lastgram-stage_bot
-  TIMEOUT: 22000
-
 jobs:
   build:
     name: "Build image"
@@ -52,11 +48,7 @@ jobs:
     steps:
       - name: Deploy Stage
         uses: fjogeleit/http-request-action@v1
-        env:
-          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
         with:
-          url: ${{ secrets.SWARM_API }}
+          url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
           timeout: 30000
-          data: '{"service": "${{env.SERVICE_NAME}}", "timeout": ${{env.TIMEOUT}}, "webhook": "${{env.WEBHOOK_URL}}"}'
