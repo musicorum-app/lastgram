@@ -13,7 +13,7 @@ export class CommandError extends Error {
 
 export class MissingArgumentError extends CommandError {
   get display () {
-    return this.ctx.t('errors:command.missingArgument`', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
+    return this.ctx.t('errors:command.missingArguments', { usage: buildCommandUsage(this.ctx.command!, this.ctx.language) })
   }
 }
 
