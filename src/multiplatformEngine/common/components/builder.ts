@@ -1,12 +1,16 @@
-import { CommandComponentBuilderPlatforms } from './base.js'
+import { CommandComponentBuilderPlatforms, CommandComponentBuilderReturnTypes } from './base.js'
 import { CommandButtonComponent } from './button.js'
 import { buildComponentForPlatform } from './list.js'
 import { MinimalContext } from '../context.js'
 import { eventEngine } from '../../../eventEngine/index.js'
-import { EventConstraints } from '../../../eventEngine/types/engine.js'
+import { EngineEventList, EventConstraints } from '../../../eventEngine/types/engine.js'
+
+export interface ComponentOptions {
+  noTranslate?: boolean
+}
 
 export class CommandComponentBuilder {
-  public components: Record<string, any>[]
+  public components: CommandComponentBuilderReturnTypes[]
   public platform: CommandComponentBuilderPlatforms
 
   constructor (public context: MinimalContext) {
@@ -14,23 +18,31 @@ export class CommandComponentBuilder {
     this.platform = context.author.platform as CommandComponentBuilderPlatforms
   }
 
-  addButton (button: CommandButtonComponent, handler?: (ctx: MinimalContext) => boolean) {
+  addButton (button: CommandButtonComponent, handler?: (ctx: MinimalContext) => boolean, options?: ComponentOptions) {
     const id = this.randomID()
     const component = buildComponentForPlatform(this.platform, 'button', {
       ...button,
-      data: `${id}_${button.data}`
+      data: `${id}_${button.data}`,
+      name: options?.noTranslate ? button.name : this.context.t(button.name)
     })
-    component && this.components.push({ type: 1, components: [component] })
-    handler && eventEngine.queueEvent(
+    const group = buildComponentForPlatform(this.platform, 'group', {
+      components: [component]
+    })
+    component && this.components.push(group)
+    handler && this.queueEvent(id, 'buttonClick', handler)
+    return this
+  }
+
+  private queueEvent (id: string, event: keyof EngineEventList, handler: (ctx: MinimalContext) => boolean) {
+    eventEngine.queueEvent(
       this.buildConstraint(),
-      'buttonClick',
+      event,
       (ctx) => {
         if (ctx.interactionData!.split('_')[0] !== id) return false
         ctx.interactionData = ctx.interactionData!.split('_')[1]
         return handler(ctx)
       }
     )
-    return this
   }
 
   private randomID () {
