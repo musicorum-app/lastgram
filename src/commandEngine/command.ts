@@ -6,7 +6,7 @@ export interface Command {
   aliases: string[]
   protectionLevel: string
   args?: CommandArgs[]
-
+  hidden?: boolean
   run? (ctx: Context, args?: Record<string, any>): Promise<void>
 }
 

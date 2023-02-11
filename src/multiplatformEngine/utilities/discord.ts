@@ -31,7 +31,7 @@ const commandArgToDiscordOption = (arg: CommandArgs): DiscordCommandOption => {
 }
 
 export const generateDiscordCommandList = () => {
-  return loadedCommands.map((command) => {
+  return loadedCommands.filter(z => !z.hidden).map((command) => {
     // check if name matches regex
     if (!regex.test(command.name)) {
       error('discord.generateDiscordCommandList', `Command name "${command.name}" does not match regex.`)
