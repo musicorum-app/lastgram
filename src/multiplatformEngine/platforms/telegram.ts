@@ -1,9 +1,9 @@
 import { Platform } from '../platform.js'
-import { error, warn } from '../../loggingEngine/logging.js'
+import { debug, error, grey, warn } from '../../loggingEngine/logging.js'
 import { buildFromTelegramUser, User } from '../common/user.js'
 import { handleTelegramMessage } from '../utilities/telegram.js'
-import { Context } from '../common/context.js'
-import { Replyable } from '../protocols.js'
+import { Context, MinimalContext } from '../common/context.js'
+import { eventEngine } from '../../eventEngine/index.js'
 
 const API_URL = 'https://api.telegram.org/bot'
 
@@ -42,8 +42,12 @@ export default class Telegram extends Platform {
 
         if (update.message && update.message.text) {
           handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
-            if (ctx?.replyWith) return this.deliverMessage(ctx, ctx.replyWith)
+            if (ctx?.replyWith) return this.deliverMessage(ctx)
           })
+        }
+
+        if (update.callback_query) {
+          this.handleInteraction(update.callback_query).then(a => a)
         }
       }
 
@@ -51,21 +55,92 @@ export default class Telegram extends Platform {
     })
   }
 
-  deliverMessage (ctx: Context, text: Replyable) {
+  async handleInteraction (query: Record<string, any>) {
+    debug('telegram.onInteraction', `received button interaction`)
+    const user = buildFromTelegramUser(query.from)
+    const minimalCtx = new MinimalContext(query.chat_instance, user, query.data)
+    try {
+      await eventEngine.dispatchEvent({
+        userID: query.from.id.toString(),
+        channelID: query.message?.chat?.id?.toString?.() ?? '*',
+        platform: 'telegram'
+      }, 'buttonClick', minimalCtx)
+
+      if (minimalCtx.replyWith) await this.deliverInteraction(query, minimalCtx)
+    } catch (e) {
+      error('telegram.onInteraction', `error while handling button interaction\n${grey(e.stack)}`)
+    }
+  }
+
+  async deliverInteraction (query: Record<string, any>, ctx: MinimalContext) {
+    if (ctx.replyOptions?.keepComponents === false) {
+      await this.request('editMessageReplyMarkup', {
+        chat_id: query.message.chat.id,
+        message_id: query.message.message_id,
+        reply_markup: JSON.stringify({ inline_keyboard: [] })
+      })
+    }
+    if (ctx.replyOptions?.editOriginal === false) {
+      await this.sendMessage(query.message.chat.id, ctx.replyWith!.toString(), {
+        parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
+        replyTo: query.message.message_id
+      })
+    } else {
+      await this.updateMessageText({
+        chatID: query.message.chat.id,
+        messageID: query.message.message_id
+      }, ctx.replyWith!.toString(), {
+        parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
+      })
+    }
+
+    return this.answerCallbackQuery(query.id, ctx.replyOptions?.alertText, ctx.replyOptions?.warning)
+  }
+
+  deliverMessage (ctx: Context) {
     const id = ctx.channel?.id || ctx.author.id
     const replyTo = ctx.message.replyingTo ? ctx.message.id : undefined
-    return this.sendMessage(id, text.toString(), {
+    return this.sendMessage(id, ctx.replyWith!.toString(), {
       parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
-      replyTo
+      replyTo,
+      replyMarkup: ctx.components.components[0]
+        ? JSON.stringify({ inline_keyboard: ctx.components.components })
+        : undefined
     })
   }
 
-  public sendMessage (chatId: string, text: string, options: { parseMode?: 'MarkdownV2' | 'HTML', replyTo?: string }) {
+  public sendMessage (chatId: string, text: string, options: { parseMode?: 'MarkdownV2' | 'HTML', replyTo?: string, replyMarkup?: string | undefined }) {
     return this.request('sendMessage', {
       chat_id: chatId,
       text,
       parse_mode: options?.parseMode,
-      reply_to_message_id: options?.replyTo
+      reply_to_message_id: options?.replyTo,
+      reply_markup: options?.replyMarkup
+    })
+  }
+
+  public updateMessageText (data: { messageID: number, chatID: number }, text: string, options: { parseMode?: 'MarkdownV2' | 'HTML', replyMarkup?: string | undefined }) {
+    return this.request('editMessageText', {
+      chat_id: data.chatID,
+      message_id: data.messageID,
+      text,
+      parse_mode: options?.parseMode,
+      reply_markup: options?.replyMarkup
+    })
+  }
+
+  public updateMessageReplyMarkup (inlineMessageId: string, replyMarkup: string) {
+    return this.request('editMessageReplyMarkup', {
+      inline_message_id: inlineMessageId,
+      reply_markup: replyMarkup
+    })
+  }
+
+  public answerCallbackQuery (callbackQueryId: string, text?: string, showAlert?: boolean) {
+    return this.request('answerCallbackQuery', {
+      callback_query_id: callbackQueryId,
+      text,
+      show_alert: showAlert
     })
   }
 
@@ -83,7 +158,6 @@ export default class Telegram extends Platform {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json()).then(response => {
-      // TODO: turn this counter onto a histogram 
       this.getCounter('telegram_requests').inc({
         success: response.ok ? 'true' : 'false',
         method
@@ -91,9 +165,12 @@ export default class Telegram extends Platform {
 
       if (!response.ok) {
         warn('platforms.telegram', `The Telegram API returned an error: ${response.description}`)
+        return undefined
       }
 
       return response.result
+    }).catch((e) => {
+      error('platforms.telegram', `A possible networking error has occurred.\n${grey(e.stack)}`)
     })
   }
 }
