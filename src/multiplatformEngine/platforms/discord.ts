@@ -1,5 +1,5 @@
 import { Platform } from '../platform.js'
-import { error, grey, info } from '../../loggingEngine/logging.js'
+import { debug, error, grey, info } from '../../loggingEngine/logging.js'
 import { Context, MinimalContext } from '../common/context.js'
 import { Replyable } from '../protocols.js'
 import { ButtonInteraction, ChatInputCommandInteraction, Client, Interaction } from 'discord.js'
@@ -42,7 +42,7 @@ export default class Discord extends Platform {
   }
 
   async onButtonInteraction (interaction: ButtonInteraction) {
-    info('discord.onInteraction', `received button interaction`)
+    debug('discord.onInteraction', `received button interaction`)
     const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), interaction.customId)
     try {
       await eventEngine.dispatchEvent({
@@ -78,7 +78,8 @@ export default class Discord extends Platform {
 
   deliverMessage (ctx: MinimalContext, text: Replyable, interaction: ChatInputCommandInteraction | ButtonInteraction) {
     if (interaction.isButton()) {
-      interaction.editReply = interaction.update
+      if (ctx.replyOptions?.editOriginal === false) interaction.editReply = interaction.reply
+      else interaction.editReply = interaction.update
     }
     if (ctx.replyOptions?.imageURL) {
       return interaction.editReply({
@@ -89,13 +90,14 @@ export default class Discord extends Platform {
       return interaction.editReply({
         content: text.toString(),
         // @ts-ignore
-        components: ctx.components.components,
+        components: ctx.replyOptions?.keepComponents ? undefined : ctx.components.components,
         ephemeral: ctx.replyOptions?.ephemeral ?? false
       })
     }
   }
 
   async start () {
+    if (!process.env.DISCORD_TOKEN) return
     await this.client.login(process.env.DISCORD_TOKEN)
   }
 }
