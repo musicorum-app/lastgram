@@ -18,6 +18,9 @@ interface ReplyOptions {
   imageURL?: string
   editOriginal?: boolean
   ephemeral?: boolean
+  keepComponents?: boolean
+  alertText?: string
+  warning?: boolean
 }
 
 export class MinimalContext {
@@ -90,7 +93,7 @@ export class MinimalContext {
     this.replyWith = (options.noTranslation || data.noTranslation) ? translationKey : this.t(translationKey, data)
 
     // detect markdown
-    const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('_') || (this.replyWith as string).includes('`')
+    const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')
     if (hasMarkdown) this.replyMarkup = 'markdown'
     if (hasMarkdown && this.author.platform === 'telegram') {
       const url = options.imageURL ? `[\u200B](${options.imageURL})` : ''
