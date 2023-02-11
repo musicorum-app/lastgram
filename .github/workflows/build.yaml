@@ -8,7 +8,7 @@ on:
 
 env:
   SERVICE_NAME: lastgram-stage_bot
-  TIMEOUT: 15000
+  TIMEOUT: 22000
 
 jobs:
   build:
@@ -58,5 +58,5 @@ jobs:
           url: ${{ secrets.SWARM_API }}
           method: 'POST'
           customHeaders: '{"Content-Type": "application/json"}'
-          timeout: 20000
+          timeout: 30000
           data: '{"service": "${{env.SERVICE_NAME}}", "timeout": ${{env.TIMEOUT}}, "webhook": "${{env.WEBHOOK_URL}}"}'
