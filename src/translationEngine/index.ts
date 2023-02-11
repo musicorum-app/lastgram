@@ -6,10 +6,9 @@ import { debug } from '../loggingEngine/logging.js'
 i18next
   .use(Backend)
   .init<FsBackendOptions>({
-    lng: 'en',
-    nonExplicitSupportedLngs: true,
+    fallbackLng: 'en',
     preload: ['en', 'pt'],
-    ns: ['core', 'commands', 'errors', 'args', 'descriptions'],
+    ns: ['commands', 'errors', 'args', 'descriptions'],
     saveMissing: isDevelopment,
     saveMissingTo: 'all',
     saveMissingPlurals: true,
@@ -22,5 +21,6 @@ i18next
 })
 
 export const lt = (locale: string, key: string, data: Record<string, any>) => {
+  debug('translationEngine.lt', `translating ${key} for ${locale}`)
   return i18next.t(key, { lng: locale, ...data })
 }

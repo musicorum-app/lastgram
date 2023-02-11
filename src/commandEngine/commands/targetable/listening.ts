@@ -13,6 +13,5 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
-  aliases: ['lt', 'ln', 'lp', 'listening', 'listen'],
-  description: 'Shows what you are currently listening to.'
+  aliases: ['lt', 'ln', 'lp', 'listening', 'listen']
 }

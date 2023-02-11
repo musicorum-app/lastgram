@@ -12,19 +12,17 @@ export default (ctx: Context, { command }: Args) => {
     const usage = buildCommandUsage(cmd, ctx.language)
     return ctx.reply('commands:help.commandInfo', {
       name: cmd.name,
-      description: ctx.t(cmd.description || 'No description available'),
+      description: ctx.t(`descriptions:${cmd.name}`),
       usage
     })
   }
-  return ctx.reply('👋 Howdy. lastgram is a bot for last.fm users, allowing them to interact with the service through Telegram.\n\nNews, updates and more: https://t.me/lastgramdaily\nSupport and vibes: https://t.me/lastgramsupport\n\nUse `/help <command>` to get more information about a command.')
+  return ctx.reply('commands:help.text')
 }
 
 export const info = {
   aliases: ['ajuda'],
-  description: 'Shows this help message.',
   args: [{
     name: 'command',
-    required: false,
-    displayName: 'command name'
+    required: false
   }]
 }

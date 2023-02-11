@@ -78,7 +78,7 @@ export class CommandRunner {
         return false
       }
       // internal errors
-      if ([2, 11].includes(error.error)) {
+      if ([2, 11, 8].includes(error.error)) {
         //ctx.reply('Sorry, last.fm seems to be offline right now. Please, try again later.\nFor more information, check @lastfmstatus at Twitter.')
         ctx.reply('errors:lastfm.serviceUnavailable')
         return false
