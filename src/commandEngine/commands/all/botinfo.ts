@@ -1,6 +1,7 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
 import client from 'prom-client'
 import { isDevelopment } from '../../../utils.js'
+import { CommandButtonComponentType } from '../../../multiplatformEngine/common/components/button.js'
 
 export default async (ctx: Context) => {
   const processMemory = process.memoryUsage()
@@ -12,14 +13,20 @@ export default async (ctx: Context) => {
     return v[v.length - 1]
   })
 
-  ctx.reply('commands:botinfo', {
+  ctx.components.addButton({
+    name: 'commands:botinfo.buttons.github',
+    emoji: '👀',
+    url: 'https://github.com/musicorum-app/lastgram',
+    type: CommandButtonComponentType.link
+  })
+
+  ctx.reply('commands:botinfo.data', {
     mode: isDevelopment ? 'development' : 'stable',
     rss: rss.toFixed(2),
     heapTotal: heapTotal.toFixed(2),
     heapUsed: heapUsed.toFixed(2),
     updates: totalTelegramMessages
-  }, { noTranslation: true })
-  // TODO: remove noTranslation
+  })
 }
 
 export const info = {
