@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  SERVICE_NAME: lastgrambot_bot
+  TIMEOUT: 10000
+
 jobs:
   build:
     name: "Build image"
@@ -46,13 +50,21 @@ jobs:
     environment: staging
     
     steps:
-      - name: TODO
-        run: echo "deployed to stage!"
+      - name: Deploy Stage
+        uses: fjogeleit/http-request-action@v1
+        env:
+          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+        with:
+          url: ${{ secrets.SWARM_API }}
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json"}'
+          timeout: 15000
+          data: '{"service": "$SERVICE_NAME", "timeout": $TIMEOUT, "webhook": "$WEBHOOK_URL"}'
   
   deploy-prod:
     name: "Production deploy"
     runs-on: ubuntu-latest
-    needs: build
+    needs: deploy-stage
     environment: production
     
     steps:
@@ -73,4 +85,4 @@ jobs:
             ghcr.io/${{ github.repository }}:latest
 
       - name: TODO
-        run: echo "deployed to prod!"
+        run: echo "not implemented yet!" && exit 1
