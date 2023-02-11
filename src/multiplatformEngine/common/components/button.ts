@@ -22,14 +22,16 @@ export const buildButtonForPlatform = (
 ): CommandComponentBuilderReturnTypes => {
   switch (platform) {
     case 'discord':
+      let data: { custom_id?: string } = {}
+      if (!button.url) data.custom_id = button.data
       return {
         label: button.name,
         emoji: button.emoji,
         type: 2,
         style: button.type ?? CommandButtonComponentType.primary,
-        custom_id: button.data,
         url: button.url,
-        disabled: button.disabled
+        disabled: button.disabled,
+        ...data
       }
     case 'telegram':
       if (button.disabled) return undefined
