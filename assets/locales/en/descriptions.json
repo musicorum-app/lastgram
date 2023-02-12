@@ -4,5 +4,6 @@
   "help": "Shows help about the bot",
   "linkfm": "Links your last.fm account to your account",
   "unlinkfm": "Unlinks your last.fm account from your account",
-  "listening": "Shows what you are listening to"
+  "listening": "Shows what you are listening to",
+  "devpanel": "Shows the developer panel"
 }

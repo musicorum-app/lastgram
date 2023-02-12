@@ -33,5 +33,12 @@
     "cancelled": "Linking cancelled.",
     "successWithUsername": "Hey, `{{username}}`! Your last.fm account has been linked successfully, but the username you've set on the bot didn't match. I've set it to `{{username}}`, which is your real one."
   },
+  "devpanel": {
+    "buttons": {
+      "updateDiscordCommands": "Update Discord commands"
+    },
+    "pickAnAction": "Pick an action...",
+    "discordCommandsUpdated": "Discord commands have been updated."
+  },
   "start": "$t(help.text)"
 }
