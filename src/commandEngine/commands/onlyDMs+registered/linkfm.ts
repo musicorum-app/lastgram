@@ -51,7 +51,7 @@ export const doneLinking = async (ctx: MinimalContext) => {
     return
   }
 
-  ctx.reply('commands:linkfm.success')
+  ctx.reply('commands:linkfm.success', { username: data.username })
 }
 export const info = {
   aliases: ['linklast']
