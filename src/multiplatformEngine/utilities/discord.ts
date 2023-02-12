@@ -1,5 +1,5 @@
 import { loadedCommands } from '../../commandEngine/loader.js'
-import { CommandArgs } from '../../commandEngine/command.js'
+import { Command, CommandArgs } from '../../commandEngine/command.js'
 import { REST, Routes } from 'discord.js'
 import { error, grey, info } from '../../loggingEngine/logging.js'
 import { lt } from '../../translationEngine/index.js'
@@ -21,10 +21,10 @@ interface DiscordCommandOption {
   required?: boolean
 }
 
-const commandArgToDiscordOption = (arg: CommandArgs): DiscordCommandOption => {
+const commandArgToDiscordOption = (arg: CommandArgs, command: Command): DiscordCommandOption => {
   return {
     name: arg.name,
-    description: 'The ' + lt('en', `args:${arg.name}`, {}),
+    description: 'The ' + lt('en', `args:${command.name}.${arg.name}`, {}),
     type: discordTypeMapping[arg.type ?? 'string'],
     required: arg.required
   }
@@ -39,8 +39,8 @@ export const generateDiscordCommandList = () => {
     }
     return {
       name: command.name,
-      description: lt('en', `descriptions:${command.name}.description`, {}),
-      options: command.args?.map?.(commandArgToDiscordOption) ?? []
+      description: lt('en', `descriptions:${command.name}`, {}),
+      options: command.args?.map?.((arg) => commandArgToDiscordOption(arg, command)) ?? []
     }
   })
 }
