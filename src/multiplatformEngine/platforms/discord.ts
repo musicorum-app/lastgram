@@ -48,7 +48,6 @@ export default class Discord extends Platform {
     try {
       await eventEngine.dispatchEvent(id, minimalCtx)
 
-      await interaction.deferUpdate()
       if (minimalCtx.replyWith) await this.deliverMessage(minimalCtx, minimalCtx.replyWith, interaction)
     } catch (e) {
       error('discord.onButtonInteraction', `error while handling button interaction\n${grey(e.stack)}`)
