@@ -1,13 +1,16 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
 import { fixLanguageFormat } from '../../helpers.js'
 import { client } from '../../../fmEngine/index.js'
+import { getUser } from '../../../database.js'
 
 type Args = {
   username: string
 }
 
 export default async (ctx: Context, { username }: Args) => {
-  if (ctx.userData.sessionKey) {
+  const user = await getUser(ctx.userPlatformId())
+
+  if (user?.sessionKey) {
     ctx.reply('commands:register.linked')
     return
   }
