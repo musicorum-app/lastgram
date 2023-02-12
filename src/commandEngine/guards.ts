@@ -53,6 +53,13 @@ export const onlyDMs = (ctx: Context) => {
   return false
 }
 
+export const developer = (ctx: Context) => {
+  const ids = ['918911149595045959', '205873263258107905', '268526982222970880']
+  if (ids.includes(ctx.author.id)) return true
+  ctx.reply('errors:guards.developer')
+  return false
+}
+
 export const unknown = (ctx: Context) => {
   error('commandEngine.guards', `commands with the unknown protection level cannot be executed`)
   ctx.reply('errors:unknown')
