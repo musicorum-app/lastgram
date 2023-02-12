@@ -17,7 +17,7 @@ export const finishAuth = async (id: number) => {
   const session = await client.auth.getSession(token).catch(() => undefined)
   if (!session) return undefined
 
-  updateUserByID(id, {
+  await updateUserByID(id, {
     sessionKey: session.key
   })
 
