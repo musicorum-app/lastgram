@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "database:generate": "prisma generate",
     "database:deploy": "prisma migrate deploy",
-    "i18n:sync": "npx i18next-locales-sync -p en -s pt es -l path/to/locales/folder --spaces 2"
+    "i18n:sync": "npx i18next-locales-sync -p en -s pt es -l path/to/locales/folder --spaces 2",
+    "cli:updateDiscordCommands": "node dist/cli.js updateDiscordCommands"
   },
   "nodemonConfig": {
     "ignore": [
