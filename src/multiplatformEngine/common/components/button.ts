@@ -1,4 +1,9 @@
-import { CommandBaseComponent, CommandComponentBuilderPlatforms, CommandComponentBuilderReturnTypes } from './base.js'
+import {
+  CommandBaseComponent,
+  CommandComponentBuilderPlatforms,
+  CommandComponentBuilderReturnTypes,
+  mergeID
+} from './base.js'
 
 export enum CommandButtonComponentType {
   primary = 1,
@@ -18,12 +23,15 @@ export interface CommandButtonComponent extends CommandBaseComponent {
 
 export const buildButtonForPlatform = (
   platform: CommandComponentBuilderPlatforms,
-  button: CommandButtonComponent
+  button: CommandButtonComponent,
+  id: string
 ): CommandComponentBuilderReturnTypes => {
   switch (platform) {
     case 'discord':
-      let data: { custom_id?: string } = {}
-      if (!button.url) data.custom_id = button.data
+      let data: { custom_id?: string, url?: string } = {}
+      if (button.url) data.url = button.url
+      else data.custom_id = mergeID(id, button.data)
+
       return {
         label: button.name,
         emoji: button.emoji,
@@ -35,10 +43,14 @@ export const buildButtonForPlatform = (
       }
     case 'telegram':
       if (button.disabled) return undefined
+
+      let tgData: { callback_data?: string, url?: string } = {}
+      if (button.url) tgData.url = button.url
+      else tgData.callback_data = mergeID(id, button.data)
+
       return {
         text: button.emoji ? `${button.emoji} ${button.name}` : button.name,
-        url: button.url,
-        callback_data: button.data
+        ...tgData
       }
   }
 }

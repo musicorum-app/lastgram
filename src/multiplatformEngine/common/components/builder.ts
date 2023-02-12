@@ -3,7 +3,6 @@ import { CommandButtonComponent } from './button.js'
 import { buildComponentForPlatform } from './list.js'
 import { MinimalContext } from '../context.js'
 import { eventEngine } from '../../../eventEngine/index.js'
-import { EngineEventList, EventConstraints } from '../../../eventEngine/types/engine.js'
 
 export interface ComponentOptions {
   noTranslate?: boolean
@@ -13,48 +12,50 @@ export class CommandComponentBuilder {
   public components: CommandComponentBuilderReturnTypes[]
   public platform: CommandComponentBuilderPlatforms
 
-  constructor (public context: MinimalContext) {
+  constructor (public context: MinimalContext, public isGroup = false) {
     this.components = []
     this.platform = context.author.platform as CommandComponentBuilderPlatforms
   }
 
-  addButton (button: CommandButtonComponent, handler?: (ctx: MinimalContext) => boolean, options?: ComponentOptions) {
+  addButton (button: CommandButtonComponent, handlerFunction?: string, options?: ComponentOptions) {
     const id = this.randomID()
     const component = buildComponentForPlatform(this.platform, 'button', {
       ...button,
-      data: `${id}_${button.data}`,
+      data: button.data,
       name: options?.noTranslate ? button.name : this.context.t(button.name)
-    })
+    }, id)
+
     const group = buildComponentForPlatform(this.platform, 'group', {
       components: [component]
     })
-    component && this.components.push(group)
-    handler && this.queueEvent(id, 'buttonClick', handler)
+
+    component && this.components.push(this.isGroup ? component : group)
+    handlerFunction && this.queueEvent(id, handlerFunction)
     return this
   }
 
-  private queueEvent (id: string, event: keyof EngineEventList, handler: (ctx: MinimalContext) => boolean) {
+  newGroup (builder: (builder: CommandComponentBuilder) => any) {
+    const b = new CommandComponentBuilder(this.context, true)
+    builder(b)
+    const groupComponent = buildComponentForPlatform(this.platform, 'group', {
+      components: b.components
+    })
+    this.components.push(groupComponent)
+    return this
+  }
+
+  private queueEvent (identifier: string, handler: string) {
     eventEngine.queueEvent(
-      this.buildConstraint(),
-      event,
-      (ctx) => {
-        if (ctx.interactionData!.split('_')[0] !== id) return false
-        ctx.interactionData = ctx.interactionData!.split('_')[1]
-        return handler(ctx)
+      identifier,
+      {
+        command: this.context.command!.name,
+        handler
       }
     )
   }
 
   private randomID () {
-    // 5 digits
-    return Math.floor(Math.random() * 100000).toString()
-  }
-
-  private buildConstraint (): EventConstraints {
-    return {
-      userID: this.context.author.id,
-      channelID: this.context.channelID,
-      platform: this.platform
-    }
+    // 10-character random string, all lowercase and no special characters
+    return Math.random().toString(36).substring(2, 12)
   }
 }
