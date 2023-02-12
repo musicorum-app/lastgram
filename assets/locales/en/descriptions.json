@@ -1,0 +1,8 @@
+{
+  "register": "Registers your last.fm username",
+  "botinfo": "Shows information about the bot",
+  "help": "Shows help about the bot",
+  "linkfm": "Links your last.fm account to your account",
+  "unlinkfm": "Unlinks your last.fm account from your account",
+  "listening": "Shows what you are listening to"
+}
