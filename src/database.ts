@@ -21,6 +21,22 @@ export const updateUserByID = (id: number, data: any) => {
   })
 }
 
+export const getUser = (platformId: string) => {
+  return client.user.findUnique({
+    where: {
+      platformId
+    }
+  })
+}
+
+export const userExists = (platformId: string) => {
+  return client.user.count({
+    where: {
+      platformId
+    }
+  })
+}
+
 process.on('exit', (code) => {
   debug('databaseEngine.main', `process is exiting with code ${code}, disconnecting from database...`)
   info('index.main', rainbow('Goodbye!'))

@@ -108,7 +108,7 @@ export class MinimalContext {
     this.command = command
   }
 
-  private userPlatformId (user = this.author): string {
+  public userPlatformId (user = this.author): string {
     return `${user.platform}_${user.id}`
   }
 }
