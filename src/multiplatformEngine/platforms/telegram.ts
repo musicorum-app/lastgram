@@ -4,6 +4,7 @@ import { buildFromTelegramUser, User } from '../common/user.js'
 import { handleTelegramMessage } from '../utilities/telegram.js'
 import { Context, MinimalContext } from '../common/context.js'
 import { eventEngine } from '../../eventEngine/index.js'
+import { EngineError, UnknownError } from '../../eventEngine/types/errors.js'
 
 const API_URL = 'https://api.telegram.org/bot'
 
@@ -65,10 +66,13 @@ export default class Telegram extends Platform {
 
     try {
       await eventEngine.dispatchEvent(id, ctx)
-
       await this.answerCallbackQuery(query.id, ctx.replyOptions?.alertText, ctx.replyOptions?.warning)
       if (ctx.replyWith) await this.deliverInteraction(query, ctx)
     } catch (e) {
+      if (e instanceof EngineError) {
+        await this.answerCallbackQuery(query.id, ctx.t(e.translationKey), true)
+        if (!(e instanceof UnknownError)) return
+      }
       error('telegram.onInteraction', `error while handling button interaction\n${grey(e.stack)}`)
     }
   }

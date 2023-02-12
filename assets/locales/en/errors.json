@@ -3,8 +3,9 @@
     "useRegister": "Use `/register <last.fm username>` to register.",
     "consultSupport": "Consult lastgram support at @lastgramsupport for more information.",
     "checkFmStatus": "For more information, check @lastfmstatus at Twitter or @lastgramsupport at Telegram.",
-    "tryAgain": "Please try again.",
-    "checkSpelling": "Please check your spelling and try again."
+    "tryAgain": "Please, try again.",
+    "runAgain": "Please, run the command again.",
+    "checkSpelling": "Please, check your spelling and try again."
   },
   "guards": {
     "targetable": {
@@ -32,5 +33,7 @@
     "userNotFound": "Sorry, the last.fm username you specified was not found. $t(errors:common.checkSpelling)",
     "noScrobbles": "Sorry, the last.fm user you specified has not scrobbled anything yet."
   },
-  "unknown": "Sorry, an unknown error occurred. $t(errors:common.tryAgain)"
+  "unknown": "Sorry, an unknown error occurred. $t(errors:common.tryAgain)",
+  "expiredInteraction": "Sorry, this button has expired. $t(errors:common.runAgain)",
+  "noInteractionPermission": "Sorry, you don't have permission to use this button."
 }

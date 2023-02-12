@@ -17,7 +17,7 @@ export class CommandComponentBuilder {
     this.platform = context.author.platform as CommandComponentBuilderPlatforms
   }
 
-  addButton (button: CommandButtonComponent, handlerFunction?: string, options?: ComponentOptions) {
+  addButton (button: CommandButtonComponent, handlerFunction?: string, options?: ComponentOptions, allowedUserId = this.context.author.id) {
     const id = this.randomID()
     const component = buildComponentForPlatform(this.platform, 'button', {
       ...button,
@@ -30,7 +30,7 @@ export class CommandComponentBuilder {
     })
 
     component && this.components.push(this.isGroup ? component : group)
-    handlerFunction && this.queueEvent(id, handlerFunction)
+    handlerFunction && this.queueEvent(id, handlerFunction, allowedUserId)
     return this
   }
 
@@ -44,9 +44,10 @@ export class CommandComponentBuilder {
     return this
   }
 
-  private queueEvent (identifier: string, handler: string) {
+  private queueEvent (identifier: string, handler: string, allowedUserId: string) {
     eventEngine.queueEvent(
       identifier,
+      allowedUserId,
       {
         command: this.context.command!.name,
         handler
