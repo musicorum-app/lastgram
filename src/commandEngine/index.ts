@@ -79,7 +79,7 @@ export class CommandRunner {
 
   private handleError (error: Error, ctx: Context) {
     if (error instanceof CommandError) {
-      ctx.reply(error.display, { noTranslation: true })
+      ctx.reply(error.display, {}, { noTranslation: true })
       return false
     }
     if (error instanceof LastfmError) {
