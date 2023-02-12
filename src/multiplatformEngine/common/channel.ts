@@ -16,12 +16,12 @@ export const buildFromTelegramChannel = (channel: Record<string, any>): Channel 
 }
 
 export const buildFromDiscordChannel = (channel: TextBasedChannel | null): Channel => {
-  if (!channel) return { id: '', name: '', platform: 'discord', type: '' }
+  if (!channel) return { id: '', name: '', platform: 'discord', type: 'dm' }
 
   return {
     id: channel.id,
     name: channel.isDMBased() ? channel.recipient!.username : (channel as TextChannel).name,
-    type: channel.type.toString(),
+    type: channel.isDMBased() ? 'dm' : channel.type.toString(),
     platform: 'discord'
   }
 }

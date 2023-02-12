@@ -6,7 +6,7 @@ import { ButtonInteraction, ChatInputCommandInteraction, Client, Interaction } f
 import { commandRunner } from '../../commandEngine/index.js'
 import { buildFromDiscordUser } from '../common/user.js'
 import { eventEngine } from '../../eventEngine/index.js'
-import { EngineError, UnknownError } from '../../eventEngine/types/errors.js'
+import { EngineError } from '../../eventEngine/types/errors.js'
 
 export default class Discord extends Platform {
   private client: Client
@@ -46,13 +46,14 @@ export default class Discord extends Platform {
     debug('discord.onInteraction', `received button interaction`)
     const [id, data] = eventEngine.extractIDFromData(interaction.customId)
     const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), data)
+    await minimalCtx.getUserData()
     try {
       await eventEngine.dispatchEvent(id, minimalCtx)
       if (minimalCtx.replyWith) await this.deliverMessage(minimalCtx, minimalCtx.replyWith, interaction)
     } catch (e) {
       if (e instanceof EngineError) {
         await interaction.reply({ content: minimalCtx.t(e.translationKey), ephemeral: true })
-        if (!(e instanceof UnknownError)) return
+        return
       }
       error('discord.onButtonInteraction', `error while handling button interaction\n${grey(e.stack)}`)
     }

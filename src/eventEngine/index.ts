@@ -1,5 +1,5 @@
 import { EventListenerHandler, EventListenerIdentifier } from './types/engine.js'
-import { debug } from '../loggingEngine/logging.js'
+import { debug, error, grey } from '../loggingEngine/logging.js'
 import { MinimalContext } from '../multiplatformEngine/common/context.js'
 import { backend } from '../cachingEngine/index.js'
 import { ExpiredError, NoPermissionError, UnknownError } from './types/errors.js'
@@ -35,7 +35,9 @@ class EventEngine {
 
     this.removeEventFromQueue(key)
 
-    return handler(ctx)?.catch?.(() => {
+    return handler(ctx)?.catch?.(async (e) => {
+      error(`eventEngine.dispatchEvent`, `error while handling event ${id}\n${grey(e.stack)}`)
+      await backend?.setTTL(key, keyValue, 15 * 60 * 1000).then(() => undefined)
       throw new UnknownError()
     })
   }
