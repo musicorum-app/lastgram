@@ -8,6 +8,8 @@ import { CommandError, InvalidArgumentError, MissingArgumentError } from './erro
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
 import * as guards from './guards.js'
 
+type GuardFunction = (ctx: Context) => Promise<boolean>
+
 export class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
 
@@ -16,11 +18,13 @@ export class CommandRunner {
   ) {
   }
 
-  runGuard (protectionLevel: string, ctx: Context): Promise<boolean> {
-    // @ts-ignore
-    const guard = guards[protectionLevel]
-    if (!guard) throw new Error(`Guard ${protectionLevel} not found. Ensure that it exists before running it.`)
-    return guard(ctx)
+  async runGuard (protectionLevel: string, ctx: Context): Promise<boolean> {
+    const guardList: GuardFunction[] = protectionLevel.split('+').map((guard: string) => {
+      // @ts-ignore
+      return guards[guard]
+    })
+    const guardResults = await Promise.all(guardList.map((guard) => guard(ctx)))
+    return guardResults.every(result => result)
   }
 
   hasCommand (name: string): boolean {
@@ -30,7 +34,7 @@ export class CommandRunner {
   async runCommand (name: string, ctx: Context) {
     const command = this.findCommand(name)
     if (!command) throw new Error(`Command ${name} not found. Ensure that it exists before running it.`)
-    ctx.setCommand({ ...command, run: undefined })
+    ctx.setCommand({ ...command })
 
     const guardResult = await this.runGuard(command.protectionLevel, ctx)
     if (!guardResult) return
@@ -67,6 +71,12 @@ export class CommandRunner {
     return findCommand(name)
   }
 
+  correctName (name: string) {
+    if (this.commands.some(command => command.name === name)) return name
+    const command = this.commands.find(command => command.aliases?.includes?.(name))
+    return command?.name ?? undefined
+  }
+
   private handleError (error: Error, ctx: Context) {
     if (error instanceof CommandError) {
       ctx.reply(error.display, { noTranslation: true })
@@ -95,7 +105,7 @@ export class CommandRunner {
     }
 
     // ctx.reply('An unknown error has occurred. Please, try again.')
-    ctx.reply('errors:unknownError')
+    ctx.reply('errors:unknown')
     return true
   }
 }

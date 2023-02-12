@@ -7,7 +7,11 @@ type Args = {
 }
 
 export default async (ctx: Context, { username }: Args) => {
-  const data = await client.user.getInfo(username)
+  if (ctx.userData.sessionKey) {
+    ctx.reply('commands:register.linked')
+    return
+  }
+  await client.user.getInfo(username)
   await ctx.createUserData(username, fixLanguageFormat(ctx.author.languageCode))
   ctx.reply(`commands:register.done`, { fmUsername: username })
 }

@@ -2,25 +2,22 @@ import { debug, error, info, warn } from '../loggingEngine/logging.js'
 import InMemoryBackend from './inMemory.js'
 import { CachingBackend } from './backend.js'
 import RedisBackend from './redis.js'
+import { isDevelopment } from '../utils.js'
 
-let internalBackend: CachingBackend | undefined
+export let backend: CachingBackend | undefined
 
 export const start = async () => {
   debug('cachingEngine.start', 'starting cachingEngine engine')
   let redisBackend: RedisBackend | undefined = new RedisBackend()
   if (await redisBackend!.start()) {
-    info('cachingEngine.start', 'redis was found, using redis')
-    internalBackend = redisBackend
+    info('cachingEngine.start', 'using redis as cache backend')
+    backend = redisBackend
   } else {
+    if (!isDevelopment) {
+      error('cachingEngine.start', 'preposterous caching configuration! redis was not found, exiting')
+      process.exit(1)
+    }
     warn('cachingEngine.start', 'redis was not found, using simple in-memory')
-    internalBackend = new InMemoryBackend()
+    backend = new InMemoryBackend()
   }
-}
-
-export const backend = () => {
-  if (!internalBackend) {
-    error('cachingEngine.backend', 'backend was not initialized! stop!')
-    throw new Error('backend was not initialized')
-  }
-  return internalBackend
 }

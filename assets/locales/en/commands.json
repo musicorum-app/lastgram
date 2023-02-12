@@ -1,9 +1,14 @@
 {
   "register": {
-    "done": "`{{fmUsername}}`, got it. You have been registered!"
+    "done": "`{{fmUsername}}`, got it. You have been registered!",
+    "linked": "You have a last.fm account linked to this account. If you want to change your username, use the `/unlinkfm` command first."
   },
   "listening": {
     "uh": "listening.uh"
+  },
+  "unlink": {
+    "done": "Your last.fm account has been unlinked.",
+    "notLinked": "You don't have a last.fm account linked to this account."
   },
   "botinfo": {
     "data": "lastgram {{mode}}\n\uD83D\uDCBB **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** messages from Telegram since last restart",
@@ -15,6 +20,18 @@
     "text": "👋 Howdy. lastgram is a bot for last.fm users, allowing them to interact with the service through Telegram.\n\nNews, updates and more: https://t.me/lastgramdaily\nSupport and vibes: https://t.me/lastgramsupport\n\nUse `/help <command>` to get more information about a command.",
     "notFound": "Command not found. Check the spelling and try again.",
     "commandInfo": "Information for the **{{name}}** command\n{{description}}\n\nUsage: `{{{usage}}}`\n\n*Arguments between `< >` are required, while arguments between `[ ]` are optional.*"
+  },
+  "linkfm": {
+    "buttons": {
+      "link": "Link your last.fm account",
+      "done": "Done",
+      "cancel": "Cancel"
+    },
+    "link": "To link your account, click on the button below. After connecting your last.fm account, click on the Done button.",
+    "success": "Hey, `{{username}}`! Your last.fm account has been linked successfully.",
+    "linkingError": "Sorry, an error occurred while linking your account. Please try again.",
+    "cancelled": "Linking cancelled.",
+    "successWithUsername": "Hey, `{{username}}`! Your last.fm account has been linked successfully, but the username you've set on the bot didn't match. I've set it to `{{username}}`, which is your real one."
   },
   "start": "$t(help.text)"
 }

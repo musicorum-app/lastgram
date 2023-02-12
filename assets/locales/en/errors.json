@@ -16,7 +16,8 @@
     "registered": {
       "userNotRegistered": "This command is only available to registered users. $t(errors:common.useRegister)",
       "userBanned": "Sorry, you have been banned from using this bot. $t(errors:common.consultSupport)"
-    }
+    },
+    "onlyDMs": "Sorry, this command can only be used in private messages."
   },
   "command": {
     "missingArgument": "Missing arguments.\nThis command should be used like this: `{{- usage}}`",

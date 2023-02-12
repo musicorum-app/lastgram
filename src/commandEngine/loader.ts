@@ -20,7 +20,12 @@ const loadCommands = async () => {
         name: command.split('.')[0],
         protectionLevel: protection,
         run: commandModule.default,
-        ...commandModule.info
+        aliases: commandModule.aliases ?? [],
+        ...commandModule.info,
+        // interaction handlers: all non-default exports, excluding info
+        interactionHandlers: Object.entries(commandModule)
+          .filter(([key]) => key !== 'default' && key !== 'info')
+          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
       })
     }
   }

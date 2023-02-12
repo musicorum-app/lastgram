@@ -1,12 +1,17 @@
-import { Context } from '../multiplatformEngine/common/context.js'
+import { Context, MinimalContext } from '../multiplatformEngine/common/context.js'
 import { lt } from '../translationEngine/index.js'
 
-export interface Command {
+export interface MinimalCommand {
   name: string
-  aliases: string[]
   protectionLevel: string
+}
+
+export interface Command extends MinimalCommand {
+  aliases?: string[]
   args?: CommandArgs[]
   hidden?: boolean
+  interactionHandlers?: { [key: string]: (ctx: MinimalContext) => Promise<void> }
+
   run? (ctx: Context, args?: Record<string, any>): Promise<void>
 }
 

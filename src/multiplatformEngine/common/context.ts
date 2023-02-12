@@ -5,13 +5,13 @@ import { buildFromDiscordUser, buildFromTelegramUser, User } from './user.js'
 import { client } from '../../database.js'
 import { Prisma } from '@prisma/client'
 import { marked } from 'marked'
-import { Command } from '../../commandEngine/command.js'
+import { MinimalCommand } from '../../commandEngine/command.js'
 import { CommandRunner } from '../../commandEngine/index.js'
 import { ChatInputCommandInteraction } from 'discord.js'
 import { lt } from '../../translationEngine/index.js'
 import { CommandComponentBuilder } from './components/builder.js'
 
-export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean, revealUser: boolean, isBanned: boolean }; where: any }>
+export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean, revealUser: boolean, isBanned: boolean, sessionKey: boolean }; where: any }>
 
 interface ReplyOptions {
   noTranslation?: boolean
@@ -28,9 +28,9 @@ export class MinimalContext {
   replyOptions?: ReplyOptions
   public components: CommandComponentBuilder
   public replyMarkup?: string
-  protected cachedResult: CachedUserData | null
-  public command?: Command
+  public command?: MinimalCommand
   public targetedUser?: User
+  protected cachedResult: CachedUserData | null
 
   constructor (
     public channelID: string,
@@ -58,7 +58,8 @@ export class MinimalContext {
         fmUsername: true,
         language: true,
         isBanned: true,
-        revealUser: true
+        revealUser: true,
+        sessionKey: true
       }
     })
 
@@ -103,6 +104,10 @@ export class MinimalContext {
     this.replyOptions = options
   }
 
+  setCommand (command: MinimalCommand) {
+    this.command = command
+  }
+
   private userPlatformId (user = this.author): string {
     return `${user.platform}_${user.id}`
   }
@@ -137,10 +142,6 @@ export class Context extends MinimalContext {
       args,
       runner
     )
-  }
-
-  setCommand (command: Command) {
-    this.command = command
   }
 }
 

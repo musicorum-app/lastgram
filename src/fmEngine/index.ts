@@ -9,7 +9,7 @@ const lastfmRequest = newHistogram('lastfm_request_duration_seconds', 'Duration 
 
 class LastgramFMClient extends LastClient {
   constructor () {
-    super(process.env.FM_API_KEY!)
+    super(process.env.FM_API_KEY!, process.env.FM_API_SECRET!)
   }
 
   onRequestStarted (method: LastfmApiMethod, params: any, internalData: InternalData) {

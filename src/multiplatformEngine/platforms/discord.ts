@@ -8,7 +8,7 @@ import { buildFromDiscordUser } from '../common/user.js'
 import { eventEngine } from '../../eventEngine/index.js'
 
 export default class Discord extends Platform {
-  private client: Client<boolean>
+  private client: Client
 
   constructor () {
     super('discord')
@@ -43,14 +43,12 @@ export default class Discord extends Platform {
 
   async onButtonInteraction (interaction: ButtonInteraction) {
     debug('discord.onInteraction', `received button interaction`)
-    const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), interaction.customId)
+    const [id, data] = eventEngine.extractIDFromData(interaction.customId)
+    const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), data)
     try {
-      await eventEngine.dispatchEvent({
-        userID: interaction.user.id,
-        channelID: interaction.channelId,
-        platform: 'discord'
-      }, 'buttonClick', minimalCtx)
+      await eventEngine.dispatchEvent(id, minimalCtx)
 
+      await interaction.deferUpdate()
       if (minimalCtx.replyWith) await this.deliverMessage(minimalCtx, minimalCtx.replyWith, interaction)
     } catch (e) {
       error('discord.onButtonInteraction', `error while handling button interaction\n${grey(e.stack)}`)
@@ -69,6 +67,7 @@ export default class Discord extends Platform {
         .filter(a => a) as string[],
       commandRunner
     )
+    ctx.setCommand({ name: interaction.commandName, protectionLevel: 'unknown' })
 
     await interaction.deferReply()
 
@@ -78,7 +77,7 @@ export default class Discord extends Platform {
 
   deliverMessage (ctx: MinimalContext, text: Replyable, interaction: ChatInputCommandInteraction | ButtonInteraction) {
     if (interaction.isButton()) {
-      if (ctx.replyOptions?.editOriginal === false) interaction.editReply = interaction.reply
+      if (ctx.replyOptions?.editOriginal === false) interaction.editReply = interaction.followUp
       else interaction.editReply = interaction.update
     }
     if (ctx.replyOptions?.imageURL) {

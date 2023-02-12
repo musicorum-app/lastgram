@@ -43,6 +43,7 @@ export default class Telegram extends Platform {
         if (update.message && update.message.text) {
           handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
             if (ctx?.replyWith) return this.deliverMessage(ctx)
+            return undefined
           })
         }
 
@@ -57,16 +58,16 @@ export default class Telegram extends Platform {
 
   async handleInteraction (query: Record<string, any>) {
     debug('telegram.onInteraction', `received button interaction`)
+    const [id, data] = eventEngine.extractIDFromData(query.data)
     const user = buildFromTelegramUser(query.from)
-    const minimalCtx = new MinimalContext(query.chat_instance, user, query.data)
-    try {
-      await eventEngine.dispatchEvent({
-        userID: query.from.id.toString(),
-        channelID: query.message?.chat?.id?.toString?.() ?? '*',
-        platform: 'telegram'
-      }, 'buttonClick', minimalCtx)
+    const ctx = new MinimalContext(query.chat_instance, user, data)
+    await ctx.getUserData()
 
-      if (minimalCtx.replyWith) await this.deliverInteraction(query, minimalCtx)
+    try {
+      await eventEngine.dispatchEvent(id, ctx)
+
+      await this.answerCallbackQuery(query.id, ctx.replyOptions?.alertText, ctx.replyOptions?.warning)
+      if (ctx.replyWith) await this.deliverInteraction(query, ctx)
     } catch (e) {
       error('telegram.onInteraction', `error while handling button interaction\n${grey(e.stack)}`)
     }
@@ -74,11 +75,10 @@ export default class Telegram extends Platform {
 
   async deliverInteraction (query: Record<string, any>, ctx: MinimalContext) {
     if (ctx.replyOptions?.keepComponents === false) {
-      await this.request('editMessageReplyMarkup', {
-        chat_id: query.message.chat.id,
-        message_id: query.message.message_id,
-        reply_markup: JSON.stringify({ inline_keyboard: [] })
-      })
+      await this.updateMessageReplyMarkup({
+        chatID: query.message.chat.id,
+        messageID: query.message.message_id
+      }, JSON.stringify({ inline_keyboard: [] }))
     }
     if (ctx.replyOptions?.editOriginal === false) {
       await this.sendMessage(query.message.chat.id, ctx.replyWith!.toString(), {
@@ -93,13 +93,12 @@ export default class Telegram extends Platform {
         parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
       })
     }
-
-    return this.answerCallbackQuery(query.id, ctx.replyOptions?.alertText, ctx.replyOptions?.warning)
   }
 
   deliverMessage (ctx: Context) {
     const id = ctx.channel?.id || ctx.author.id
     const replyTo = ctx.message.replyingTo ? ctx.message.id : undefined
+
     return this.sendMessage(id, ctx.replyWith!.toString(), {
       parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
       replyTo,
@@ -129,9 +128,10 @@ export default class Telegram extends Platform {
     })
   }
 
-  public updateMessageReplyMarkup (inlineMessageId: string, replyMarkup: string) {
+  public updateMessageReplyMarkup (data: { messageID: number, chatID: number }, replyMarkup: string) {
     return this.request('editMessageReplyMarkup', {
-      inline_message_id: inlineMessageId,
+      chat_id: data.chatID,
+      message_id: data.messageID,
       reply_markup: replyMarkup
     })
   }
@@ -163,7 +163,7 @@ export default class Telegram extends Platform {
         method
       })
 
-      if (!response.ok) {
+      if (!response.ok && !response.description?.includes?.('rights')) {
         warn('platforms.telegram', `The Telegram API returned an error: ${response.description}`)
         return undefined
       }

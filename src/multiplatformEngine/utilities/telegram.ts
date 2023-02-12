@@ -7,6 +7,7 @@ export const handleTelegramMessage = async (botUser: string, data: Record<string
   if (!commandRunner.hasCommand(name)) return
 
   const ctx = Context.fromTelegramMessage(data, args || [], commandRunner)
+  ctx.setCommand({ name: commandRunner.correctName(name)!, protectionLevel: 'unknown' })
   await commandRunner.runCommand(name, ctx)
 
   return ctx

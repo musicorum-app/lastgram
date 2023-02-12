@@ -12,11 +12,12 @@ export type CommandComponent = keyof CommandComponentList
 export const buildComponentForPlatform = (
   platform: CommandComponentBuilderPlatforms,
   component: CommandComponent,
-  data: CommandComponentList[CommandComponent]
+  data: CommandComponentList[CommandComponent],
+  id?: string
 ) => {
   switch (component) {
     case 'button':
-      return buildButtonForPlatform(platform, data as CommandButtonComponent)
+      return buildButtonForPlatform(platform, data as CommandButtonComponent, id!)
     case 'group':
       return buildGroupForPlatform(platform, data as CommandComponentGroup)
     default:
