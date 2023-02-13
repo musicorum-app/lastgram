@@ -1,7 +1,7 @@
 import { Context, MinimalContext } from '../../../multiplatformEngine/common/context.js'
 import { finishAuth, prepareForAuth } from '../../../fmEngine/connect.js'
 import { CommandButtonComponentType } from '../../../multiplatformEngine/common/components/button.js'
-import { updateUserByID } from '../../../database.js'
+import { updateUserByID } from '../../../databaseEngine/index.js'
 
 export default async (ctx: Context) => {
   const linkURL = await prepareForAuth(ctx.guardData.registeredUserData!.id)

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { debug, info, rainbow } from './loggingEngine/logging.js'
+import { debug, info, rainbow } from '../loggingEngine/logging.js'
 
 export const client = new PrismaClient()
 

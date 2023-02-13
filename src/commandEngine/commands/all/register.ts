@@ -1,7 +1,7 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
 import { fixLanguageFormat } from '../../helpers.js'
 import { client } from '../../../fmEngine/index.js'
-import { getUser } from '../../../database.js'
+import { getUser } from '../../../databaseEngine/index.js'
 
 type Args = {
   username: string

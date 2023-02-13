@@ -1,5 +1,5 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
-import { updateUserByID } from '../../../database.js'
+import { updateUserByID } from '../../../databaseEngine/index.js'
 
 export default async (ctx: Context) => {
   if (!ctx.guardData.registeredUserData!.sessionKey) {

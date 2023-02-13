@@ -3,7 +3,7 @@ import { createClient, RedisClientType, RedisModules } from 'redis'
 import { error } from '../loggingEngine/logging.js'
 
 export default class RedisBackend extends CachingBackend {
-  private client?: RedisClientType<RedisModules>
+  public client?: RedisClientType<RedisModules>
 
   constructor () {
     super()

@@ -2,7 +2,7 @@ import { buildFromDiscordMessage, buildFromTelegramMessage, Message } from './me
 import { buildFromDiscordChannel, buildFromTelegramChannel, Channel } from './channel.js'
 import { Replyable } from '../protocols.js'
 import { buildFromDiscordUser, buildFromTelegramUser, User } from './user.js'
-import { client } from '../../database.js'
+import { client } from '../../databaseEngine/index.js'
 import { Prisma } from '@prisma/client'
 import { marked } from 'marked'
 import { MinimalCommand } from '../../commandEngine/command.js'
