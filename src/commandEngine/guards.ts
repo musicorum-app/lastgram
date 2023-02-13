@@ -4,29 +4,20 @@ import { error } from '../loggingEngine/logging.js'
 export const all = () => true
 
 export const targetable = async (ctx: Context) => {
-  if (ctx.message.replyingToUser) {
-    const u = await ctx.getUserData(ctx.message.replyingToUser)
-    if (!u) {
-      ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
-      return false
-    }
-    if (u.isBanned) {
-      ctx.reply('errors:guards.targetable.userMentionedBanned')
-      return false
-    }
-    ctx.targetedUser = ctx.message.replyingToUser
-  } else {
-    const u = await ctx.getUserData()
-    if (!u) {
-      ctx.reply('errors:guards.targetable.userNotRegistered')
-      return false
-    }
-    if (u.isBanned) {
-      ctx.reply('errors:guards.targetable.userBanned')
-      return false
-    }
-    ctx.targetedUser = ctx.author
+  if (!ctx.message.replyingToUser && !ctx.targetedUser) {
+    ctx.reply('errors:guards.targetable.userNotMentioned')
+    return false
   }
+  const u = await ctx.getUserData(ctx.message.replyingToUser)
+  if (!u) {
+    ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
+    return false
+  }
+  if (u.isBanned) {
+    ctx.reply('errors:guards.targetable.userMentionedBanned')
+    return false
+  }
+  ctx.targetedUser = ctx.message.replyingToUser
 
   return true
 }

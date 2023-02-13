@@ -10,6 +10,7 @@
   "guards": {
     "targetable": {
       "userNotRegistered": "$t(errors:guards.registered.userNotRegistered)",
+      "userNotMentioned": "You must mention a user to use this command. $t(errors:common.useRegister)",
       "userBanned": "$t(errors:guards.registered.userBanned)",
       "userMentionedNotRegistered": "The user you mentioned has not registered themselves yet. $t(errors:common.useRegister)",
       "userMentionedBanned": "Sorry, the user you mentioned has been banned from using this bot. $t(errors:common.consultSupport)"
