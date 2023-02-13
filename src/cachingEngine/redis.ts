@@ -9,6 +9,7 @@ export default class RedisBackend extends CachingBackend {
     super()
 
     this.client = createClient({
+      url: process.env.REDIS_URL || 'redis://localhost:6379',
       socket: {
         reconnectStrategy: () => {
           return 5
@@ -40,7 +41,7 @@ export default class RedisBackend extends CachingBackend {
 
   async setTTL (key: string, value: any, ttl: number) {
     await this.client!.set(key, value, {
-      EX: ttl
+      EX: ttl / 1000
     })
   }
 
