@@ -61,8 +61,8 @@ export default class Telegram extends Platform {
     debug('telegram.onInteraction', `received button interaction`)
     const [id, data] = eventEngine.extractIDFromData(query.data)
     const user = buildFromTelegramUser(query.from)
-    const ctx = new MinimalContext(query.chat_instance, user, data)
-    await ctx.getUserData()
+    const ctx = new MinimalContext(user, data)
+    await ctx.getUserData(undefined, 'registeredUserData')
 
     try {
       await eventEngine.dispatchEvent(id, ctx)

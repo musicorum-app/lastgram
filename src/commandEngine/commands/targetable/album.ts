@@ -2,20 +2,18 @@ import { Context } from '../../../multiplatformEngine/common/context.js'
 import { getNowPlaying } from '../../../fmEngine/completeNowPlaying.js'
 
 export default async (ctx: Context) => {
-  const data = await getNowPlaying(ctx, 'track')
+  const data = await getNowPlaying(ctx, 'album')
 
-  ctx.reply(`commands:listening`, {
+  ctx.reply(`commands:album`, {
     user: ctx.targetedUser?.name ?? ctx.registeredUser!.name,
     isListening: data.isNowPlaying ? 'isPlaying' : 'wasPlaying',
-    track: data.name,
     artist: data.artist,
     album: data.album,
     playCount: data.playCount,
-    emoji: data.loved ? '💗' : '🎵',
     joinArrays: '\n'
   }, { imageURL: data.imageURL })
 }
 
 export const info = {
-  aliases: ['lt', 'ln', 'lp', 'listening', 'listen']
+  aliases: ['alb']
 }

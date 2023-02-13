@@ -4,7 +4,7 @@ import { CommandButtonComponentType } from '../../../multiplatformEngine/common/
 import { updateUserByID } from '../../../database.js'
 
 export default async (ctx: Context) => {
-  const linkURL = await prepareForAuth(ctx.userData.id)
+  const linkURL = await prepareForAuth(ctx.guardData.registeredUserData!.id)
 
   ctx.components.addButton({
     name: 'commands:linkfm.buttons.link',
@@ -35,14 +35,14 @@ export const cancelLinking = async (ctx: MinimalContext) => {
 }
 
 export const doneLinking = async (ctx: MinimalContext) => {
-  const data = await finishAuth(ctx.userData.id)
+  const data = await finishAuth(ctx.guardData.registeredUserData!.id)
   if (!data) {
     ctx.reply('commands:linkfm.linkingError')
     return
   }
 
-  if (data.username.toLowerCase() !== ctx.userData.fmUsername.toLowerCase()) {
-    updateUserByID(ctx.userData.id, {
+  if (data.username.toLowerCase() !== ctx.guardData.registeredUserData!.fmUsername.toLowerCase()) {
+    updateUserByID(ctx.guardData.registeredUserData!.id, {
       fmUsername: data.username
     })
     ctx.reply('commands:linkfm.successWithUsername', {

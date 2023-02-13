@@ -1,14 +1,22 @@
-import { Context } from '../multiplatformEngine/common/context.js'
+import { CachedUserData, Context } from '../multiplatformEngine/common/context.js'
 import { error } from '../loggingEngine/logging.js'
+import { User } from '../multiplatformEngine/common/user.js'
+
+export interface GuardData {
+  targetedUserData?: CachedUserData
+  targetedUser?: User
+  registeredUserData?: CachedUserData
+  registeredUser?: User
+}
 
 export const all = () => true
 
-export const targetable = async (ctx: Context) => {
-  if (!ctx.message.replyingToUser && !ctx.targetedUser) {
+export const targeted = async (ctx: Context) => {
+  if (!ctx.message.replyingToUser) {
     ctx.reply('errors:guards.targetable.userNotMentioned')
     return false
   }
-  const u = await ctx.getUserData(ctx.message.replyingToUser)
+  const u = await ctx.getUserData(ctx.message.replyingToUser, 'targetedUserData')
   if (!u) {
     ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
     return false
@@ -17,13 +25,39 @@ export const targetable = async (ctx: Context) => {
     ctx.reply('errors:guards.targetable.userMentionedBanned')
     return false
   }
-  ctx.targetedUser = ctx.message.replyingToUser
+  ctx.setGuardData('targetedUser', ctx.message.replyingToUser)
+  return true
+}
 
+export const targetable = async (ctx: Context) => {
+  if (ctx.message.replyingToUser) {
+    const u = await ctx.getUserData(ctx.message.replyingToUser, 'registeredUserData')
+    if (!u) {
+      ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
+      return false
+    }
+    if (u.isBanned) {
+      ctx.reply('errors:guards.targetable.userMentionedBanned')
+      return false
+    }
+    ctx.setGuardData('targetedUser', ctx.message.replyingToUser)
+  } else {
+    const u = await ctx.getUserData(ctx.author, 'registeredUserData')
+    if (!u) {
+      ctx.reply('errors:guards.registered.userNotRegistered')
+      return false
+    }
+    if (u.isBanned) {
+      ctx.reply('errors:guards.registered.userBanned')
+      return false
+    }
+    ctx.setGuardData('registeredUser', ctx.author)
+  }
   return true
 }
 
 export const registered = async (ctx: Context) => {
-  const u = await ctx.getUserData()
+  const u = await ctx.getUserData(ctx.author, 'registeredUserData')
   if (!u) {
     ctx.reply('errors:guards.registered.userNotRegistered')
     return false
@@ -32,7 +66,7 @@ export const registered = async (ctx: Context) => {
     ctx.reply('errors:guards.registered.userBanned')
     return false
   }
-  ctx.targetedUser = ctx.author
+  ctx.setGuardData('registeredUser', ctx.author)
 
   return true
 }

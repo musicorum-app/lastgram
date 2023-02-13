@@ -15,6 +15,11 @@ i18next
     backend: {
       loadPath: 'assets/locales/{{lng}}/{{ns}}.json',
       addPath: 'assets/locales/{{lng}}/{{ns}}.missing.json'
+    },
+    interpolation: {
+      escape: (str: string): string => {
+        return str.replace(/[*_`~#&<>"'\/\[\]]/g, '\\$&')
+      }
     }
   }).then(() => {
   debug('translationEngine.main', 'i18next initialized')

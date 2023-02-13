@@ -1,11 +1,53 @@
 {
+  "common": {
+    "lnTitle_isPlaying": "**{{name}}** is listening to:",
+    "lnTitle_wasPlaying": "**{{name}}** was listening to:",
+    "lnOther_one": "**{{name}}** has listened **once** to:",
+    "lnOther_other": "**{{name}}** has listened **{{count}} times** to:",
+    "lnOther_zero": "**{{name}}** has **never** listened to:",
+    "track": "{{emoji}} **{{track}}**",
+    "album": "💽 {{album}}",
+    "artist": "🧑‍🎤 {{artist}}",
+    "scrobbles_one": "\n📊 *{{count}} scrobble*",
+    "scrobbles_other": "\n📊 *{{count}} scrobbles*"
+  },
   "register": {
     "done": "`{{fmUsername}}`, got it. You have been registered!",
     "linked": "You have a last.fm account linked to this account. If you want to change your username, use the `/unlinkfm` command first."
   },
-  "listening": {
-    "uh": "listening.uh"
-  },
+  "youtrack": [
+    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "{{emoji}} **{{track}}**",
+    "💽 {{album}}",
+    "🧑‍🎤 {{artist}}"
+  ],
+  "youalbum": [
+    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "💽 {{album}}",
+    "🧑‍🎤 {{artist}}"
+  ],
+  "youartist": [
+    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "🧑‍🎤 {{artist}}"
+  ],
+  "listening": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "{{emoji}} **{{track}}**",
+    "💽 {{album}}",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "album": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "💽 {{album}}",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "artist": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
   "unlink": {
     "done": "Your last.fm account has been unlinked.",
     "notLinked": "You don't have a last.fm account linked to this account."

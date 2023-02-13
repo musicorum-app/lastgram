@@ -11,6 +11,7 @@ export interface NowPlayingData<NowPlayingEntity> {
   name: string
   imageURL: string
   artist?: string
+  album?: string
   playCount?: number
   loved: boolean
   tags?: string[]
@@ -32,24 +33,28 @@ const entityCall = (entity: NowPlayingEntity, username: string, track: LastfmRec
   }
 }
 
-export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity): Promise<NowPlayingData<NowPlayingEntity>> => {
-  debug('fmEngine.getNowPlaying', `getting now playing for ${ctx.targetedUser!.name} (fm username is ${ctx.userData.fmUsername})`)
-  const nowPlaying = await client.user.getRecentTracks(ctx.userData.fmUsername, { limit: 1 })
+export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getFromRegisteredUserForTargeted?: boolean): Promise<NowPlayingData<NowPlayingEntity>> => {
+  const targetUserData = ctx.targetedUserData ?? ctx.registeredUserData
+  const targetUser = ctx.targetedUser ?? ctx.registeredUser
+
+  debug('fmEngine.getNowPlaying', `getting now playing for ${targetUser.name} (fm username is ${targetUserData.fmUsername})`)
+  const nowPlaying = await client.user.getRecentTracks(getFromRegisteredUserForTargeted ? ctx.registeredUserData.fmUsername : targetUserData.fmUsername, { limit: 1 })
 
   const track = nowPlaying.tracks[0]
   if (!track) {
     throw new NoScrobblesError(ctx)
   }
 
-  const info = await entityCall(entity, ctx.userData.fmUsername, track)
+  const info = await entityCall(entity, targetUserData.fmUsername, track)
 
   return {
     name: track.name,
     imageURL: track.images[3].url,
-    artist: entity === 'artist' ? undefined : track.artist.name,
+    artist: track.artist.name,
+    album: track.album.name || info.album?.name,
     playCount: info.user!.playCount,
     loved: info.user!.loved,
     tags: info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag),
-    isNowPlaying: track.isNowPlaying
+    isNowPlaying: track.nowPlaying
   }
 }

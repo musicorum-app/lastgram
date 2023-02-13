@@ -45,8 +45,8 @@ export default class Discord extends Platform {
   async onButtonInteraction (interaction: ButtonInteraction) {
     debug('discord.onInteraction', `received button interaction`)
     const [id, data] = eventEngine.extractIDFromData(interaction.customId)
-    const minimalCtx = new MinimalContext(interaction.channelId, buildFromDiscordUser(interaction.user), data)
-    await minimalCtx.getUserData()
+    const minimalCtx = new MinimalContext(buildFromDiscordUser(interaction.user), data)
+    await minimalCtx.getUserData(undefined, 'registeredUserData')
     try {
       await eventEngine.dispatchEvent(id, minimalCtx)
       if (minimalCtx.replyWith) await this.deliverMessage(minimalCtx, minimalCtx.replyWith, interaction)

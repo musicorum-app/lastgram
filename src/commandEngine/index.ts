@@ -8,7 +8,7 @@ import { CommandError, InvalidArgumentError, MissingArgumentError } from './erro
 import { LastfmError } from '@musicorum/lastfm/dist/error/LastfmError.js'
 import * as guards from './guards.js'
 
-type GuardFunction = (ctx: Context) => Promise<boolean>
+type GuardFunction = { name: string, execute: (ctx: Context) => Promise<boolean> }
 
 export class CommandRunner {
   private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
@@ -21,9 +21,13 @@ export class CommandRunner {
   async runGuard (protectionLevel: string, ctx: Context): Promise<boolean> {
     const guardList: GuardFunction[] = protectionLevel.split('+').map((guard: string) => {
       // @ts-ignore
-      return guards[guard]
+      return { execute: guards[guard], name: guard }
     })
-    const guardResults = await Promise.all(guardList.map((guard) => guard(ctx)))
+    const guardResults = await Promise.all(guardList.map((guard) => {
+      ctx.guard = guard.name
+      return guard.execute(ctx)
+    }))
+    ctx.guard = undefined
     return guardResults.every(result => result)
   }
 

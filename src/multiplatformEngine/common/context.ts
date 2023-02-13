@@ -10,6 +10,8 @@ import { CommandRunner } from '../../commandEngine/index.js'
 import { ChatInputCommandInteraction } from 'discord.js'
 import { lt } from '../../translationEngine/index.js'
 import { CommandComponentBuilder } from './components/builder.js'
+import { GuardData } from '../../commandEngine/guards.js'
+import { fixLanguageFormat } from '../../commandEngine/helpers.js'
 
 export type CachedUserData = Prisma.UserGetPayload<{ select: { fmUsername: boolean; language: boolean; id: boolean, revealUser: boolean, isBanned: boolean, sessionKey: boolean }; where: any }>
 
@@ -29,29 +31,48 @@ export class MinimalContext {
   public components: CommandComponentBuilder
   public replyMarkup?: string
   public command?: MinimalCommand
-  public targetedUser?: User
-  protected cachedResult: CachedUserData | null
+  public guardData: GuardData = {}
+  private currentGuard?: string
 
   constructor (
-    public channelID: string,
     public author: User,
     public interactionData?: string
   ) {
     this.components = new CommandComponentBuilder(this)
   }
 
-  get userData () {
-    return this.cachedResult!
+  set guard (guard: string | undefined) {
+    this.currentGuard = guard
+  }
+
+  get registeredUserData () {
+    return this.guardData.registeredUserData as CachedUserData
+  }
+
+  get targetedUserData () {
+    return this.guardData.targetedUserData as CachedUserData
+  }
+
+  get targetedUser () {
+    return this.guardData.targetedUser as User
+  }
+
+  get registeredUser () {
+    return this.guardData.registeredUser as User
   }
 
   get language () {
-    return this.userData?.language || this.author.languageCode || 'en'
+    return this.registeredUserData?.language || fixLanguageFormat(this.author.languageCode) || 'en'
   }
 
-  async getUserData (user = this.author): Promise<CachedUserData | null> {
+  setGuardData (key: keyof GuardData, data: any) {
+    this.guardData[key] = data
+  }
+
+  async getUserData (user: User | undefined, guardKey: keyof GuardData): Promise<CachedUserData | null> {
     const r = await client.user.findFirst({
       where: {
-        platformId: this.userPlatformId(user)
+        platformId: this.userPlatformId(user || this.author)
       },
       select: {
         id: true,
@@ -63,7 +84,7 @@ export class MinimalContext {
       }
     })
 
-    this.cachedResult = r
+    this.setGuardData(guardKey, r)
     return r
   }
 
@@ -94,11 +115,17 @@ export class MinimalContext {
     this.replyWith = options.noTranslation ? translationKey : this.t(translationKey, data)
 
     // detect markdown
-    const hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')
-    if (hasMarkdown) this.replyMarkup = 'markdown'
-    if (hasMarkdown && this.author.platform === 'telegram') {
-      const url = options.imageURL ? `[\u200B](${options.imageURL})` : ''
-      this.replyWith = marked.parseInline(this.replyWith as string + url)
+    let hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')
+    if (options.imageURL && this.author.platform === 'telegram') {
+      this.replyWith += `[\u200B](${options.imageURL})`
+      hasMarkdown = true
+    }
+
+    if (hasMarkdown) {
+      this.replyMarkup = 'markdown'
+      if (this.author.platform === 'telegram') {
+        this.replyWith = marked.parseInline(this.replyWith as string)
+      }
     }
 
     this.replyOptions = options
@@ -121,7 +148,7 @@ export class Context extends MinimalContext {
     public args: string[],
     public runner: CommandRunner
   ) {
-    super(channel.id, author)
+    super(author)
   }
 
   static fromDiscordMessage (message: ChatInputCommandInteraction, args: string[], runner: CommandRunner) {
