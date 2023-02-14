@@ -40,6 +40,9 @@ export class CommandRunner {
     if (!command) throw new Error(`Command ${name} not found. Ensure that it exists before running it.`)
     ctx.setCommand({ ...command })
 
+    await ctx.getUserData(ctx.author, 'registeredUserData')
+    ctx.setGuardData('registeredUser', ctx.author)
+
     const guardResult = await this.runGuard(command.protectionLevel, ctx)
     if (!guardResult) return
 

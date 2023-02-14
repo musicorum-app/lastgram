@@ -57,16 +57,14 @@ export const targetable = async (ctx: Context) => {
 }
 
 export const registered = async (ctx: Context) => {
-  const u = await ctx.getUserData(ctx.author, 'registeredUserData')
-  if (!u) {
+  if (!ctx.guardData.registeredUserData) {
     ctx.reply('errors:guards.registered.userNotRegistered')
     return false
   }
-  if (u.isBanned) {
+  if (ctx.guardData.registeredUserData.isBanned) {
     ctx.reply('errors:guards.registered.userBanned')
     return false
   }
-  ctx.setGuardData('registeredUser', ctx.author)
 
   return true
 }
