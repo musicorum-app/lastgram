@@ -45,16 +45,16 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     throw new NoScrobblesError(ctx)
   }
 
-  const info = await entityCall(entity, targetUserData.fmUsername, track)
+  const info = await entityCall(entity, targetUserData.fmUsername, track).catch(() => undefined)
 
   return {
     name: track.name,
     imageURL: track.images[3].url,
     artist: track.artist.name,
     album: track.album.name || info.album?.name,
-    playCount: info.user!.playCount,
-    loved: info.user!.loved,
-    tags: info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag),
+    playCount: info.user?.playCount || 0,
+    loved: info.user?.loved || false,
+    tags: info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || [],
     isNowPlaying: track.nowPlaying
   }
 }
