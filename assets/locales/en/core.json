@@ -1,0 +1,17 @@
+{
+  "buttons": {
+    "cancel": "Cancel",
+    "done": "Done"
+  },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish",
+    "portuguese": "Portuguese",
+    "russian": "Russian"
+  },
+  "dialogues": {
+    "pickAnOption": "Please, select an option...",
+    "cancelled": "Operation cancelled.",
+    "switchedLanguages": "The bot will now speak in English with you."
+  }
+}

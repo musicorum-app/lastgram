@@ -8,7 +8,7 @@ i18next
   .init<FsBackendOptions>({
     fallbackLng: 'en',
     preload: ['en', 'pt'],
-    ns: ['commands', 'errors', 'args', 'descriptions'],
+    ns: ['core', 'commands', 'errors', 'args', 'descriptions'],
     saveMissing: isDevelopment,
     saveMissingTo: 'all',
     saveMissingPlurals: true,

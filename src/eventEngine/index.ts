@@ -25,6 +25,7 @@ class EventEngine {
     if (!keyValue) throw new ExpiredError()
     const [commandNameAndID, handlerName] = keyValue.split('.')
     const [userId, commandName] = commandNameAndID.split('_')
+    ctx.setCommand({ name: commandName, protectionLevel: 'unknown' })
 
     if (ctx.author.id !== userId && userId !== '*') throw new NoPermissionError()
 

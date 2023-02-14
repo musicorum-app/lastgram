@@ -65,22 +65,20 @@
   },
   "linkfm": {
     "buttons": {
-      "link": "Link your last.fm account",
-      "done": "Done",
-      "cancel": "Cancel"
+      "link": "Link your last.fm account"
     },
-    "link": "To link your account, click on the button below. After connecting your last.fm account, click on the Done button.",
+    "link": "To link your account, click on the button below. After connecting your last.fm account, click on the *$t(core:buttons.done)* button.",
     "success": "Hey, `{{username}}`! Your last.fm account has been linked successfully.",
     "linkingError": "Sorry, an error occurred while linking your account. Please try again.",
-    "cancelled": "Linking cancelled.",
     "successWithUsername": "Hey, `{{username}}`! Your last.fm account has been linked successfully, but the username you've set on the bot didn't match. I've set it to `{{username}}`, which is your real one."
   },
-  "devpanel": {
+  "config": {
     "buttons": {
-      "updateDiscordCommands": "Update Discord commands"
+      "changeLanguage": "Change language",
+      "donate": "Donate to the bot",
+      "patreon": "Support the bot on Patreon"
     },
-    "pickAnAction": "Pick an action...",
-    "discordCommandsUpdated": "Discord commands have been updated."
-  },
-  "start": "$t(help.text)"
+    "donate": "If you like the bot and want to donate to support its development, you can do so by clicking on the button below. Thank you!",
+    "pickALanguage": "Please, select a language..."
+  }
 }

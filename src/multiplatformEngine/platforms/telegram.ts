@@ -78,12 +78,13 @@ export default class Telegram extends Platform {
   }
 
   async deliverInteraction (query: Record<string, any>, ctx: MinimalContext) {
-    if (ctx.replyOptions?.keepComponents === false) {
-      await this.updateMessageReplyMarkup({
-        chatID: query.message.chat.id,
-        messageID: query.message.message_id
-      }, JSON.stringify({ inline_keyboard: [] }))
-    }
+    await this.updateMessageReplyMarkup({
+      chatID: query.message.chat.id,
+      messageID: query.message.message_id
+    }, JSON.stringify({
+      inline_keyboard: []
+    }))
+
     if (ctx.replyOptions?.editOriginal === false) {
       await this.sendMessage(query.message.chat.id, ctx.replyWith!.toString(), {
         parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
@@ -96,6 +97,14 @@ export default class Telegram extends Platform {
       }, ctx.replyWith!.toString(), {
         parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
       })
+    }
+    if (ctx.components.components[0]) {
+      await this.updateMessageReplyMarkup({
+        chatID: query.message.chat.id,
+        messageID: query.message.message_id
+      }, JSON.stringify({
+        inline_keyboard: ctx.replyOptions?.keepComponents === false ? [] : ctx.components.components
+      }))
     }
   }
 

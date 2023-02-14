@@ -15,13 +15,13 @@ export default async (ctx: Context) => {
 
   ctx.components.newGroup((builder) => {
     builder.addButton({
-      name: 'commands:linkfm.buttons.done',
+      name: 'core:buttons.done',
       emoji: '✅',
       type: CommandButtonComponentType.success
     }, 'doneLinking')
 
     builder.addButton({
-      name: 'commands:linkfm.buttons.cancel',
+      name: 'core:buttons.cancel',
       emoji: '❌',
       type: CommandButtonComponentType.danger
     }, 'cancelLinking')
@@ -31,7 +31,7 @@ export default async (ctx: Context) => {
 }
 
 export const cancelLinking = async (ctx: MinimalContext) => {
-  ctx.reply('commands:linkfm.cancelled')
+  ctx.reply('core:dialogues.cancelled')
 }
 
 export const doneLinking = async (ctx: MinimalContext) => {
