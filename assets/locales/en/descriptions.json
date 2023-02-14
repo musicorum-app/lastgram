@@ -5,10 +5,10 @@
   "linkfm": "Links your last.fm account to your account",
   "unlinkfm": "Unlinks your last.fm account from your account",
   "listening": "Shows what you are listening to",
-  "devpanel": "Shows the developer panel",
   "album": "Shows what album you are listening to",
   "artist": "Shows what artist you are listening to",
   "youalbum": "Shows how many times someone has listened to an album you're listening to",
   "youartist": "Shows how many times someone has listened to an artist you're listening to",
-  "youtrack": "Shows how many times someone has listened to a track you're listening to"
+  "youtrack": "Shows how many times someone has listened to a track you're listening to",
+  "config": "Shows the configuration panel"
 }
