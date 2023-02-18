@@ -25,7 +25,8 @@
   "command": {
     "missingArgument": "Missing arguments.\nThis command should be used like this: `{{- usage}}`",
     "generic": "Sorry, an unknown error occurred while processing your command. $t(errors:common.consultSupport)",
-    "invalidArgument": "Invalid argument.\nThis command should be used like this: `{{- usage}}`"
+    "invalidArgument": "Invalid argument.\nThis command should be used like this: `{{- usage}}`",
+    "collage": "Sorry, an unknown error occurred while processing your collage. $t(errors:common.tryAgain)"
   },
   "lastfm": {
     "genericError": "Sorry, an unknown error occurred with last.fm. $t(errors:common.tryAgain)",

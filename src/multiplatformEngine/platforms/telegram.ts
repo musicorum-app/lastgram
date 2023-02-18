@@ -78,12 +78,21 @@ export default class Telegram extends Platform {
   }
 
   async deliverInteraction (query: Record<string, any>, ctx: MinimalContext) {
-    await this.updateMessageReplyMarkup({
-      chatID: query.message.chat.id,
-      messageID: query.message.message_id
-    }, JSON.stringify({
-      inline_keyboard: []
-    }))
+    await this.clearInteractions(query)
+    if (ctx.replyOptions?.imageURL && ctx.replyOptions?.sendImageAsPhoto) {
+      await this.updateMessageMedia({
+        chatID: query.message.chat.id,
+        messageID: query.message.message_id
+      }, {
+        url: ctx.replyOptions.imageURL,
+        caption: ctx.replyWith!.toString()
+      }, {
+        parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
+      })
+
+      await this.updateInteraction(query, ctx)
+      return
+    }
 
     if (ctx.replyOptions?.editOriginal === false) {
       await this.sendMessage(query.message.chat.id, ctx.replyWith!.toString(), {
@@ -98,19 +107,21 @@ export default class Telegram extends Platform {
         parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
       })
     }
-    if (ctx.components.components[0]) {
-      await this.updateMessageReplyMarkup({
-        chatID: query.message.chat.id,
-        messageID: query.message.message_id
-      }, JSON.stringify({
-        inline_keyboard: ctx.replyOptions?.keepComponents === false ? [] : ctx.components.components
-      }))
-    }
+
+    await this.updateInteraction(query, ctx)
   }
 
   deliverMessage (ctx: Context) {
     const id = ctx.channel?.id || ctx.author.id
     const replyTo = ctx.message.replyingTo ? ctx.message.id : undefined
+    if (ctx.replyOptions?.sendImageAsPhoto) {
+      return this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
+        replyTo,
+        replyMarkup: ctx.components.components[0]
+          ? JSON.stringify({ inline_keyboard: ctx.components.components })
+          : undefined
+      })
+    }
 
     return this.sendMessage(id, ctx.replyWith!.toString(), {
       parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
@@ -119,6 +130,49 @@ export default class Telegram extends Platform {
         ? JSON.stringify({ inline_keyboard: ctx.components.components })
         : undefined
     })
+  }
+
+  updateMessageMedia (data: { messageID: number, chatID: number }, media: { url: string, caption?: string }, options: { parseMode?: 'MarkdownV2' | 'HTML' }) {
+    return this.request('editMessageMedia', {
+      chat_id: data.chatID,
+      message_id: data.messageID,
+      media: {
+        type: 'photo',
+        media: media.url,
+        caption: media.caption,
+        parse_mode: options?.parseMode
+      }
+    })
+  }
+
+  sendPhoto (chatId: string, photo: { url: string, caption?: string }, options: { replyTo?: string, replyMarkup?: string | undefined }) {
+    return this.request('sendPhoto', {
+      chat_id: chatId,
+      photo: photo.url,
+      caption: photo.caption,
+      reply_to_message_id: options?.replyTo,
+      reply_markup: options?.replyMarkup
+    })
+  }
+
+  private async clearInteractions (query: Record<string, any>) {
+    await this.updateMessageReplyMarkup({
+      chatID: query.message.chat.id,
+      messageID: query.message.message_id
+    }, JSON.stringify({
+      inline_keyboard: []
+    }))
+  }
+
+  private async updateInteraction (query: Record<string, any>, ctx: MinimalContext) {
+    if (ctx.components.components[0]) {
+      await this.updateMessageReplyMarkup({
+        chatID: query.message.chat.id,
+        messageID: query.message.message_id
+      }, JSON.stringify({
+        inline_keyboard: ctx.replyOptions?.keepComponents === false ? [] : ctx.components.components
+      }))
+    }
   }
 
   public sendMessage (chatId: string, text: string, options: { parseMode?: 'MarkdownV2' | 'HTML', replyTo?: string, replyMarkup?: string | undefined }) {

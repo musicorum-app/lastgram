@@ -80,5 +80,13 @@
     },
     "donate": "If you like the bot and want to donate to support its development, you can do so by clicking on the button below. Thank you!",
     "pickALanguage": "Please, select a language..."
+  },
+  "cllg": {
+    "buttons": {
+      "increase": "More",
+      "decrease": "Less",
+      "showLabels": "Labels",
+      "padded": "Padding"
+    }
   }
 }

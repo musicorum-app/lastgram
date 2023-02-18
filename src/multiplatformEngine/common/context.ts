@@ -23,6 +23,7 @@ interface ReplyOptions {
   keepComponents?: boolean
   alertText?: string
   warning?: boolean
+  sendImageAsPhoto?: boolean
 }
 
 export class MinimalContext {
@@ -116,7 +117,7 @@ export class MinimalContext {
 
     // detect markdown
     let hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')
-    if (options.imageURL && this.author.platform === 'telegram') {
+    if (options.imageURL && this.author.platform === 'telegram' && !options.sendImageAsPhoto) {
       this.replyWith += `[\u200B](${options.imageURL})`
       hasMarkdown = true
     }

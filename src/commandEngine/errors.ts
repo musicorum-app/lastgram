@@ -1,8 +1,8 @@
 import { buildCommandUsage } from './command.js'
-import { Context } from '../multiplatformEngine/common/context.js'
+import { MinimalContext } from '../multiplatformEngine/common/context.js'
 
 export class CommandError extends Error {
-  constructor (public ctx: Context) {
+  constructor (public ctx: MinimalContext) {
     super(`Command error`)
   }
 
@@ -26,5 +26,11 @@ export class InvalidArgumentError extends CommandError {
 export class NoScrobblesError extends CommandError {
   get display () {
     return this.ctx.t('errors:command.noScrobbles')
+  }
+}
+
+export class CollageError extends CommandError {
+  get display () {
+    return this.ctx.t('errors:command.collage')
   }
 }

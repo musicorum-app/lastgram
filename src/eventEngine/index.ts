@@ -45,7 +45,7 @@ class EventEngine {
 
   private addEventToQueue (id: string, userID: string, listener: EventListenerIdentifier) {
     const key = `event_${id}`
-    backend!.setTTL(key, `${userID}_${listener.command}.${listener.handler}`, 15 * 60 * 1000).then(() => undefined)
+    backend!.setTTL(key, `${userID}_${listener.command}.${listener.handler}`, 5 * 60 * 1000).then(() => undefined)
   }
 
   private removeEventFromQueue (key: string) {
