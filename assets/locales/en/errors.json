@@ -19,6 +19,7 @@
       "userNotRegistered": "This command is only available to registered users. $t(errors:common.useRegister)",
       "userBanned": "Sorry, you have been banned from using this bot. $t(errors:common.consultSupport)"
     },
+    "notLinked": "Sorry, this command is only available to users who have linked their last.fm account. Run `/linkfm` to link your account.",
     "onlyDMs": "Sorry, this command can only be used in private messages.",
     "developer": "Sorry, this command is only available to the lastgram development team."
   },

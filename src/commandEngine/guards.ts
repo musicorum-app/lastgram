@@ -69,6 +69,21 @@ export const registered = async (ctx: Context) => {
   return true
 }
 
+export const linked = async (ctx: Context) => {
+  if (!ctx.guardData.registeredUserData) {
+    ctx.reply('errors:guards.registered.userNotRegistered')
+    return false
+  }
+  if (ctx.guardData.registeredUserData.isBanned) {
+    ctx.reply('errors:guards.registered.userBanned')
+    return false
+  }
+  if (!ctx.guardData.registeredUserData.sessionKey) {
+    ctx.reply('errors:guards.notLinked')
+    return false
+  }
+  return true
+}
 export const onlyDMs = (ctx: Context) => {
   if (ctx.message.platform === 'telegram' && ctx.channel.id === ctx.author.id) return true
   if (ctx.message.platform === 'discord' && ctx.channel.type === 'dm') return true
