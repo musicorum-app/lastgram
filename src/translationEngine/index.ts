@@ -26,6 +26,5 @@ i18next
 })
 
 export const lt = (locale: string, key: string, data: Record<string, any>) => {
-  debug('translationEngine.lt', `translating ${key} for ${locale}`)
   return i18next.t(key, { lng: locale, ...data })
 }

@@ -5,7 +5,7 @@ import { updateUserByID } from '../databaseEngine/index.js'
 export const prepareForAuth = async (id: number) => {
   const token = await client.auth.getToken()
   const url = client.utilities.buildDesktopAuthURL(token)
-  await backend!.setTTL(`fm_pending_auth_${id}`, token, 60 * 60)
+  await backend!.setTTL(`fm_pending_auth_${id}`, token, 60 * 60 * 1000)
   return url
 }
 
@@ -23,4 +23,8 @@ export const finishAuth = async (id: number) => {
 
   await backend!.delete(`fm_pending_auth_${id}`)
   return session
+}
+
+export const markSongAsLoved = async (id: number, track: string, artist: string) => {
+  client.track.love()
 }

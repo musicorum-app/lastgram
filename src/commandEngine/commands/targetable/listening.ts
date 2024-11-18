@@ -17,5 +17,5 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
-  aliases: ['lt', 'ln', 'lp', 'listening', 'listen']
+  aliases: ['lt', 'ln', 'lp', 'pl', 'pt', 'listening', 'listen']
 }

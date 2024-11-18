@@ -23,12 +23,12 @@
   ],
   "youalbum": [
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "💽 {{album}}",
+    "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}"
   ],
   "youartist": [
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "🧑‍🎤 {{artist}}"
+    "🧑‍🎤 **{{artist}}**"
   ],
   "listening": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
@@ -39,13 +39,13 @@
   ],
   "album": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "💽 {{album}}",
+    "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "artist": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 {{artist}}",
+    "🧑‍🎤 **{{artist}}**",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "unlink": {
@@ -67,7 +67,7 @@
     "buttons": {
       "link": "Link your last.fm account"
     },
-    "link": "To link your account, click on the button below. After connecting your last.fm account, click on the *$t(core:buttons.done)* button.",
+    "link": "To link your account, click on the button below.\nAfter connecting your last.fm account, click on the *$t(core:buttons.done)* button.",
     "success": "Hey, `{{username}}`! Your last.fm account has been linked successfully.",
     "linkingError": "Sorry, an error occurred while linking your account. Please try again.",
     "successWithUsername": "Hey, `{{username}}`! Your last.fm account has been linked successfully, but the username you've set on the bot didn't match. I've set it to `{{username}}`, which is your real one."
@@ -88,5 +88,20 @@
       "showLabels": "Labels",
       "padded": "Padding"
     }
+  },
+  "lovetrack": {
+    "success": "❤️ Okay! I told last.fm that you loved listening to **{{track}}**.\nIt should show with a heart now.",
+    "notAnymore": "💔 Okay! I told last.fm that you don't love **{{track}}** anymore.\nIt should show without a heart now.",
+    "error": "🤔 Sorry, an error occurred while trying to love this track. Please try again.",
+    "notPlaying": "🤨 You need to be listening to a track to interact with it."
+  },
+  "assembledLyrics": [
+    "🎶 **{{title}}**",
+    "📝 {{lyrics}}\n",
+    "*[Lyrics provided by {{sourceName}}] ({{sourceLink}})*"
+  ],
+  "lyrics": {
+    "noResult": "🤔 Sorry, I couldn't find the lyrics for this track.",
+    "noArgs": "🤔 You need to provide a track name to get its lyrics."
   }
 }

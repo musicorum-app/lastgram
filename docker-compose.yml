@@ -1,0 +1,24 @@
+services:
+  lastgram-database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: lastgram
+      POSTGRES_USER: lg
+      POSTGRES_PASSWORD: lgnextrocks
+    volumes:
+      - pg-lg:/var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:5432:5432'
+
+  lastgram-redis:
+    image: valkey/valkey
+    restart: unless-stopped
+    volumes:
+      - redis-lg:/data
+    ports:
+      - '127.0.0.1:6379:6379'
+
+volumes:
+    pg-lg:
+    redis-lg:

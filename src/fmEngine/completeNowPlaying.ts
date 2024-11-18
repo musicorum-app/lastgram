@@ -33,7 +33,7 @@ const entityCall = (entity: NowPlayingEntity, username: string, track: LastfmRec
   }
 }
 
-export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getFromRegisteredUserForTargeted?: boolean): Promise<NowPlayingData<NowPlayingEntity>> => {
+export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getFromRegisteredUserForTargeted?: boolean, informationForRegistered?: boolean): Promise<NowPlayingData<NowPlayingEntity>> => {
   const targetUserData = ctx.targetedUserData ?? ctx.registeredUserData
   const targetUser = ctx.targetedUser ?? ctx.registeredUser
 
@@ -45,16 +45,20 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     throw new NoScrobblesError(ctx)
   }
 
-  const info = await entityCall(entity, targetUserData.fmUsername, track).catch(() => undefined)
+  const info = await entityCall(
+    entity,
+    informationForRegistered ? ctx.registeredUserData.fmUsername : targetUserData.fmUsername,
+    track
+  ).catch(() => undefined)
 
   return {
     name: track.name,
-    imageURL: track.images[3].url,
+    imageURL: info.images?.[3]?.url || track.images[3].url,
     artist: track.artist.name,
     album: track.album.name || info.album?.name,
     playCount: info.user?.playCount || 0,
     loved: info.user?.loved || false,
     tags: info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || [],
-    isNowPlaying: track.nowPlaying
+    isNowPlaying: track.nowPlaying || false
   }
 }

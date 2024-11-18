@@ -1,17 +1,20 @@
 import { Command } from './command.js'
 import { readdirSync } from 'node:fs'
 import { bold, debug, italic } from '../loggingEngine/logging.js'
+import { isBun } from '../utils.js'
+
+const BASE_PATH = isBun ? './src/commandEngine/commands' : './dist/commandEngine/commands'
 
 const loadCommands = async () => {
   debug('commandEngine.loader', 'Loading commands...')
   const commands: Command[] = []
-  const levels = readdirSync('./dist/commandEngine/commands', { withFileTypes: true })
+  const levels = readdirSync(BASE_PATH, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
   for (const protection of levels) {
-    const commandsInLevel = readdirSync(`./dist/commandEngine/commands/${protection}`, { withFileTypes: true })
+    const commandsInLevel = readdirSync(`${BASE_PATH}/${protection}`, { withFileTypes: true })
       .filter(dirent => dirent.isFile())
-      .filter(dirent => dirent.name.endsWith('.js'))
+      .filter(dirent => dirent.name.endsWith('.js') || dirent.name.endsWith('.ts'))
       .map(dirent => dirent.name)
     for (const command of commandsInLevel) {
       debug('commandEngine.loader', `Loading command ${italic(command.split('.')[0])} in protection level ${bold(protection)}`)

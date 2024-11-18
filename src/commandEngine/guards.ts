@@ -84,6 +84,7 @@ export const linked = async (ctx: Context) => {
   }
   return true
 }
+
 export const onlyDMs = (ctx: Context) => {
   if (ctx.message.platform === 'telegram' && ctx.channel.id === ctx.author.id) return true
   if (ctx.message.platform === 'discord' && ctx.channel.type === 'dm') return true

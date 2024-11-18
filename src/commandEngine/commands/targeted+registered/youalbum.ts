@@ -14,5 +14,5 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
-  aliases: ['youalb']
+  aliases: ['youalb', 'vcalb']
 }
