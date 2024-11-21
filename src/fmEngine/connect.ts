@@ -24,7 +24,3 @@ export const finishAuth = async (id: number) => {
   await backend!.delete(`fm_pending_auth_${id}`)
   return session
 }
-
-export const markSongAsLoved = async (id: number, track: string, artist: string) => {
-  client.track.love()
-}

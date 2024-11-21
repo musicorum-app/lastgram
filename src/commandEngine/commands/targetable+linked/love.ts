@@ -14,7 +14,7 @@ export default async (ctx: Context) => {
     username: ctx.guardData.registeredUserData!.fmUsername
   }
 
-  const text = !data.loved ? await loveTrack(req) : await unloveTrack(req)
+  const text = data.loved ? await unloveTrack(req) : await loveTrack(req)
   return ctx.reply(text, { track: data.name })
 }
 
