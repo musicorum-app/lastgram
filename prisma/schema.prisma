@@ -14,6 +14,15 @@ model User {
   sessionKey String?
 }
 
+model FmDisplayName {
+  id          Int      @id @default(autoincrement())
+  fmUsername  String
+  displayName String
+  platformId  String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 generator client {
   provider = "prisma-client-js"
 }

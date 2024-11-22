@@ -19,6 +19,16 @@ services:
     ports:
       - '127.0.0.1:6379:6379'
 
+  lastgram-scylla:
+    image: scylladb/scylla
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:9042:9042'
+    volumes:
+      - scylla-lg:/var/lib/scylla
+
+
 volumes:
     pg-lg:
     redis-lg:
+    scylla-lg:

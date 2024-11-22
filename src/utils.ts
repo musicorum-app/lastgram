@@ -1,3 +1,9 @@
-export const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV !== 'production'
+import { createHash } from 'node:crypto'
+
+export const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV !== 'production' || process.env.DEBUGGING === 'true'
 
 export const isBun = !!process.versions.bun
+
+export const hashName = (str: string) => {
+  return createHash('md5').update(str).digest('hex')
+}

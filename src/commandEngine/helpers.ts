@@ -19,7 +19,7 @@ export const inferDataFromContent = (content: string): ClassicCollageData => {
 
   // check the period
   let period: '7day' | '1month' | '3month' | '6month' | '12month' | 'overall' = 'overall'
-  if (['7day', '7days', '7dias', '7d', '1s'].some((a) => content.includes(a))) period = '7day'
+  if (['7day', '7days', '7dias', '7d', '1s', '1w'].some((a) => content.includes(a))) period = '7day'
   if (['1month', '1mês', '1mes', '1m'].some((a) => content.includes(a))) period = '1month'
   if (['3month', '3mês', '3mes', '3m'].some((a) => content.includes(a))) period = '3month'
   if (['6month', '6mês', '6mes', '6m'].some((a) => content.includes(a))) period = '6month'

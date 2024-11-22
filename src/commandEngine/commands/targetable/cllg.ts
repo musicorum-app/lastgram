@@ -98,5 +98,5 @@ const buildComponents = (ctx: MinimalContext, data: ClassicCollageData, id: stri
 }
 
 export const info = {
-  aliases: []
+  aliases: ['collage', 'clg', 'cl']
 }

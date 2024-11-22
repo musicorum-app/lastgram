@@ -18,6 +18,7 @@ export interface Command extends MinimalCommand {
 export interface CommandArgs {
   name: string
   required: boolean
+  everythingAfter?: boolean
   type?: 'string' | 'integer' | 'boolean'
   guard?: (arg: string) => boolean
   parse?: (arg: string) => any

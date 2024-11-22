@@ -57,6 +57,12 @@ export class CommandRunner {
         command.args.forEach((arg, i) => {
           if (arg.required && !ctx.args[i]) throw new MissingArgumentError(ctx)
           if (arg.guard && !arg.guard(ctx.args[i])) throw new InvalidArgumentError(ctx)
+          if (arg.everythingAfter) {
+            // keep current and all following arguments
+            args[arg.name] = ctx.args.slice(i).join(' ')
+            return
+          }
+
           args[arg.name] = arg.parse ? arg.parse(ctx.args[i]) : ctx.args[i]
         })
       } catch (error) {

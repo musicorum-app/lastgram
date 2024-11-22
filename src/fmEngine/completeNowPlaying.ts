@@ -4,11 +4,13 @@ import { Context } from '../multiplatformEngine/common/context.js'
 import { LastfmRecentTracksTrack } from '@musicorum/lastfm/dist/types/packages/user.js'
 import { LastfmTag } from '@musicorum/lastfm/dist/types/packages/common.js'
 import { debug } from '../loggingEngine/logging.js'
+import { hashName } from '../utils.js'
 
 export type NowPlayingEntity = 'artist' | 'album' | 'track'
 
 export interface NowPlayingData<NowPlayingEntity> {
   name: string
+  mbid?: string
   imageURL: string
   artist?: string
   album?: string
@@ -53,6 +55,7 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
 
   return {
     name: track.name,
+    mbid: info.mbid || hashName(track.name),
     imageURL: info.images?.[3]?.url || track.images[3].url,
     artist: track.artist.name,
     album: track.album.name || info.album?.name,
@@ -62,3 +65,4 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     isNowPlaying: track.nowPlaying || false
   }
 }
+

@@ -10,5 +10,12 @@
   "youalbum": "Shows how many times someone has listened to an album you're listening to",
   "youartist": "Shows how many times someone has listened to an artist you're listening to",
   "youtrack": "Shows how many times someone has listened to a track you're listening to",
-  "config": "Shows the configuration panel"
+  "config": "Shows the configuration panel",
+  "lyrics": "Shows the lyrics of the song you're listening to",
+  "acllg": "Asymmetric collages",
+  "cllg": "Classical collages",
+  "love": "Loves the song you're listening to",
+  "mealbum": "Shows how many times you have listened to an album",
+  "meartist": "Shows how many times you have listened to an artist",
+  "metrack": "Shows how many times you have listened to a track"
 }

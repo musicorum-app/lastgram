@@ -27,8 +27,11 @@ export default class Telegram extends Platform {
     if (!this.running) return Promise.resolve()
 
     return this.request('getUpdates', {
-      offset
+      offset,
+      drop_pending_updates: process.env.DROP_PENDING_UPDATES_ON_START === 'true'
     }).then(async (response: Record<string, any>) => {
+      // set drop pending updates to false now.
+      process.env.DROP_PENDING_UPDATES_ON_START = 'false'
       if (!(response instanceof Array)) {
         warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
         await new Promise(resolve => setTimeout(resolve, 1000))

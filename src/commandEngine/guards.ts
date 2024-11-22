@@ -92,6 +92,13 @@ export const onlyDMs = (ctx: Context) => {
   return false
 }
 
+export const noDMs = (ctx: Context) => {
+  if (ctx.message.platform === 'telegram' && ctx.channel.id !== ctx.author.id) return true
+  if (ctx.message.platform === 'discord' && ctx.channel.type !== 'dm') return true
+  ctx.reply('errors:guards.noDMs')
+  return false
+}
+
 export const developer = (ctx: Context) => {
   const ids = ['918911149595045959', '205873263258107905', '268526982222970880']
   if (ids.includes(ctx.author.id)) return true

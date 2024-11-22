@@ -1,7 +1,7 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
 import { fixLanguageFormat } from '../../helpers.js'
 import { client } from '../../../fmEngine/index.js'
-import { getUser } from '../../../databaseEngine/index.js'
+import { getUser, upsertUserDisplayName } from '../../../databaseEngine/index.js'
 
 type Args = {
   username: string
@@ -15,6 +15,7 @@ export default async (ctx: Context, { username }: Args) => {
     return
   }
   await client.user.getInfo(username)
+  await upsertUserDisplayName(ctx.userPlatformId(), ctx.author.name, username)
   await ctx.createUserData(username, fixLanguageFormat(ctx.author.languageCode))
   ctx.reply(`commands:register.done`, { fmUsername: username })
 }

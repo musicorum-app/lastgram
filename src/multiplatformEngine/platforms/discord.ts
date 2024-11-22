@@ -7,6 +7,7 @@ import { commandRunner } from '../../commandEngine/index.js'
 import { buildFromDiscordUser } from '../common/user.js'
 import { eventEngine } from '../../eventEngine/index.js'
 import { EngineError } from '../../eventEngine/types/errors.js'
+import { updateDiscordCommands } from '../utilities/discord.js'
 
 export default class Discord extends Platform {
   private client: Client
@@ -23,6 +24,7 @@ export default class Discord extends Platform {
     this.client.on('interactionCreate', (...args) => this.onInteraction(...args))
 
     this.createCounter('discord_requests', 'Discord request count', ['success', 'method'])
+    if (process.env.DISCORD_UPDATE_COMMANDS_ON_START) updateDiscordCommands().then(() => info('discord.main', 'commands updated'))
   }
 
   onReady () {
@@ -81,13 +83,33 @@ export default class Discord extends Platform {
 
   deliverMessage (ctx: MinimalContext, text: Replyable, interaction: ChatInputCommandInteraction | ButtonInteraction) {
     if (interaction.isButton()) {
-      if (ctx.replyOptions?.editOriginal === false) interaction.editReply = interaction.followUp
-      else interaction.editReply = interaction.update
+      if (ctx.replyOptions?.editOriginal === false) {
+        // use follow-up
+        return interaction.followUp({
+          content: text.toString(),
+          ephemeral: ctx.replyOptions?.ephemeral ?? false,
+          files: ctx.replyOptions?.imageURL ? [ctx.replyOptions.imageURL] : undefined,
+          // @ts-ignore
+          components: ctx.replyOptions?.keepComponents ? undefined : ctx.components.components,
+        })
+      } else {
+        // use update
+        return interaction.update({
+          content: text.toString(),
+          // @ts-ignore
+          components: ctx.replyOptions?.keepComponents ? undefined : ctx.components.components,
+          files: ctx.replyOptions?.imageURL ? [ctx.replyOptions.imageURL] : undefined
+        })
+      }
     }
+
     if (ctx.replyOptions?.imageURL) {
       return interaction.editReply({
         content: text.toString(),
-        files: [ctx.replyOptions.imageURL]
+        files: [ctx.replyOptions.imageURL],
+        // @ts-ignore
+        components: ctx.replyOptions?.keepComponents ? undefined : ctx.components.components,
+        ephemeral: ctx.replyOptions?.ephemeral ?? false
       })
     } else {
       return interaction.editReply({

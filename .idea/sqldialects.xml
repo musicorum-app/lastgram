@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/prisma/migrations/20241122023010_add_fm_display_name/migration.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/graphEngine/migrations.ts" dialect="CassandraQL" />
+    <file url="file://$PROJECT_DIR$/src/graphEngine/operations.ts" dialect="CassandraQL" />
+  </component>
+</project>

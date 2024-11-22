@@ -37,6 +37,22 @@ export const userExists = (platformId: string) => {
   })
 }
 
+export const upsertUserDisplayName = (platformId: string, displayName: string, username: string) => {
+  return client.fmDisplayName.upsert({
+    where: {
+      platformId
+    },
+    update: {
+      displayName
+    },
+    create: {
+      platformId,
+      displayName,
+      fmUsername: username
+    }
+  })
+}
+
 process.on('exit', (code) => {
   debug('databaseEngine.main', `process is exiting with code ${code}, disconnecting from database...`)
   info('index.main', rainbow('Goodbye!'))
