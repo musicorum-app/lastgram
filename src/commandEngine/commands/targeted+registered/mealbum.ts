@@ -10,7 +10,7 @@ export default async (ctx: Context) => {
     album: data.album,
     playCount: data.playCount,
     joinArrays: '\n'
-  }, { imageURL: data.imageURL })
+  }, { imageURL: data.imageURL, sendImageAsPhoto: !ctx.registeredUserData?.sendPhotosAsLink })
 }
 
 export const info = {

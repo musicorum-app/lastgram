@@ -1,5 +1,5 @@
 import { Platform } from '../platform.js'
-import { debug, error, grey, warn } from '../../loggingEngine/logging.js'
+import { debug, error, grey, info, warn } from '../../loggingEngine/logging.js'
 import { buildFromTelegramUser, User } from '../common/user.js'
 import { handleTelegramMessage } from '../utilities/telegram.js'
 import { Context, MinimalContext } from '../common/context.js'
@@ -120,6 +120,7 @@ export default class Telegram extends Platform {
     if (ctx.replyOptions?.sendImageAsPhoto) {
       return this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
         replyTo,
+        parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
         replyMarkup: ctx.components.components[0]
           ? JSON.stringify({ inline_keyboard: ctx.components.components })
           : undefined
@@ -148,13 +149,14 @@ export default class Telegram extends Platform {
     })
   }
 
-  sendPhoto (chatId: string, photo: { url: string, caption?: string }, options: { replyTo?: string, replyMarkup?: string | undefined }) {
+  sendPhoto (chatId: string, photo: { url: string, caption?: string }, options: { replyTo?: string, replyMarkup?: string | undefined, parseMode?: 'MarkdownV2' | 'HTML' }) {
     return this.request('sendPhoto', {
       chat_id: chatId,
       photo: photo.url,
       caption: photo.caption,
       reply_to_message_id: options?.replyTo,
-      reply_markup: options?.replyMarkup
+      reply_markup: options?.replyMarkup,
+      parse_mode: options?.parseMode
     })
   }
 
@@ -217,6 +219,7 @@ export default class Telegram extends Platform {
   async start () {
     this.running = true
     this.bot = await this.request('getMe').then(buildFromTelegramUser)
+    info('telegram.start', `running as @${this.bot.username}`)
     return this.getUpdates()
   }
 

@@ -1,24 +1,59 @@
-interface LyricsResponse {
+import { debug } from '../loggingEngine/logging.js'
+
+interface LyricResult {
+  instrumental: boolean
   lyrics: string
-  provider: 'vagalume' | 'lyrics.ovh'
+  trackName: string
+  artistName: string
 }
 
-const findLyrics = (music: string, artist: string) => {
-  return fetch()
+interface LyricResponse {
+  id: number
+  trackName: string
+  artistName: string
+  albumName: string
+  duration: number
+  instrumental: boolean
+  plainLyrics: string
+  syncedLyrics: string
 }
 
-const vagalumeRequest = async (music: string, artist: string) => {
+export const findLyrics = async (track: string, artist: string) => {
+  const d1 = await getLyricsByParams(track, artist)
+  if (d1) return constructLyricResult(d1)
+  const d2 = await searchLyrics(`${track} ${artist}`)
+  if (d2) return constructLyricResult(d2)
+  debug('lyricsEngine.findLyrics', `could not find lyrics for ${track} by ${artist}`)
+  return undefined
+}
+
+const constructLyricResult = (response: LyricResponse): LyricResult => {
+  return {
+    instrumental: response.instrumental,
+    lyrics: response.plainLyrics,
+    trackName: response.trackName,
+    artistName: response.artistName
+  }
+}
+
+const getLyricsByParams = async (track: string, artist: string): Promise<LyricResponse | undefined> => {
   const response = await fetch(
-    `https://api.vagalume.com.br/search.php?art=${encodeURIComponent(artist)}&mus=${encodeURIComponent(music)}&apikey={process.env.VAGALUME_API_KEY}`
-  ).then((res: Response) => res.json())
+    `https://lrclib.net/api/get?track_name=${encodeURIComponent(track)}&artist_name=${encodeURIComponent(artist)}`,
+    { method: 'GET', headers: { 'User-Agent': 'lastgram robot (https://github.com/musicorum-app/lastgram)' } }
+  ).then((res: Response) => res.json()).then((r) => r?.id ? r : undefined)
+  if (!response) return undefined
 
-  console.log(response)
+  debug('lyricsEngine.getLyricsByParams', `got ${response.trackName} by ${response.artistName}`)
+  return response
 }
 
-const lyricsOVHRequest = async (music: string, artist: string) => {
+const searchLyrics = async (query: string): Promise<LyricResponse | undefined> => {
   const response = await fetch(
-    `https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(music)}`
-  ).then((res: Response) => res.json())
+    `https://lrclib.net/api/search?q=${encodeURIComponent(query)}`,
+    { method: 'GET', headers: { 'User-Agent': 'lastgram robot (https://github.com/musicorum-app/lastgram)' } }
+  ).then((res: Response) => res.json()).then((r) => r?.[0] || undefined)
+  if (!response) return undefined
 
-  console.log(response)
+  debug('lyricsEngine.searchLyrics', `searched for ${query}, got ${response.trackName} by ${response.artistName}`)
+  return response
 }

@@ -5,6 +5,7 @@ import { LastfmRecentTracksTrack } from '@musicorum/lastfm/dist/types/packages/u
 import { LastfmTag } from '@musicorum/lastfm/dist/types/packages/common.js'
 import { debug } from '../loggingEngine/logging.js'
 import { hashName } from '../utils.js'
+import { graphEngine } from '../graphEngine/index.js'
 
 export type NowPlayingEntity = 'artist' | 'album' | 'track'
 
@@ -20,7 +21,7 @@ export interface NowPlayingData<NowPlayingEntity> {
   isNowPlaying: boolean
 }
 
-const entityCall = (entity: NowPlayingEntity, username: string, track: LastfmRecentTracksTrack) => {
+const entityCall = async (entity: NowPlayingEntity, username: string, track: LastfmRecentTracksTrack) => {
   const data = { username }
 
   switch (entity) {

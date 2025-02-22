@@ -12,7 +12,7 @@ export default async (ctx: Context) => {
     playCount: data.playCount,
     emoji: data.loved ? '💗' : '🎵',
     joinArrays: '\n'
-  }, { imageURL: data.imageURL })
+  }, { imageURL: data.imageURL, sendImageAsPhoto: !ctx.registeredUserData?.sendPhotosAsLink })
 }
 
 export const info = {

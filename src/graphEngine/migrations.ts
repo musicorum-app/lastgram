@@ -10,37 +10,56 @@ export const createKeyspace = async (client: Client) => {
 export const createTables = async (client: Client) => {
   const query = `
     CREATE TABLE IF NOT EXISTS artist_scrobbles (
+      playCount int,
       fmUsername text,
       artistMbid text,
-      playCount int,
-      id uuid PRIMARY KEY,
       createdAt timestamp,
-      updatedAt timestamp
+      updatedAt timestamp,
+      PRIMARY KEY (fmUsername, artistMbid)
     );
 `
 
   const query2 = `
     CREATE TABLE IF NOT EXISTS crowns (
-      artistScrobbleId uuid,
       artistMbid text,
-      groupId uuid,
+      groupId text,
+      fmUsername text,
+      playCount int,
+      switchedtimes int,
+      createdAt timestamp,
+      updatedAt timestamp,
+      PRIMARY KEY (groupId, artistMbid)
+    );
+  `
+
+  // past holders of a crown
+  const querych = `
+    CREATE TABLE IF NOT EXISTS crown_holders (
+      artistMbid text,
+      groupId text,
       fmUsername text,
       playCount int,
       createdAt timestamp,
-      updatedAt timestamp,
-      id uuid PRIMARY KEY
+      PRIMARY KEY (groupId, artistMbid)
     );
   `
+
+  // artist name to mbid mapping
+  const query4 = `
+    CREATE TABLE IF NOT EXISTS artist_mbid_map (
+      artistName text,
+      artistMbid text,
+      PRIMARY KEY (artistName, artistMbid)
+    );
+  `
+
   await client.execute(query)
   await client.execute(query2)
+  await client.execute(querych)
+  await client.execute(query4)
 
-  // create indexes for artist scrobbles w fmUsername and artistMbid
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON artist_scrobbles(fmUsername);`)
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON artist_scrobbles(artistMbid);`)
+  // create index w 2 columns, artistScrobbleId and groupId
 
-  // create indexes for crowns w artistScrobbleId and groupId
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON crowns(artistScrobbleId);`)
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON crowns(groupId);`)
 
   // create table for group members
   const query3 = `
@@ -49,15 +68,11 @@ export const createTables = async (client: Client) => {
       fmUsername text,
       createdAt timestamp,
       updatedAt timestamp,
-      id uuid PRIMARY KEY
+      PRIMARY KEY (groupId, fmUsername)
     );
   `
 
   await client.execute(query3)
-
-  // create indexes for group members w groupId and fmUsername
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON group_members(groupId);`)
-  await client.execute(`CREATE INDEX IF NOT EXISTS ON group_members(fmUsername);`)
 }
 
 

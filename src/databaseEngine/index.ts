@@ -37,17 +37,24 @@ export const userExists = (platformId: string) => {
   })
 }
 
-export const upsertUserDisplayName = (platformId: string, displayName: string, username: string) => {
-  return client.fmDisplayName.upsert({
+export const getUserDisplayName = (fmUsername: string) => {
+  return client.fmDisplayName.findUnique({
     where: {
-      platformId
-    },
+      fmUsername
+    }
+  })
+}
+
+export const upsertUserDisplayName = (displayName: string, username: string) => {
+  return client.fmDisplayName.upsert({
     update: {
       displayName
     },
     create: {
-      platformId,
       displayName,
+      fmUsername: username
+    },
+    where: {
       fmUsername: username
     }
   })

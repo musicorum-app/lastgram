@@ -1,7 +1,14 @@
 import { createKeyspace, createTables } from './migrations.js'
 import { Client } from 'cassandra-driver'
 import { debug, error } from '../loggingEngine/logging.js'
-import { getCrown, upsertArtistScrobble, getUserCrowns, tryGetToCrown, addUserToGroupList } from './operations.js'
+import {
+  getCrown,
+  upsertArtistScrobble,
+  getUserCrowns,
+  tryGetToCrown,
+  addUserToGroupList,
+  getCountPastCrownHolders, linkArtistNameToMbid, getArtistNameFromMbid
+} from './operations.js'
 
 const client = new Client({
   contactPoints: ['127.0.0.1'],
@@ -34,11 +41,11 @@ class GraphEngine {
     return getUserCrowns(this.client!, groupId, fmUsername)
   }
 
-  tryToStealCrown (groupId: string, artistMbid: string, fmUsername: string) {
+  tryToStealCrown (groupId: string, artistMbid: string, fmUsername: string, artistName: string, playCount: number = 0) {
     if (!this.hasStarted) {
       throw new Error('GraphEngine has not started')
     }
-    return tryGetToCrown(this.client!, groupId, artistMbid, fmUsername)
+    return tryGetToCrown(this.client!, groupId, artistMbid, fmUsername, artistName, playCount)
   }
 
   addMemberToGroupList (groupId: string, fmUsername: string) {
@@ -51,6 +58,28 @@ class GraphEngine {
   setClient (client: Client) {
     this.client = client
     this.hasStarted = true
+  }
+
+  getPastCrownHoldersCount (groupId: string, artistMbid: string) {
+    if (!this.hasStarted) {
+      throw new Error('GraphEngine has not started')
+    }
+    return getCountPastCrownHolders(this.client!, groupId, artistMbid)
+  }
+
+  linkArtistNameToMbid (artistName: string, artistMbid: string | undefined) {
+    if (!this.hasStarted) {
+      throw new Error('GraphEngine has not started')
+    }
+    return linkArtistNameToMbid(this.client!, artistName, artistMbid)
+  }
+
+  getArtistNameByMbid (artistMbid: string) {
+    if (!this.hasStarted) {
+      throw new Error('GraphEngine has not started')
+    }
+
+    return getArtistNameFromMbid(this.client!, artistMbid)
   }
 }
 

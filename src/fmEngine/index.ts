@@ -3,6 +3,7 @@ import { LastfmApiMethod } from '@musicorum/lastfm/dist/types/responses.js'
 import { error } from '../loggingEngine/logging.js'
 import { newHistogram } from '../loggingEngine/metrics.js'
 import { backend } from '../cachingEngine/index.js'
+import { graphEngine } from '../graphEngine/index.js'
 
 type InternalData = Record<string, any>
 
@@ -10,6 +11,7 @@ interface ReducedArtistInfo {
   name: string
   mbid?: string
   imageURL: string
+  playCount: number
 }
 
 const lastfmRequest = newHistogram('lastfm_request_duration_seconds', 'Duration of last.fm requests in seconds', ['method', 'code', 'success'])
@@ -30,16 +32,19 @@ class LastgramFMClient extends LastClient {
     }
   }
 
-  async getArtistInfo (artist: string): Promise<ReducedArtistInfo | undefined> {
-    const d = await backend?.get(`fm:artist:${artist}`)
-    // if (d) return Promise.resolve(JSON.parse(d))
-    return this.artist.getInfo(artist, { autocorrect: 1 }).then(async (data) => {
+  async getArtistInfo (artist: string, username: string | undefined): Promise<ReducedArtistInfo | undefined> {
+    //const d = !username && await backend?.get(`fm:artist:${artist}`)
+    //if (d) return Promise.resolve(JSON.parse(d))
+    return this.artist.getInfo(artist, { autocorrect: 1, username }).then(async (data) => {
+      const imgIndex = data.images.length - 1
       const reduced: ReducedArtistInfo = {
         name: data.name,
-        imageURL: data?.images?.[3]?.url || '',
-        mbid: data.mbid
+        imageURL: data?.images?.[imgIndex]?.url || undefined,
+        mbid: data.mbid,
+        playCount: data.user?.playCount || 0
       }
-      await backend?.setTTL(`fm:artist:${artist}`, JSON.stringify(reduced), 60 * 60 * 12).catch(() => error('fmEngine.getArtistInfo', `error while caching artist info for ${artist}`))
+
+      !username && await backend?.setTTL(`fm:artist:${artist}`, JSON.stringify(reduced), 60 * 60 * 6).catch(() => error('fmEngine.getArtistInfo', `error while caching artist info for ${artist}`))
       return reduced
     })
   }

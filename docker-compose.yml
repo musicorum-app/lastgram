@@ -27,7 +27,6 @@ services:
     volumes:
       - scylla-lg:/var/lib/scylla
 
-
 volumes:
     pg-lg:
     redis-lg:

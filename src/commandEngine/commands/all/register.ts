@@ -15,7 +15,7 @@ export default async (ctx: Context, { username }: Args) => {
     return
   }
   await client.user.getInfo(username)
-  await upsertUserDisplayName(ctx.userPlatformId(), ctx.author.name, username)
+  await upsertUserDisplayName(ctx.author.name, username)
   await ctx.createUserData(username, fixLanguageFormat(ctx.author.languageCode))
   ctx.reply(`commands:register.done`, { fmUsername: username })
 }

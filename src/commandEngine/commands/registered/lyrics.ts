@@ -1,17 +1,30 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
+import { findLyrics } from '../../../lyricsEngine/index.js'
+import { getNowPlaying } from '../../../fmEngine/completeNowPlaying.js'
 
 export default async (ctx: Context) => {
-  const args = ctx.args.join(' ')
-  if (!args) return ctx.reply('commands:lyrics.noArgs')
+  let args = ctx.args.join(' ')
+  if (!args) {
+    const data = await getNowPlaying(ctx, 'track')
+    if (!data.isNowPlaying) return ctx.reply('commands:lyrics.noArgs')
+    args = `${data.artist} - ${data.name}`
+  }
 
-  const result = await getLyrics(args)
-  console.log(result)
+  const rawArtistTrack = args.split('-').map((r) => r.trim())
+  if (rawArtistTrack.length < 2) return ctx.reply('commands:lyrics.invalidArgs')
+
+  const [artist, track] = rawArtistTrack
+
+  const result = await findLyrics(track, artist)
+
   if (!result?.lyrics) return ctx.reply('commands:lyrics.noResult')
+  if (result.instrumental) return ctx.reply('commands:lyrics.instrumental')
 
   return ctx.reply('commands:assembledLyrics', {
-    title: result.lyrics,
-    sourceName:  result.source.name,
-    sourceLink: result.source.link
+    lyrics: result.lyrics,
+    artist: result.artistName,
+    track: result.trackName,
+    joinArrays: '\n'
   })
 }
 
