@@ -1,0 +1,7 @@
+[install.cache]
+# when true, don't load from the global cache.
+# Bun may still write to node_modules/.cache
+disable = true
+
+# when true, always resolve the latest versions from the registry
+disableManifest = false
