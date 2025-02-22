@@ -1,0 +1,118 @@
+{
+  "common": {
+    "lnTitle_isPlaying": "**{{name}}** está escuchando:",
+    "lnTitle_wasPlaying": "**{{name}}** estaba escuchando:",
+    "lnOther_one": "**{{name}}** ha escuchado **una vez**:",
+    "lnOther_other": "**{{name}}** ha escuchado **{{count}} veces**:",
+    "lnOther_zero": "**{{name}}** **nunca** ha escuchado:",
+    "track": "{{emoji}} **{{track}}**",
+    "album": "💽 {{album}}",
+    "artist": "🧑‍🎤 {{artist}}",
+    "scrobbles_one": "\n📊 *{{count}} reproducción*",
+    "scrobbles_other": "\n📊 *{{count}} reproducciones*"
+  },
+  "register": {
+    "done": "`{{fmUsername}}`, entendido. ¡Has sido registrado!",
+    "linked": "Ya tienes una cuenta de last.fm vinculada. Si quieres cambiar tu nombre de usuario, usa primero el comando `/unlinkfm`."
+  },
+  "unlink": {
+    "done": "Tu cuenta de last.fm ha sido desvinculada.",
+    "notLinked": "No tienes una cuenta de last.fm vinculada."
+  },
+  "botinfo": {
+    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Uso de memoria:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** mensajes de Telegram desde el último reinicio",
+    "buttons": {
+      "github": "Código fuente en GitHub"
+    }
+  },
+  "help": {
+    "text": "👋 Hola. lastgram es un bot para usuarios de last.fm, permitiéndoles interactuar con el servicio a través de Telegram.\n\nNovedades y más: https://t.me/lastgramdaily\nSoporte: https://t.me/lastgramsupport\n\nUsa `/help <comando>` para obtener más información sobre un comando.",
+    "notFound": "Comando no encontrado. Revisa la ortografía e inténtalo de nuevo.",
+    "commandInfo": "Información sobre el comando **{{name}}**\n{{description}}\n\nUso: `{{- usage}}`\n\n*Los argumentos entre `< >` son obligatorios, los argumentos entre `[ ]` son opcionales.*"
+  },
+  "linkfm": {
+    "buttons": {
+      "link": "Vincular tu cuenta de last.fm"
+    },
+    "link": "Para vincular tu cuenta, haz clic en el botón de abajo.\nDespués de conectar tu cuenta de last.fm, haz clic en el botón *$t(core:buttons.done)*.",
+    "success": "¡Hola, `{{username}}`! Tu cuenta de last.fm ha sido vinculada con éxito.",
+    "linkingError": "Lo siento, ocurrió un error al vincular tu cuenta. Por favor, inténtalo de nuevo.",
+    "successWithUsername": "¡Hola, `{{username}}`! Tu cuenta de last.fm ha sido vinculada con éxito, pero el nombre de usuario que estableciste en el bot no coincidía. Lo he establecido como `{{username}}`, que es el tuyo real."
+  },
+  "config": {
+    "buttons": {
+      "changeLanguage": "Cambiar idioma",
+      "donate": "Donar al bot",
+      "patreon": "Apoyar en Patreon",
+      "lnExhibition": "Configuración de visualización",
+      "ln": {
+        "showTags": "Mostrar etiquetas",
+        "showAlbums": "Mostrar álbumes",
+        "sendPhotoAsLink": "Enviar portada como enlace",
+        "sendPhotoAsPhoto": "Enviar portada como foto",
+        "hideTags": "Ocultar etiquetas"
+      }
+    },
+    "donate": "Si te gusta el bot y quieres donar para apoyar su desarrollo, puedes hacerlo haciendo clic en el botón de abajo. ¡Gracias!",
+    "pickALanguage": "Por favor, selecciona un idioma...",
+    "lnConfig": "Configura cómo se muestra tu información de Last.fm.",
+    "lnConfigUpdated": "¡Tu configuración de visualización de Last.fm ha sido actualizada!"
+  },
+  "cllg": {
+    "buttons": {
+      "increase": "Más",
+      "decrease": "Menos",
+      "showLabels": "Etiquetas",
+      "padded": "Espaciado"
+    }
+  },
+  "lovetrack": {
+    "success": "❤️ ¡Ok! Le dije a last.fm que te encantó escuchar **{{track}}**.\nAhora debería aparecer con un corazón.",
+    "notAnymore": "💔 ¡Ok! Le dije a last.fm que ya no te gusta **{{track}}**.\nAhora debería aparecer sin corazón.",
+    "error": "🤔 Lo siento, ocurrió un error al intentar marcar como favorita esta canción. Por favor, inténtalo de nuevo.",
+    "notPlaying": "🤨 Necesitas estar escuchando una canción para interactuar con ella."
+  },
+  "lyrics": {
+    "noResult": "🤔 Lo siento, no pude encontrar la letra de esta canción.",
+    "noArgs": "🤔 Necesitas proporcionar el nombre de una canción para obtener su letra."
+  },
+  "crowns": {
+    "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} reproducciones* ({{count}} robo)",
+    "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} reproducciones* ({{count}} robos)",
+    "list": [
+      "Coronas de **{{displayName}}** en **{{groupName}}**\n",
+      "{{- crownsText}}"
+    ],
+    "noCrowns": "¡Aún no tienes coronas en este grupo!"
+  },
+  "whoknows": {
+    "claimCount_ordinal_one": "👑 Eres el **primero** en reclamar la corona para ese artista aquí.",
+    "claimCount_ordinal_other": "👑 Eres el **{{count}}º** en reclamar la corona para ese artista aquí.",
+    "success": [
+      "{{- pretext}}🎉 ¡Ahora eres el poseedor de la corona para **{{artistName}}** aquí!",
+      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
+    ],
+    "error_notEnough": "porque no tienes suficientes reproducciones para superar al actual poseedor.",
+    "error_noScrobbles": "porque no tienes suficientes reproducciones para reclamar nada.",
+    "error_alreadyHas": "¡ya tienes la corona para este artista!",
+    "failure": [
+      "{{- pretext}}❌ No pudiste reclamar la corona para **{{artistName}}** porque",
+      "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
+    ],
+    "pastHolder": "👤 **{{name}}** - *{{playCount}} reproducciones*",
+    "currentHolder": "👑 **{{name}}** - **{{playCount}} reproducciones**",
+    "holdersTitle": "👑 Poseedores de la corona para **{{artistName}}**",
+    "noScrobbles": "🤔 No me diste un nombre de artista ni estás escuchando nada en este momento. ¿Qué quieres que revise?"
+  },
+  "meartist": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "🧑‍🎤 **{{artist}}**",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "mealbum": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "💽 **{{album}}**",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ]
+}

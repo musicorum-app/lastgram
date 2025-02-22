@@ -1,0 +1,18 @@
+{
+  "buttons": {
+    "cancel": "Отмена",
+    "done": "Готово"
+  },
+  "languages": {
+    "english": "Английский",
+    "spanish": "Испанский",
+    "portuguese": "Португальский",
+    "russian": "Русский",
+    "french": "Французский"
+  },
+  "dialogues": {
+    "pickAnOption": "Пожалуйста, выберите опцию...",
+    "cancelled": "Операция отменена.",
+    "switchedLanguages": "Теперь бот будет общаться с вами на русском языке."
+  }
+}

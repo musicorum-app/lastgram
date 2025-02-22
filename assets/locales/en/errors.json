@@ -21,7 +21,8 @@
     },
     "notLinked": "Sorry, this command is only available to users who have linked their last.fm account. Run `/linkfm` to link your account.",
     "onlyDMs": "Sorry, this command can only be used in private messages.",
-    "developer": "Sorry, this command is only available to the lastgram development team."
+    "developer": "Sorry, this command is only available to the lastgram development team.",
+    "noDMs": "Sorry, but this command cannot be used in private messages."
   },
   "command": {
     "missingArgument": "Missing arguments.\nThis command should be used like this: `{{- usage}}`",

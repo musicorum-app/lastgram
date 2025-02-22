@@ -1,0 +1,18 @@
+{
+  "buttons": {
+    "cancel": "Annuler",
+    "done": "Terminé"
+  },
+  "languages": {
+    "english": "Anglais",
+    "spanish": "Espagnol",
+    "portuguese": "Portugais",
+    "russian": "Russe",
+    "french": "Français"
+  },
+  "dialogues": {
+    "pickAnOption": "Veuillez sélectionner une option...",
+    "cancelled": "Opération annulée.",
+    "switchedLanguages": "Le bot vous parlera maintenant en français."
+  }
+}

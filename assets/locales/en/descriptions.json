@@ -15,7 +15,8 @@
   "acllg": "Asymmetric collages",
   "cllg": "Classical collages",
   "love": "Loves the song you're listening to",
-  "mealbum": "Shows how many times you have listened to an album",
-  "meartist": "Shows how many times you have listened to an artist",
-  "metrack": "Shows how many times you have listened to a track"
+  "mealbum": "Shows how many times you have listened to an album someone else's listening right now",
+  "meartist": "Shows how many times you have listened to an artist someone else's listening right now",
+  "metrack": "Shows how many times you have listened to a track someone else's listening right now",
+  "start": "Start using the bot"
 }

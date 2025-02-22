@@ -76,10 +76,20 @@
     "buttons": {
       "changeLanguage": "Change language",
       "donate": "Donate to the bot",
-      "patreon": "Support the bot on Patreon"
+      "patreon": "Support the bot on Patreon",
+      "lnExhibition": "Last.fm display settings",
+      "ln": {
+        "showTags": "Show tags",
+        "showAlbums": "Show albums",
+        "sendPhotoAsLink": "Send cover as link",
+        "sendPhotoAsPhoto": "Send cover as photo",
+        "hideTags": "Hide tags"
+      }
     },
     "donate": "If you like the bot and want to donate to support its development, you can do so by clicking on the button below. Thank you!",
-    "pickALanguage": "Please, select a language..."
+    "pickALanguage": "Please, select a language...",
+    "lnConfig": "Configure how your Last.fm information is displayed.",
+    "lnConfigUpdated": "Your Last.fm display settings have been updated!"
   },
   "cllg": {
     "buttons": {
@@ -96,12 +106,52 @@
     "notPlaying": "🤨 You need to be listening to a track to interact with it."
   },
   "assembledLyrics": [
-    "🎶 **{{title}}**",
-    "📝 {{lyrics}}\n",
-    "*[Lyrics provided by {{sourceName}}] ({{sourceLink}})*"
+    "🎶 **{{artist}} - {{track}}**\n",
+    "{{lyrics}}"
   ],
   "lyrics": {
     "noResult": "🤔 Sorry, I couldn't find the lyrics for this track.",
     "noArgs": "🤔 You need to provide a track name to get its lyrics."
-  }
+  },
+  "crowns": {
+    "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubo)",
+    "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubos)",
+    "list": [
+      "**{{displayName}}**'s crowns on **{{groupName}}**\n",
+      "{{- crownsText}}"
+    ],
+    "noCrowns": "You don't have any crowns in this group yet!"
+  },
+  "whoknows": {
+    "claimCount_ordinal_one": "👑 You are the **first** to claim the crown for that artist here.",
+    "claimCount_ordinal_two": "👑 You are the **{{count}}nd** to claim the crown for that artist here.",
+    "claimCount_ordinal_few": "👑 You are the **{{count}}rd** to claim the crown for that artist here.",
+    "claimCount_ordinal_other": "👑 You are the **{{count}}th** to claim the crown for that artist here.",
+    "success":  [
+      "{{- pretext}}🎉 You're now the holder of the crown for **{{artistName}}** here!",
+      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
+    ],
+    "error_notEnough": "because you don't have enough scrobbles to take on the current crown holder.",
+    "error_noScrobbles": "because you don't have enough scrobbles to claim anything.",
+    "error_alreadyHas": "you already have the crown for this artist!",
+    "failure": [
+      "{{- pretext}}❌ You weren't able to claim the crown for **{{artistName}}** because",
+      "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
+    ],
+    "pastHolder": "👤 **{{name}}** - *{{playCount}} scrobbles*",
+    "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
+    "holdersTitle": "👑 Crown holders for **{{artistName}}**",
+    "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
+  },
+  "meartist": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "🧑‍🎤 **{{artist}}**",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "mealbum": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "💽 **{{album}}**",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ]
 }

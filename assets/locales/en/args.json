@@ -4,5 +4,8 @@
   },
   "help": {
     "command": "command name"
+  },
+  "whoknows": {
+    "artist": "artist name"
   }
 }

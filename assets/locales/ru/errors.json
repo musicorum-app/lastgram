@@ -1,0 +1,43 @@
+{
+  "common": {
+    "useRegister": "Используйте `/register <имя пользователя last.fm>` для регистрации.",
+    "consultSupport": "Обратитесь в поддержку lastgram в @lastgramsupport для получения дополнительной информации.",
+    "checkFmStatus": "Для получения дополнительной информации проверьте @lastfmstatus в Twitter или @lastgramsupport в Telegram.",
+    "tryAgain": "Пожалуйста, попробуйте снова.",
+    "runAgain": "Пожалуйста, выполните команду снова.",
+    "checkSpelling": "Пожалуйста, проверьте правописание и попробуйте снова."
+  },
+  "guards": {
+    "targetable": {
+      "userNotRegistered": "$t(errors:guards.registered.userNotRegistered)",
+      "userNotMentioned": "Вы должны упомянуть пользователя для этой команды. $t(errors:common.useRegister)",
+      "userBanned": "$t(errors:guards.registered.userBanned)",
+      "userMentionedNotRegistered": "Упомянутый вами пользователь ещё не зарегистрировался. $t(errors:common.useRegister)",
+      "userMentionedBanned": "Извините, упомянутый вами пользователь был заблокирован в боте. $t(errors:common.consultSupport)"
+    },
+    "registered": {
+      "userNotRegistered": "Эта команда доступна только для зарегистрированных пользователей. $t(errors:common.useRegister)",
+      "userBanned": "Извините, вы были заблокированы в боте. $t(errors:common.consultSupport)"
+    },
+    "notLinked": "Извините, эта команда доступна только для пользователей, привязавших свой аккаунт last.fm. Выполните `/linkfm` для привязки аккаунта.",
+    "onlyDMs": "Извините, эта команда может использоваться только в личных сообщениях.",
+    "developer": "Извините, эта команда доступна только для команды разработчиков lastgram.",
+    "noDMs": "Извините, но эта команда не может использоваться в личных сообщениях."
+  },
+  "command": {
+    "missingArgument": "Отсутствуют аргументы.\nЭта команда должна использоваться так: `{{- usage}}`",
+    "generic": "Извините, произошла неизвестная ошибка при обработке вашей команды. $t(errors:common.consultSupport)",
+    "invalidArgument": "Неверный аргумент.\nЭта команда должна использоваться так: `{{- usage}}`",
+    "collage": "Извините, произошла неизвестная ошибка при создании вашего коллажа. $t(errors:common.tryAgain)"
+  },
+  "lastfm": {
+    "genericError": "Извините, произошла неизвестная ошибка с last.fm. $t(errors:common.tryAgain)",
+    "serviceUnavailable": "Извините, похоже, last.fm сейчас недоступен. $t(errors:common.checkFmStatus)",
+    "seriousError": "Извините, произошла серьёзная ошибка с last.fm. $t(errors:common.consultSupport)",
+    "userNotFound": "Извините, указанное имя пользователя last.fm не найдено. $t(errors:common.checkSpelling)",
+    "noScrobbles": "Извините, указанный пользователь last.fm ещё ничего не скробблил."
+  },
+  "unknown": "Извините, произошла неизвестная ошибка. $t(errors:common.tryAgain)",
+  "expiredInteraction": "Извините, срок действия этой кнопки истёк. $t(errors:common.runAgain)",
+  "noInteractionPermission": "Извините, у вас нет разрешения на использование этой кнопки."
+}

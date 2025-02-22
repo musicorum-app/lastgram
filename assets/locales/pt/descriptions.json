@@ -1,0 +1,22 @@
+{
+  "register": "Registra seu nome de usuário do last.fm",
+  "botinfo": "Mostra informações sobre o bot",
+  "help": "Mostra ajuda sobre o bot",
+  "linkfm": "Vincula sua conta last.fm à sua conta",
+  "unlinkfm": "Desvincula sua conta last.fm da sua conta",
+  "listening": "Mostra o que você está ouvindo",
+  "album": "Mostra qual álbum você está ouvindo",
+  "artist": "Mostra qual artista você está ouvindo",
+  "youalbum": "Mostra quantas vezes alguém ouviu um álbum que você está ouvindo",
+  "youartist": "Mostra quantas vezes alguém ouviu um artista que você está ouvindo",
+  "youtrack": "Mostra quantas vezes alguém ouviu uma música que você está ouvindo",
+  "config": "Mostra o painel de configuração",
+  "lyrics": "Mostra a letra da música que você está ouvindo",
+  "acllg": "Colagens assimétricas",
+  "cllg": "Colagens clássicas",
+  "love": "Ama a música que você está ouvindo",
+  "mealbum": "Mostra quantas vezes você ouviu um álbum que alguém está ouvindo",
+  "meartist": "Mostra quantas vezes você ouviu um artista que alguém está ouvindo",
+  "metrack": "Mostra quantas vezes você ouviu uma música que alguém está ouvindo",
+  "start": "Começar a usar o bot"
+}

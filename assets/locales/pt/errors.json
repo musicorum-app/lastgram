@@ -1,0 +1,43 @@
+{
+  "common": {
+    "useRegister": "Use `/register <usuário do last.fm>` para se registrar.",
+    "consultSupport": "Consulte o suporte do lastgram em @lastgramsupport para mais informações.",
+    "checkFmStatus": "Para mais informações, verifique @lastfmstatus no Twitter ou @lastgramsupport no Telegram.",
+    "tryAgain": "Por favor, tente novamente.",
+    "runAgain": "Por favor, execute o comando novamente.",
+    "checkSpelling": "Por favor, verifique a ortografia e tente novamente."
+  },
+  "guards": {
+    "targetable": {
+      "userNotRegistered": "$t(errors:guards.registered.userNotRegistered)",
+      "userNotMentioned": "Você precisa mencionar um usuário para este comando. $t(errors:common.useRegister)",
+      "userBanned": "$t(errors:guards.registered.userBanned)",
+      "userMentionedNotRegistered": "O usuário que você mencionou ainda não se registrou. $t(errors:common.useRegister)",
+      "userMentionedBanned": "Desculpe, o usuário que você mencionou foi banido do bot. $t(errors:common.consultSupport)"
+    },
+    "registered": {
+      "userNotRegistered": "Este comando só está disponível para usuários registrados. $t(errors:common.useRegister)",
+      "userBanned": "Desculpe, você foi banido de usar este bot. $t(errors:common.consultSupport)"
+    },
+    "notLinked": "Desculpe, este comando só está disponível para usuários que vincularam sua conta last.fm. Execute `/linkfm` para vincular sua conta.",
+    "onlyDMs": "Desculpe, este comando só pode ser usado em mensagens privadas.",
+    "developer": "Desculpe, este comando só está disponível para a equipe de desenvolvimento do lastgram.",
+    "noDMs": "Desculpe, mas este comando não pode ser usado em mensagens privadas."
+  },
+  "command": {
+    "missingArgument": "Argumentos faltando.\nEste comando deve ser usado assim: `{{- usage}}`",
+    "generic": "Desculpe, ocorreu um erro desconhecido ao processar seu comando. $t(errors:common.consultSupport)",
+    "invalidArgument": "Argumento inválido.\nEste comando deve ser usado assim: `{{- usage}}`",
+    "collage": "Desculpe, ocorreu um erro desconhecido ao processar sua colagem. $t(errors:common.tryAgain)"
+  },
+  "lastfm": {
+    "genericError": "Desculpe, ocorreu um erro desconhecido com o last.fm. $t(errors:common.tryAgain)",
+    "serviceUnavailable": "Desculpe, o last.fm parece estar indisponível no momento. $t(errors:common.checkFmStatus)",
+    "seriousError": "Desculpe, ocorreu um erro grave com o last.fm. $t(errors:common.consultSupport)",
+    "userNotFound": "Desculpe, o nome de usuário do last.fm especificado não foi encontrado. $t(errors:common.checkSpelling)",
+    "noScrobbles": "Desculpe, o usuário do last.fm especificado ainda não fez nenhum scrobble."
+  },
+  "unknown": "Desculpe, ocorreu um erro desconhecido. $t(errors:common.tryAgain)",
+  "expiredInteraction": "Desculpe, este botão expirou. $t(errors:common.runAgain)",
+  "noInteractionPermission": "Desculpe, você não tem permissão para usar este botão."
+}

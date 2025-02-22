@@ -1,0 +1,11 @@
+{
+  "register": {
+    "username": "nom d'utilisateur last.fm"
+  },
+  "help": {
+    "command": "nom de la commande"
+  },
+  "whoknows": {
+    "artist": "nom de l'artiste"
+  }
+}

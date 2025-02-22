@@ -1,0 +1,94 @@
+{
+  "common": {
+    "lnTitle_isPlaying": "**{{name}}** está ouvindo:",
+    "lnTitle_wasPlaying": "**{{name}}** estava ouvindo:",
+    "lnOther_one": "**{{name}}** ouviu **uma vez**:",
+    "lnOther_other": "**{{name}}** ouviu **{{count}} vezes**:",
+    "lnOther_zero": "**{{name}}** **nunca** ouviu:",
+    "track": "{{emoji}} **{{track}}**",
+    "album": "💽 {{album}}",
+    "artist": "🧑‍🎤 {{artist}}",
+    "scrobbles_one": "\n📊 *{{count}} scrobble*",
+    "scrobbles_other": "\n📊 *{{count}} scrobbles*"
+  },
+  "register": {
+    "done": "`{{fmUsername}}`, entendi. Você foi registrado!",
+    "linked": "Você já tem uma conta last.fm vinculada. Se quiser mudar seu nome de usuário, use o comando `/unlinkfm` primeiro."
+  },
+  "unlink": {
+    "done": "Sua conta last.fm foi desvinculada.",
+    "notLinked": "Você não tem uma conta last.fm vinculada."
+  },
+  "botinfo": {
+    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Uso de memória:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** mensagens do Telegram desde o último restart",
+    "buttons": {
+      "github": "Código fonte no GitHub"
+    }
+  },
+  "help": {
+    "text": "👋 Olá. lastgram é um bot para usuários do last.fm, permitindo que eles interajam com o serviço pelo Telegram.\n\nNovidades e mais: https://t.me/lastgramdaily\nSuporte: https://t.me/lastgramsupport\n\nUse `/help <comando>` para obter mais informações sobre um comando.",
+    "notFound": "Comando não encontrado. Verifique a escrita e tente novamente.",
+    "commandInfo": "Informações sobre o comando **{{name}}**\n{{description}}\n\nUso: `{{- usage}}`\n\n*Argumentos entre `< >` são obrigatórios, argumentos entre `[ ]` são opcionais.*"
+  },
+  "linkfm": {
+    "buttons": {
+      "link": "Vincular sua conta last.fm"
+    },
+    "link": "Para vincular sua conta, clique no botão abaixo.\nDepois de conectar sua conta last.fm, clique no botão *$t(core:buttons.done)*.",
+    "success": "Oi, `{{username}}`! Sua conta last.fm foi vinculada com sucesso.",
+    "linkingError": "Desculpe, ocorreu um erro ao vincular sua conta. Tente novamente.",
+    "successWithUsername": "Oi, `{{username}}`! Sua conta last.fm foi vinculada com sucesso, mas o nome de usuário que você definiu no bot não correspondia. Eu defini como `{{username}}`, que é o seu real."
+  },
+  "config": {
+    "buttons": {
+      "changeLanguage": "Mudar idioma",
+      "donate": "Doar para o bot",
+      "patreon": "Apoiar no Patreon",
+      "lnExhibition": "Configurações de exibição",
+      "ln": {
+        "showTags": "Mostrar tags",
+        "showAlbums": "Mostrar álbuns",
+        "sendPhotoAsLink": "Enviar capa como link",
+        "sendPhotoAsPhoto": "Enviar capa como foto",
+        "hideTags": "Esconder tags"
+      }
+    },
+    "donate": "Se você gosta do bot e quer doar para apoiar seu desenvolvimento, pode fazer isso clicando no botão abaixo. Obrigado!",
+    "pickALanguage": "Por favor, selecione um idioma...",
+    "lnConfig": "Configure como suas informações do Last.fm são exibidas.",
+    "lnConfigUpdated": "Suas configurações de exibição do Last.fm foram atualizadas!"
+  },
+  "cllg": {
+    "buttons": {
+      "increase": "Mais",
+      "decrease": "Menos",
+      "showLabels": "Rótulos",
+      "padded": "Espaçamento"
+    }
+  },
+  "lovetrack": {
+    "success": "❤️ Ok! Eu disse ao last.fm que você amou ouvir **{{track}}**.\nAgora deve aparecer com um coração.",
+    "notAnymore": "💔 Ok! Eu disse ao last.fm que você não ama mais **{{track}}**.\nAgora deve aparecer sem o coração.",
+    "error": "🤔 Desculpe, ocorreu um erro ao tentar amar esta faixa. Tente novamente.",
+    "notPlaying": "🤨 Você precisa estar ouvindo uma faixa para interagir com ela."
+  },
+  "lyrics": {
+    "noResult": "🤔 Desculpe, não encontrei a letra desta música.",
+    "noArgs": "🤔 Você precisa fornecer o nome de uma música para obter sua letra."
+  },
+  "crowns": {
+    "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubo)",
+    "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubos)",
+    "noCrowns": "Você ainda não tem nenhuma coroa neste grupo!",
+    "list": [
+      "Coroas de **{{displayName}}** em **{{groupName}}**\n",
+      "{{- crownsText}}"
+    ]
+  },
+  "whoknows": {
+    "failure": [
+      "{{- pretext}}❌ Você não conseguiu pegar a coroa de **{{artistName}}** porque",
+      "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
+    ]
+  }
+}
