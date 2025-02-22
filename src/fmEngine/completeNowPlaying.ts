@@ -17,7 +17,7 @@ export interface NowPlayingData<NowPlayingEntity> {
   album?: string
   playCount?: number
   loved: boolean
-  tags?: string[]
+  tags: string[]
   isNowPlaying: boolean
 }
 
@@ -54,6 +54,9 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     track
   ).catch(() => undefined)
 
+  let tags = info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || []
+  tags = tags.map((a: string) => a.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_'))
+
   return {
     name: track.name,
     mbid: info.mbid || hashName(track.name),
@@ -62,7 +65,7 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     album: track.album.name || info.album?.name,
     playCount: info.user?.playCount || 0,
     loved: info.user?.loved || false,
-    tags: info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || [],
+    tags,
     isNowPlaying: track.nowPlaying || false
   }
 }

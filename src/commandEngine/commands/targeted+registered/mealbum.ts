@@ -9,6 +9,7 @@ export default async (ctx: Context) => {
     artist: data.artist,
     album: data.album,
     playCount: data.playCount,
+    tags: ctx.registeredUserData.sendTags ? `\n*${data.tags.map(a => `#${a}`).join(' ')}*` : '',
     joinArrays: '\n'
   }, { imageURL: data.imageURL, sendImageAsPhoto: !ctx.registeredUserData?.sendPhotosAsLink })
 }

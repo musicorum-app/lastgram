@@ -74,14 +74,6 @@ export class MinimalContext {
     const r = await client.user.findFirst({
       where: {
         platformId: this.userPlatformId(user || this.author)
-      },
-      select: {
-        id: true,
-        fmUsername: true,
-        language: true,
-        isBanned: true,
-        revealUser: true,
-        sessionKey: true
       }
     })
 
@@ -120,6 +112,10 @@ export class MinimalContext {
     if (options.imageURL && this.author.platform === 'telegram' && !options.sendImageAsPhoto) {
       this.replyWith += `[\u200B](${options.imageURL})`
       hasMarkdown = true
+    }
+
+    if (options.sendImageAsPhoto && options.imageURL) {
+      options.imageURL = options.imageURL.replaceAll('300x300', '1000x1000')
     }
 
     if (hasMarkdown) {

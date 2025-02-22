@@ -86,43 +86,6 @@
     "linkingError": "Извините, произошла ошибка при привязке вашего аккаунта. Пожалуйста, попробуйте снова.",
     "successWithUsername": "Привет, `{{username}}`! Ваш аккаунт last.fm успешно привязан, но указанное вами имя пользователя не совпадало. Я установил его как `{{username}}`, что является вашим настоящим именем."
   },
-  "youtrack": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "{{emoji}} **{{track}}**",
-    "💽 {{album}}",
-    "🧑‍🎤 {{artist}}"
-  ],
-  "youalbum": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}"
-  ],
-  "youartist": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "🧑‍🎤 **{{artist}}**"
-  ],
-  "listening": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "{{emoji}} **{{track}}**",
-    "💽 {{album}}",
-    "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ],
-  "album": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ],
-  "artist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ],
-  "assembledLyrics": [
-    "🎶 **{{artist}} - {{track}}**\n",
-    "{{lyrics}}"
-  ],
   "lyrics": {
     "noResult": "🤔 Извините, я не смог найти текст для этой песни.",
     "noArgs": "🤔 Вы должны указать название песни, чтобы получить её текст."
@@ -132,16 +95,5 @@
     "notAnymore": "💔 Хорошо! Я сообщил last.fm, что вам больше не нравится **{{track}}**.\nТеперь должно отображаться без сердечка.",
     "error": "🤔 Извините, произошла ошибка при попытке отметить этот трек как понравившийся. Пожалуйста, попробуйте снова.",
     "notPlaying": "🤨 Вы должны слушать трек, чтобы взаимодействовать с ним."
-  },
-  "meartist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ],
-  "mealbum": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ]
+  }
 }

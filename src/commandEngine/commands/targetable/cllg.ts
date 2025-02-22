@@ -49,6 +49,30 @@ export const refreshCollage = async (ctx: MinimalContext) => {
     case 'padded':
       data.padded = !data.padded
       break
+    case 'artist':
+      data.entity = 'artist'
+      break
+    case 'album':
+      data.entity = 'album'
+      break
+    case 'track':
+      data.entity = 'track'
+      break
+    case '7d':
+      data.period = '7day'
+      break
+    case '1m':
+      data.period = '1month'
+      break
+    case '3m':
+      data.period = '3month'
+      break
+    case '6m':
+      data.period = '6month'
+      break
+    case 'overall':
+      data.period = 'overall'
+      break
   }
 
   await backend!.quickEdit(id, JSON.stringify(data))
@@ -93,6 +117,66 @@ const buildComponents = (ctx: MinimalContext, data: ClassicCollageData, id: stri
       name: 'commands:cllg.buttons.padded',
       type: CommandButtonComponentType.primary,
       data: id + '_padded'
+    }, 'refreshCollage')
+  })
+
+  ctx.components.newGroup((b) => {
+    b.addButton({
+      emoji: '🧑‍🎤',
+      name: 'commands:cllg.buttons.artist',
+      type: CommandButtonComponentType.primary,
+      data: id + '_artist'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '💿',
+      name: 'commands:cllg.buttons.album',
+      type: CommandButtonComponentType.primary,
+      data: id + '_album'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '🎵',
+      name: 'commands:cllg.buttons.track',
+      type: CommandButtonComponentType.primary,
+      data: id + '_track'
+    }, 'refreshCollage')
+  })
+
+  ctx.components.newGroup((b) => {
+    b.addButton({
+      emoji: '7️⃣',
+      name: 'commands:cllg.buttons.m',
+      type: CommandButtonComponentType.primary,
+      data: id + '_7d'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '1️⃣',
+      name: 'commands:cllg.buttons.m',
+      type: CommandButtonComponentType.primary,
+      data: id + '_1m'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '3️⃣',
+      name: 'commands:cllg.buttons.m',
+      type: CommandButtonComponentType.primary,
+      data: id + '_3m'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '6️⃣',
+      name: 'commands:cllg.buttons.m',
+      type: CommandButtonComponentType.primary,
+      data: id + '_6m'
+    }, 'refreshCollage')
+
+    b.addButton({
+      emoji: '📅',
+      name: 'commands:cllg.buttons.m',
+      type: CommandButtonComponentType.primary,
+      data: id + '_overall'
     }, 'refreshCollage')
   })
 }

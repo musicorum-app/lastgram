@@ -12,6 +12,7 @@ i18next
     saveMissing: isDevelopment,
     saveMissingTo: 'all',
     saveMissingPlurals: true,
+    joinArrays: '\n',
     backend: {
       loadPath: 'assets/locales/{{lng}}/{{ns}}.json',
       addPath: 'assets/locales/{{lng}}/{{ns}}.missing.json'

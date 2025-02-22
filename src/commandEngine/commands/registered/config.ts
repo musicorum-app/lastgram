@@ -65,7 +65,7 @@ export const lnConfig = async (ctx: MinimalContext) => {
 
 export const showTags = async (ctx: MinimalContext) => {
   await updateUserByID(ctx.registeredUserData.id, {
-    showTags: true
+    sendTags: true
   })
 
   ctx.reply('commands:config.lnConfigUpdated')
@@ -73,7 +73,7 @@ export const showTags = async (ctx: MinimalContext) => {
 
 export const noTags = async (ctx: MinimalContext) => {
   await updateUserByID(ctx.registeredUserData.id, {
-    showTags: false
+    sendTags: false
   })
 
   ctx.reply('commands:config.lnConfigUpdated')

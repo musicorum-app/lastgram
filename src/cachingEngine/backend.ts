@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 export abstract class CachingBackend {
   abstract get (key: string): Promise<string | undefined>
 
@@ -20,5 +22,5 @@ export abstract class CachingBackend {
   }
 }
 
-// random 12 character string
-const randomString = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+// random 32 character string
+const randomString = () => crypto.randomBytes(16).toString('hex')

@@ -10,8 +10,8 @@ export default async (ctx: Context) => {
     artist: data.artist,
     album: data.album,
     playCount: data.playCount,
-    emoji: data.loved ? '💗' : '🎵',
-    joinArrays: '\n'
+    emoji: data.loved ? ctx.targetedUserData.likedEmoji : '🎵',
+    tags: ctx.targetedUserData.sendTags ? `\n*${data.tags.map(a => `#${a}`).join(' ')}*` : ''
   }, { imageURL: data.imageURL, sendImageAsPhoto: !ctx.targetedUserData?.sendPhotosAsLink })
 }
 

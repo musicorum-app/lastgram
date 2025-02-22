@@ -4,7 +4,7 @@
     "": {
       "name": "@lyricalsoul/lastgram",
       "dependencies": {
-        "@musicorum/lastfm": "^0.3.2",
+        "@musicorum/lastfm": "^0.3.3",
         "@polka/parse": "^1.0.0-next.0",
         "@polka/send-type": "^0.5.2",
         "@prisma/client": "^6.4.1",
@@ -12,7 +12,7 @@
         "country-emoji": "^1.5.6",
         "date-fns": "^4.1.0",
         "discord.js": "^14.18.0",
-        "i18next": "^23.16.8",
+        "i18next": "^24.2.2",
         "i18next-fs-backend": "^2.6.0",
         "marked": "^15.0.7",
         "polka": "^0.5.2",
@@ -95,7 +95,7 @@
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.25.0", "", { "os": "win32", "cpu": "x64" }, "sha512-ZENoHJBxA20C2zFzh6AI4fT6RraMzjYw4xKWemRTRmRVtN9c5DcH9r/f2ihEkMjOW5eGgrwCslG/+Y/3bL+DHQ=="],
 
-    "@musicorum/lastfm": ["@musicorum/lastfm@0.3.2", "", {}, "sha512-eDbjvUZfgprTQhCHZLZpHw3isF2IEjqTDily1ORD6q2NkQD+WFGwpl8wb73pyKCdDsPnJy5XFhQTrEZ/HnoKjg=="],
+    "@musicorum/lastfm": ["@musicorum/lastfm@0.3.3", "", {}, "sha512-P5T9Y32x54VpLWwivz60yRJ1GBOCvd3EhqC0HnaFSjEHoLexvGURWhnvsHX/Gu464DX3JZW5vksDCSGDNrRi1g=="],
 
     "@opentelemetry/api": ["@opentelemetry/api@1.9.0", "", {}, "sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg=="],
 
@@ -175,7 +175,7 @@
 
     "generic-pool": ["generic-pool@3.9.0", "", {}, "sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g=="],
 
-    "i18next": ["i18next@23.16.8", "", { "dependencies": { "@babel/runtime": "^7.23.2" } }, "sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg=="],
+    "i18next": ["i18next@24.2.2", "", { "dependencies": { "@babel/runtime": "^7.23.2" }, "peerDependencies": { "typescript": "^5" }, "optionalPeers": ["typescript"] }, "sha512-NE6i86lBCKRYZa5TaUDkU5S4HFgLIEJRLr3Whf2psgaxBleQ2LC1YW1Vc+SCgkAW7VEzndT6al6+CzegSUHcTQ=="],
 
     "i18next-fs-backend": ["i18next-fs-backend@2.6.0", "", {}, "sha512-3ZlhNoF9yxnM8pa8bWp5120/Ob6t4lVl1l/tbLmkml/ei3ud8IWySCHt2lrY5xWRlSU5D9IV2sm5bEbGuTqwTw=="],
 

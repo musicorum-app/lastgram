@@ -103,16 +103,5 @@
     "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
     "holdersTitle": "👑 Détenteurs de la couronne pour **{{artistName}}**",
     "noScrobbles": "🤔 Vous ne m'avez pas donné de nom d'artiste et vous n'écoutez rien en ce moment. Que voulez-vous que je vérifie ?"
-  },
-  "meartist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ],
-  "mealbum": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
-  ]
+  }
 }
