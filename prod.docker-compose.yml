@@ -9,17 +9,17 @@ services:
       - DATABASE_URL=postgres://lg:lgnextrocks@lastgram-database:5432/lastgram
       - CASSANDRA_HOST=lastgram-scylla
       - REDIS_URL=redis://lastgram-redis:6379
-      - FM_API_KEY=${project.FM_API_KEY}
-      - FM_API_SECRET=${project.FM_API_SECRET}
-      - DITTO_URL=${environment.DITTO_URL}
-      - DITTO_API_KEY=${project.DITTO_API_KEY}
-      - TELEGRAM_TOKEN=${environment.TELEGRAM_TOKEN}
-      - GENIUS_SECRET_KEY=${project.GENIUS_SECRET_KEY}
-      - DISCORD_TOKEN=${environment.DISCORD_TOKEN}
-      - DROP_PENDING_UPDATES_ON_START=${environment.DROP_PENDING_UPDATES_ON_START}
-      - DISCORD_CLIENT_ID=${environment.DISCORD_CLIENT_ID}
-      - DISCORD_UPDATE_COMMANDS_ON_START=${environment.DISCORD_UPDATE_COMMANDS_ON_START}
-      - DEBUGGING=${environment.DEBUGGING}
+      - FM_API_KEY=${FM_API_KEY}
+      - FM_API_SECRET=${FM_API_SECRET}
+      - DITTO_URL=${DITTO_URL}
+      - DITTO_API_KEY=${DITTO_API_KEY}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - GENIUS_SECRET_KEY=${GENIUS_SECRET_KEY}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DROP_PENDING_UPDATES_ON_START=${DROP_PENDING_UPDATES_ON_START}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_UPDATE_COMMANDS_ON_START=${DISCORD_UPDATE_COMMANDS_ON_START}
+      - DEBUGGING=${DEBUGGING}
     depends_on:
       - lastgram-database
       - lastgram-redis
