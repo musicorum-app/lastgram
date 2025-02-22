@@ -13,11 +13,13 @@ export default async (ctx: Context) => {
     return v[v.length - 1]
   })
 
-  ctx.components.addButton({
-    name: 'commands:botinfo.buttons.github',
-    emoji: '👀',
-    url: 'https://github.com/musicorum-app/lastgram',
-    type: CommandButtonComponentType.link
+  ctx.components.newGroup((b) => {
+    b.addButton({
+      name: 'commands:botinfo.buttons.github',
+      emoji: '👀',
+      url: 'https://github.com/musicorum-app/lastgram',
+      type: CommandButtonComponentType.link
+    })
   })
 
   ctx.reply('commands:botinfo.data', {

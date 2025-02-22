@@ -9,9 +9,7 @@
     "album": "💽 {{album}}",
     "artist": "🧑‍🎤 {{artist}}",
     "scrobbles_one": "\n📊 *{{count}} scrobble*",
-    "scrobbles_other": "\n📊 *{{count}} scrobbles*",
-    "tags_hasTags": "\n{{name}}",
-    "tags_noTags": ""
+    "scrobbles_other": "\n📊 *{{count}} scrobbles*"
   },
   "register": {
     "done": "`{{fmUsername}}`, got it. You have been registered!",
@@ -21,53 +19,34 @@
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
-    "🧑‍🎤 {{artist}}",
-    "{{-tags}}"
+    "🧑‍🎤 {{artist}}"
   ],
   "youalbum": [
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
     "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
-    "{{-tags}}"
+    "🧑‍🎤 {{artist}}"
   ],
   "youartist": [
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
-    "🧑‍🎤 **{{artist}}**",
-    "{{-tags}}"
-  ],
-  "meartist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
-    "{{-tags}}"
-  ],
-  "mealbum": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
-    "{{-tags}}"
+    "🧑‍🎤 **{{artist}}**"
   ],
   "listening": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
     "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
-    "{{-tags}}"
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "album": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
-    "{{-tags}}"
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "artist": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
-    "{{-tags}}"
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "unlink": {
     "done": "Your last.fm account has been unlinked.",
@@ -118,7 +97,6 @@
       "decrease": "Less",
       "showLabels": "Labels",
       "padded": "Padding",
-      "m": "",
       "artist": "Artist",
       "album": "Album",
       "track": "Track"
@@ -167,5 +145,19 @@
     "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
     "holdersTitle": "👑 Crown holders for **{{artistName}}**",
     "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
+  },
+  "meartist": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "🧑‍🎤 **{{artist}}**",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "mealbum": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "💽 **{{album}}**",
+    "🧑‍🎤 {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
+  ],
+  "unlinkfm": {
+    "done": "Your last.fm account has been successfully unlinked."
   }
 }

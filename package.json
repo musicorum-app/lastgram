@@ -13,7 +13,8 @@
     "database:deploy": "bunx prisma migrate deploy",
     "database:migrate": "bunx prisma migrate dev",
     "i18n:sync": "bunx i18next-locales-sync -p en -s pt es -l path/to/locales/folder --spaces 2",
-    "cli:updateDiscordCommands": "bun dist/cli.js updateDiscordCommands"
+    "cli:updateDiscordCommands": "bun src/cli.ts updateDiscordCommands",
+    "cli:checkTranslations": "bun src/cli.ts checkTranslations"
   },
   "nodemonConfig": {
     "ignore": [

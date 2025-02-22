@@ -63,7 +63,10 @@
       "increase": "Mais",
       "decrease": "Menos",
       "showLabels": "Rótulos",
-      "padded": "Espaçamento"
+      "padded": "Espaçamento",
+      "artist": "Artista",
+      "album": "Álbum",
+      "track": "Faixa"
     }
   },
   "lovetrack": {
@@ -89,6 +92,24 @@
     "failure": [
       "{{- pretext}}❌ Você não conseguiu pegar a coroa de **{{artistName}}** porque",
       "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
-    ]
+    ],
+    "claimCount_ordinal_one": "👑 Você é o **primeiro** a reivindicar a coroa deste artista aqui.",
+    "claimCount_ordinal_two": "👑 Você é o **{{count}}º** a reivindicar a coroa deste artista aqui.",
+    "claimCount_ordinal_few": "👑 Você é o **{{count}}º** a reivindicar a coroa deste artista aqui.",
+    "claimCount_ordinal_other": "👑 Você é o **{{count}}º** a reivindicar a coroa deste artista aqui.",
+    "success": [
+      "{{- pretext}}🎉 Você agora é o detentor da coroa de **{{artistName}}** aqui!",
+      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
+    ],
+    "error_notEnough": "porque você não tem scrobbles suficientes para superar o atual detentor da coroa.",
+    "error_noScrobbles": "porque você não tem scrobbles suficientes para reivindicar nada.",
+    "error_alreadyHas": "você já tem a coroa deste artista!",
+    "pastHolder": "👤 **{{name}}** - *{{playCount}} scrobbles*",
+    "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
+    "holdersTitle": "👑 Detentores da coroa para **{{artistName}}**",
+    "noScrobbles": "🤔 Você não me deu um nome de artista nem está ouvindo nada agora. O que você quer que eu verifique?"
+  },
+  "unlinkfm": {
+    "done": "Sua conta last.fm foi desvinculada com sucesso."
   }
 }

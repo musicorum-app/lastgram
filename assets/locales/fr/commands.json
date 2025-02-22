@@ -63,7 +63,10 @@
       "increase": "Plus",
       "decrease": "Moins",
       "showLabels": "Étiquettes",
-      "padded": "Espacement"
+      "padded": "Espacement",
+      "artist": "Artiste",
+      "album": "Album",
+      "track": "Piste"
     }
   },
   "lovetrack": {
@@ -88,6 +91,8 @@
   "whoknows": {
     "claimCount_ordinal_one": "👑 Vous êtes le **premier** à réclamer la couronne pour cet artiste ici.",
     "claimCount_ordinal_other": "👑 Vous êtes le **{{count}}ème** à réclamer la couronne pour cet artiste ici.",
+    "claimCount_ordinal_two": "👑 Vous êtes le **{{count}}ème** à réclamer la couronne pour cet artiste ici.",
+    "claimCount_ordinal_few": "👑 Vous êtes le **{{count}}ème** à réclamer la couronne pour cet artiste ici.",
     "success": [
       "{{- pretext}}🎉 Vous êtes maintenant détenteur de la couronne pour **{{artistName}}** ici !",
       "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
@@ -103,5 +108,8 @@
     "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
     "holdersTitle": "👑 Détenteurs de la couronne pour **{{artistName}}**",
     "noScrobbles": "🤔 Vous ne m'avez pas donné de nom d'artiste et vous n'écoutez rien en ce moment. Que voulez-vous que je vérifie ?"
+  },
+  "unlinkfm": {
+    "done": "Votre compte last.fm a été délié avec succès."
   }
 }

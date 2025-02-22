@@ -15,7 +15,7 @@ export default async (ctx: Context) => {
   }
 
   const text = data.loved ? await unloveTrack(req) : await loveTrack(req)
-  return ctx.reply(text, { track: data.name })
+  return ctx.reply(text, { track: data.name, artist: data.artist })
 }
 
 export const info = {

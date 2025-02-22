@@ -5,7 +5,8 @@
     "module": "esnext",
     "moduleResolution": "NodeNext",
     "strictNullChecks": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*"
