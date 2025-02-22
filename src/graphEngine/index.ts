@@ -11,7 +11,7 @@ import {
 } from './operations.js'
 
 const client = new Client({
-  contactPoints: ['127.0.0.1'],
+  contactPoints: [process.env.CASSANDRA_HOST || 'localhost'],
   localDataCenter: 'datacenter1'
 })
 

@@ -7,6 +7,7 @@ services:
     environment:
       # keys are DATABASE_URL, FM_API_KEY, FM_API_SECRET, DITTO_URL, DITTO_API_KEY, TELEGRAM_TOKEN, GENIUS_SECRET_KEY, DISCORD_TOKEN, DROP_PENDING_UPDATES_ON_START, DISCORD_CLIENT_ID, #DISCORD_UPDATE_COMMANDS_ON_START, DEBUGGING'
       - DATABASE_URL=postgres://lg:lgnextrocks@lastgram-database:5432/lastgram
+      - CASSANDRA_HOST=lastgram-scylla
       - REDIS_URL=redis://lastgram-redis:6379
       - FM_API_KEY=${project.FM_API_KEY}
       - FM_API_SECRET=${project.FM_API_SECRET}
