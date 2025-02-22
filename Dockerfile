@@ -30,9 +30,12 @@ FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/* .
 COPY --from=prerelease /usr/src/app/package.json .
+COPY . .
+
 RUN bun run database:generate
 
 # run the app
 USER bun
 EXPOSE 3000/tcp
+# cd to the project directory
 ENTRYPOINT [ "bun", "run", "src/index.ts" ]
