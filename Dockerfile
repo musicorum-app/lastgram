@@ -26,4 +26,4 @@ COPY --from=builder /usr/src/app/package.json ./
 USER bun
 EXPOSE 3000/tcp
 
-CMD ["bun", "run", "database:migrate", "&&", "bun", "run", "src/index.ts"]
+CMD ["bun", "run", "database:migrate", "--skip-generate", "&&", "bun", "run", "src/index.ts"]
