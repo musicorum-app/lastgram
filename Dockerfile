@@ -24,8 +24,9 @@ COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/start.sh ./
 
+RUN chmod +x start.sh
+
 USER bun
 EXPOSE 3000/tcp
 
-RUN chmod +x start.sh
 CMD ["./start.sh"]
