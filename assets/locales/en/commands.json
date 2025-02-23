@@ -16,35 +16,35 @@
     "linked": "You have a last.fm account linked to this account. If you want to change your username, use the `/unlinkfm` command first."
   },
   "youtrack": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": {{user}}, \"count\": {{playCount}}})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
     "🧑‍🎤 {{artist}}"
   ],
   "youalbum": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": {{user}}, \"count\": {{playCount}}})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}"
   ],
   "youartist": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": {{user}}, \"count\": {{playCount}}})",
     "🧑‍🎤 **{{artist}}**"
   ],
   "listening": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": {{user}}, \"context\": \"{{isListening}}\"})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
     "🧑‍🎤 {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "album": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": {{user}}, \"context\": \"{{isListening}}\"})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "artist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": {{user}}, \"context\": \"{{isListening}}\"})",
     "🧑‍🎤 **{{artist}}**",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
@@ -104,8 +104,8 @@
     }
   },
   "lovetrack": {
-    "success": "❤️ Okay! I told last.fm that you loved listening to **{{track}}**.\nIt should show with a heart now.",
-    "notAnymore": "💔 Okay! I told last.fm that you don't love **{{track}}** anymore.\nIt should show without a heart now.",
+    "success": "❤️ Okay! I told last.fm that you loved listening to **{{track}}** by **{{artist}}**.\nIt should show with a heart now.",
+    "notAnymore": "💔 Okay! I told last.fm that you don't love **{{track}}** by **{{artist}}** anymore.\nIt should show without a heart now.",
     "error": "🤔 Sorry, an error occurred while trying to love this track. Please try again.",
     "notPlaying": "🤨 You need to be listening to a track to interact with it."
   },
@@ -148,12 +148,12 @@
     "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
   },
   "meartist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": {{user}}, \"context\": \"{{isListening}}\"})",
     "🧑‍🎤 **{{artist}}**",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"
   ],
   "mealbum": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": {{user}}, \"context\": \"{{isListening}}\"})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})"

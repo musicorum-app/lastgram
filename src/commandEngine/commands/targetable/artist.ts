@@ -11,7 +11,7 @@ export default async (ctx: Context) => {
   if (!data.mbid) warn('commands.artist', `no mbid found for ${data.artist}`)
   if (data.playCount && data.playCount > 1 && data.mbid) await graphEngine.upsertScrobbles(ctx.registeredUserData.fmUsername, data.mbid, data.playCount)
   ctx.reply(`commands:artist`, {
-    user: user.name,
+    user: JSON.stringify(user.name),
     isListening: data.isNowPlaying ? 'isPlaying' : 'wasPlaying',
     artist: data.artist,
     playCount: data.playCount,
