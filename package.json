@@ -22,6 +22,7 @@
     ]
   },
   "devDependencies": {
+    "@types/bun": "^1.2.3",
     "@types/marked": "^6.0.0",
     "@types/node": "^22.13.5",
     "chokidar": "^4.0.3",

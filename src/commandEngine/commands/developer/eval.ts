@@ -2,6 +2,7 @@ import { Context } from '../../../multiplatformEngine/common/context.js'
 import { inspect } from 'node:util'
 import { client } from '../../../databaseEngine/index.js'
 import { sleep } from 'bun'
+
 const clean = async (val: any) => {
   if (val && val.constructor?.name === 'Promise') val = await val
   if (typeof val !== 'string') val = inspect(val, { depth: 2 })

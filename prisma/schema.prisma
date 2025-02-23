@@ -10,7 +10,7 @@ model User {
   updatedAt        DateTime @updatedAt
   isBanned         Boolean  @default(false)
   revealUser       Boolean  @default(false)
-  sendPhotosAsLink Boolean  @default(false)
+  sendPhotosAsLink Boolean  @default(true)
   sendTags         Boolean  @default(false)
   likedEmoji       String   @default("❤️")
   banNote          String?

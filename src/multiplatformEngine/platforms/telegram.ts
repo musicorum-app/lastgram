@@ -149,14 +149,17 @@ export default class Telegram extends Platform {
     })
   }
 
-  sendPhoto (chatId: string, photo: { url: string, caption?: string }, options: { replyTo?: string, replyMarkup?: string | undefined, parseMode?: 'MarkdownV2' | 'HTML' }) {
+  sendPhoto (chatId: string, photo: { url: string, caption?: string }, options: {
+    showCaptionBelowMedia?: boolean
+    replyTo?: string, replyMarkup?: string | undefined, parseMode?: 'MarkdownV2' | 'HTML' }) {
     return this.request('sendPhoto', {
       chat_id: chatId,
       photo: photo.url,
       caption: photo.caption,
       reply_to_message_id: options?.replyTo,
       reply_markup: options?.replyMarkup,
-      parse_mode: options?.parseMode
+      parse_mode: options?.parseMode,
+      show_caption_above_media: !options?.showCaptionBelowMedia
     })
   }
 
