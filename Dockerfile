@@ -20,10 +20,10 @@ ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/assets ./assets
+COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/package.json ./
 
 USER bun
 EXPOSE 3000/tcp
 
-RUN bun run database:migrate
-CMD ["bun", "run", "src/index.ts"]
+CMD ["bun", "run", "database:migrate", "&&", "bun", "run", "src/index.ts"]
