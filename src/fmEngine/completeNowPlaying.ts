@@ -60,7 +60,7 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
   return {
     name: track.name,
     mbid: info.mbid || hashName(track.name),
-    imageURL: info.images?.[3]?.url || track.images[3].url,
+    imageURL: info.images?.[3]?.url || track?.images?.[3]?.url,
     artist: track.artist.name,
     album: track.album.name || info.album?.name,
     playCount: info.user?.playCount || 0,
