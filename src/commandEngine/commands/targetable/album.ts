@@ -7,7 +7,7 @@ export default async (ctx: Context) => {
   const userData = ctx.targetedUserData ?? ctx.registeredUserData
 
   ctx.reply(`commands:album`, {
-    user: JSON.stringify(user.name),
+    user: user.name,
     isListening: data.isNowPlaying ? 'isPlaying' : 'wasPlaying',
     artist: data.artist,
     album: data.album,

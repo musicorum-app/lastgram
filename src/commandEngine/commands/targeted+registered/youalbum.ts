@@ -5,7 +5,7 @@ export default async (ctx: Context) => {
   const data = await getNowPlaying(ctx, 'album', true)
 
   ctx.reply(`commands:youalbum`, {
-    user: JSON.stringify(ctx.targetedUser?.name),
+    user: ctx.targetedUser?.name,
     artist: data.artist,
     album: data.album,
     playCount: data.playCount,
