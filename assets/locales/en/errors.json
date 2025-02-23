@@ -28,6 +28,7 @@
     "missingArgument": "Missing arguments.\nThis command should be used like this: `{{- usage}}`",
     "generic": "Sorry, an unknown error occurred while processing your command. $t(errors:common.consultSupport)",
     "invalidArgument": "Invalid argument.\nThis command should be used like this: `{{- usage}}`",
+    "noScrobbles": "Sorry, the user you specified has not scrobbled anything yet.",
     "collage": "Sorry, an unknown error occurred while processing your collage. $t(errors:common.tryAgain)"
   },
   "lastfm": {
