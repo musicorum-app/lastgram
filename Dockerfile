@@ -22,8 +22,10 @@ COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/assets ./assets
 COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/package.json ./
+COPY --from=builder /usr/src/app/start.sh ./
 
 USER bun
 EXPOSE 3000/tcp
 
-CMD ["bun", "run", "database:migrate", "--skip-generate", "&&", "bun", "run", "src/index.ts"]
+RUN chmod +x start.sh
+CMD ["./start.sh"]
