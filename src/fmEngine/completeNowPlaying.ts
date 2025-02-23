@@ -65,7 +65,7 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     album: track.album.name || info.album?.name,
     playCount: info.user?.playCount || 0,
     loved: info.user?.loved || false,
-    tags,
+    tags: tags.slice(0, 5),
     isNowPlaying: track.nowPlaying || false
   }
 }
