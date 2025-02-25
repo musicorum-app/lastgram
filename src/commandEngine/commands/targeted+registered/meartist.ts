@@ -5,7 +5,7 @@ export default async (ctx: Context) => {
   const data = await getNowPlaying(ctx, 'artist', false, true)
 
   ctx.reply(`commands:meartist`, {
-    user: ctx.targetedUser?.name,
+    user: ctx.registeredUser?.name,
     artist: data.artist,
     playCount: data.playCount,
     tags: ctx.registeredUserData.sendTags ? `\n*${data.tags.map(a => `#${a}`).join(' ')}*` : '',

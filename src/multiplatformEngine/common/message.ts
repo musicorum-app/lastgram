@@ -8,6 +8,7 @@ export interface Message extends Base {
   isAnonymous: boolean
   replyingTo?: Message
   replyingToUser?: User
+  mustReply?: boolean
 }
 
 export const buildFromTelegramMessage = (message: Record<string, any>): Message => {
@@ -17,8 +18,9 @@ export const buildFromTelegramMessage = (message: Record<string, any>): Message 
     sentAt: message.date,
     isAnonymous: !!message.sender_chat,
     platform: 'telegram',
-    replyingTo: message.reply_to_message ? buildFromTelegramMessage(message.reply_to_message) : undefined,
-    replyingToUser: message.reply_to_message ? buildFromTelegramUser(message.reply_to_message.from) : undefined
+    replyingTo: message.reply_to_message && message.reply_to_message.from.id !== 777000 ? buildFromTelegramMessage(message.reply_to_message) : undefined,
+    replyingToUser: message.reply_to_message && message.reply_to_message.from.id !== 777000 ? buildFromTelegramUser(message.reply_to_message.from) : undefined,
+    mustReply: message.reply_to_message?.from?.id === 777000
   }
 }
 

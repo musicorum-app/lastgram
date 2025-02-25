@@ -116,7 +116,9 @@ export default class Telegram extends Platform {
 
   deliverMessage (ctx: Context) {
     const id = ctx.channel?.id || ctx.author.id
-    const replyTo = ctx.message.replyingTo ? ctx.message.id : undefined
+    const basedReply = (ctx.replyOptions?.replyingToOriginal || ctx.message.mustReply) ? ctx.message.id : undefined
+    const replyTo = ctx.message.replyingTo ? ctx.message.id : basedReply
+
     if (ctx.replyOptions?.sendImageAsPhoto) {
       return this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
         replyTo,

@@ -5,7 +5,7 @@ export default async (ctx: Context) => {
   const data = await getNowPlaying(ctx, 'track', false, true)
 
   ctx.reply(`commands:youtrack`, {
-    user: ctx.targetedUser?.name,
+    user: ctx.registeredUser?.name,
     track: data.name,
     artist: data.artist,
     album: data.album,

@@ -116,7 +116,7 @@
     "notPlaying": "🤨 You need to be listening to a track to interact with it."
   },
   "assembledLyrics": [
-    "🎶 **{{artist}} - {{track}}**\n",
+    "🎶 **{{artist}} - {{track}}**",
     "{{lyrics}}"
   ],
   "lyrics": {
@@ -127,7 +127,7 @@
     "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubo)",
     "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubos)",
     "list": [
-      "**{{displayName}}**'s crowns on **{{groupName}}**\n",
+      "**{{displayName}}**'s crowns on **{{groupName}}**",
       "{{- crownsText}}"
     ],
     "noCrowns": "You don't have any crowns in this group yet!"
@@ -171,7 +171,7 @@
   },
   "eval": [
     "**Code**: <pre><code class=\"language-javascript\">{{code}}</code></pre>",
-    "**Output**: <pre><code class=\"language-javascript\">{{output}}</code></pre>\n",
+    "**Output**: <pre><code class=\"language-javascript\">{{output}}</code></pre>",
     "⏱️ **Time taken**: {{time}}ms"
   ]
 }

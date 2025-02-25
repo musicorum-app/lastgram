@@ -24,6 +24,7 @@ interface ReplyOptions {
   alertText?: string
   warning?: boolean
   sendImageAsPhoto?: boolean
+  replyingToOriginal?: boolean
 }
 
 export class MinimalContext {
@@ -105,7 +106,7 @@ export class MinimalContext {
   }
 
   reply (translationKey: string, data: Record<string, any> = {}, options: ReplyOptions = {}) {
-    this.replyWith = options.noTranslation ? translationKey : this.t(translationKey, data)
+    this.replyWith = options.noTranslation ? translationKey : this.t(translationKey, data).trim()
 
     // detect markdown
     let hasMarkdown = (this.replyWith as string).includes('*') || (this.replyWith as string).includes('`') || (this.replyWith as string).includes('[')

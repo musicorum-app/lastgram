@@ -27,7 +27,7 @@ class PlatformManager {
   }
 }
 
-export const loadedPlatforms = await loadPlatforms()
+export const loadedPlatforms: Platform[] = await loadPlatforms()
 export let platformManager: PlatformManager | undefined
 
 export const start = () => {
