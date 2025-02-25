@@ -111,5 +111,9 @@
   },
   "unlinkfm": {
     "done": "Sua conta last.fm foi desvinculada com sucesso."
+  },
+  "emoji": {
+    "invalid": "🤔 Hm, não reconheço esse emoji. $t(errors:common.tryAgain)",
+    "done": "{{emoji}} Pronto!"
   }
 }

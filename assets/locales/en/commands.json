@@ -173,5 +173,9 @@
     "**Code**: <pre><code class=\"language-javascript\">{{code}}</code></pre>",
     "**Output**: <pre><code class=\"language-javascript\">{{output}}</code></pre>",
     "⏱️ **Time taken**: {{time}}ms"
-  ]
+  ],
+  "emoji": {
+    "invalid": "🤔 That doesn't look like a valid emoji. $t(errors:common.checkSpelling)",
+    "done": "{{emoji}} Done!"
+  }
 }

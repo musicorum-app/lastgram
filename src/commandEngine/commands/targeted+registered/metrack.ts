@@ -6,6 +6,7 @@ export default async (ctx: Context) => {
 
   ctx.reply(`commands:youtrack`, {
     user: ctx.registeredUser?.name,
+    isListening: data.isNowPlaying ? 'isPlaying' : 'wasPlaying',
     track: data.name,
     artist: data.artist,
     album: data.album,
