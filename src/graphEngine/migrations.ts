@@ -40,7 +40,7 @@ export const createTables = async (client: Client) => {
       fmUsername text,
       playCount int,
       createdAt timestamp,
-      PRIMARY KEY (groupId, artistMbid)
+      PRIMARY KEY (groupId, artistMbid, fmUsername)
     );
   `
 
@@ -49,6 +49,7 @@ export const createTables = async (client: Client) => {
     CREATE TABLE IF NOT EXISTS artist_mbid_map (
       artistName text,
       artistMbid text,
+      artistCover text,
       PRIMARY KEY (artistName, artistMbid)
     );
   `

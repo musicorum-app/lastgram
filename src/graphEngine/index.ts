@@ -1,89 +1,11 @@
 import { createKeyspace, createTables } from './migrations.js'
 import { Client } from 'cassandra-driver'
 import { debug, error } from '../loggingEngine/logging.js'
-import {
-  getCrown,
-  upsertArtistScrobble,
-  getUserCrowns,
-  tryGetToCrown,
-  addUserToGroupList,
-  getCountPastCrownHolders, linkArtistNameToMbid, getArtistNameFromMbid
-} from './operations.js'
 
-const client = new Client({
+export const client = new Client({
   contactPoints: [process.env.CASSANDRA_HOST || 'localhost'],
   localDataCenter: 'datacenter1'
 })
-
-class GraphEngine {
-  hasStarted: boolean = false
-  client: Client | undefined = undefined
-
-  upsertScrobbles (fmUsername: string, artistMbid: string, playCount: number) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    debug('graphEngine.upsertScrobbles', `upserting scrobbles for ${fmUsername} on ${artistMbid} with playcount ${playCount}`)
-    return upsertArtistScrobble(this.client!, fmUsername, artistMbid, playCount)
-  }
-
-  getCrownOnGroup (groupId: string, artistMbid: string) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return getCrown(this.client!, groupId, artistMbid)
-  }
-
-  getUserCrowns (groupId: string, fmUsername: string) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return getUserCrowns(this.client!, groupId, fmUsername)
-  }
-
-  tryToStealCrown (groupId: string, artistMbid: string, fmUsername: string, artistName: string, playCount: number = 0) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return tryGetToCrown(this.client!, groupId, artistMbid, fmUsername, artistName, playCount)
-  }
-
-  addMemberToGroupList (groupId: string, fmUsername: string) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return addUserToGroupList(this.client!, groupId, fmUsername).then(() => debug('graphEngine.addMemberToGroupList', `added ${fmUsername} to group ${groupId}`))
-  }
-
-  setClient (client: Client) {
-    this.client = client
-    this.hasStarted = true
-  }
-
-  getPastCrownHoldersCount (groupId: string, artistMbid: string) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return getCountPastCrownHolders(this.client!, groupId, artistMbid)
-  }
-
-  linkArtistNameToMbid (artistName: string, artistMbid: string | undefined) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-    return linkArtistNameToMbid(this.client!, artistName, artistMbid)
-  }
-
-  getArtistNameByMbid (artistMbid: string) {
-    if (!this.hasStarted) {
-      throw new Error('GraphEngine has not started')
-    }
-
-    return getArtistNameFromMbid(this.client!, artistMbid)
-  }
-}
-
-export const graphEngine = new GraphEngine()
 
 export const start = async () => {
   await client.connect().then(() => debug('graphEngine.main', 'connected to database'))
@@ -91,6 +13,5 @@ export const start = async () => {
   client.keyspace = 'lastgram'
 
   await createTables(client).then(() => debug('graphEngine.main', 'tables created')).catch((e) => error('graphEngine.main', e.stack))
-  graphEngine.setClient(client)
 }
 

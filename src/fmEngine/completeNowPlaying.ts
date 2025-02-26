@@ -5,13 +5,14 @@ import { LastfmRecentTracksTrack } from '@musicorum/lastfm/dist/types/packages/u
 import { LastfmTag } from '@musicorum/lastfm/dist/types/packages/common.js'
 import { debug } from '../loggingEngine/logging.js'
 import { hashName } from '../utils.js'
-import { graphEngine } from '../graphEngine/index.js'
+import { upsertArtistScrobbles } from '../graphEngine/operations/artist-scrobbles.js'
 
 export type NowPlayingEntity = 'artist' | 'album' | 'track'
 
 export interface NowPlayingData<NowPlayingEntity> {
   name: string
-  mbid?: string
+  mbid: string
+  artistMbid: string
   imageURL: string
   artist?: string
   album?: string
@@ -26,7 +27,9 @@ const entityCall = async (entity: NowPlayingEntity, username: string, track: Las
 
   switch (entity) {
     case 'artist':
-      return client.artist.getInfo(track.artist.name, data)
+      const d = await client.artist.getInfo(track.artist.name, data)
+      if (d?.playCount && d?.playCount > 1 && d?.mbid) await upsertArtistScrobbles(username, d?.mbid, d?.playCount)
+      return d
     case 'album':
       return client.album.getInfo(track.album.name, track.artist.name, data)
     case 'track':
@@ -54,12 +57,20 @@ export const getNowPlaying = async (ctx: Context, entity: NowPlayingEntity, getF
     track
   ).catch(() => undefined)
 
-  let tags = info.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || []
+  let tags = info?.tags?.map?.((tag: LastfmTag) => tag.name ?? tag) || []
   tags = tags.map((a: string) => a.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_'))
+
+  let artistMbid
+  if (entity === 'track' || entity === 'album') {
+    artistMbid = track.artist.mbid || hashName(track.artist.name)
+  } else {
+    artistMbid = info?.mbid
+  }
 
   return {
     name: track.name,
     mbid: info.mbid || hashName(track.name),
+    artistMbid,
     imageURL: info.images?.[3]?.url || track?.images?.[3]?.url,
     artist: track.artist.name,
     album: track.album.name || info.album?.name,

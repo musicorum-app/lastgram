@@ -1,16 +1,12 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
-import { graphEngine } from '../../../graphEngine/index.js'
-
-type Args = {
-  artistName: string
-}
-type InternalArtistType = { name: string, mbid: string | undefined, imageURL: string | undefined, playCount: number }
+import { getUserCrowns } from '../../../graphEngine/operations/crowns.js'
+import { getArtistDataByMbid } from '../../../graphEngine/operations.js'
 
 export default async (ctx: Context) => {
   const username = ctx.targetedUserData?.fmUsername ?? ctx.registeredUserData!.fmUsername
   const displayName = ctx.targetedUser?.name ?? ctx.registeredUser!.name
 
-  const crowns = await graphEngine.getUserCrowns(ctx.channel.id, username).then((r) => {
+  const crowns = await getUserCrowns(ctx.channel.id, username).then((r) => {
     if (!r?.length) return undefined
     return r.sort((a: any, b: any) => b.createdat - a.createdat)
   })
@@ -21,7 +17,7 @@ export default async (ctx: Context) => {
   }
 
   // sort by createdAt
-  const artistNames = await Promise.all(crowns.map((c: any) => graphEngine.getArtistNameByMbid(c.artistmbid)))
+  const artistNames = await Promise.all(crowns.map((c: any) => getArtistDataByMbid(c.artistmbid).then(a => a.name)))
   let crownsText = ''
   for (let i = 0; i < crownCount; i++) {
     const crown = crowns[i]

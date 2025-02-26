@@ -6,7 +6,6 @@ export default async (ctx: Context) => {
 
   ctx.reply(`commands:meartist`, {
     user: ctx.registeredUser?.name,
-    isListening: data.isNowPlaying ? 'isPlaying' : 'wasPlaying',
     artist: data.artist,
     playCount: data.playCount,
     tags: ctx.registeredUserData.sendTags ? `\n*${data.tags.map(a => `#${a}`).join(' ')}*` : '',

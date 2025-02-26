@@ -1,9 +1,9 @@
 import { Context } from '../../../multiplatformEngine/common/context.js'
-import { fixLanguageFormat } from '../../helpers.js'
 import { client } from '../../../fmEngine/index.js'
-import { getUser, getUserDisplayName, upsertUserDisplayName } from '../../../databaseEngine/index.js'
-import { graphEngine } from '../../../graphEngine/index.js'
+import { getUserDisplayName, upsertUserDisplayName } from '../../../databaseEngine/index.js'
 import { hashName } from '../../../utils.js'
+import { addUserToGroupList, linkArtistNameToMbid } from '../../../graphEngine/operations.js'
+import { getCountPastCrownHolders, tryToStealCrown } from '../../../graphEngine/operations/crowns.js'
 
 type Args = {
   artistName: string
@@ -12,7 +12,7 @@ type InternalArtistType = { name: string, mbid: string | undefined, imageURL: st
 
 export default async (ctx: Context, { artistName }: Args) => {
   await upsertUserDisplayName(ctx.author.name, ctx.registeredUserData.fmUsername)
-  await graphEngine.addMemberToGroupList(ctx.channel.id, ctx.registeredUserData.fmUsername)
+  await addUserToGroupList(ctx.channel.id, ctx.registeredUserData.fmUsername)
   let artist: InternalArtistType | undefined = undefined
   if (!artistName) {
     // get now playing and retrieve artist from there
@@ -31,11 +31,11 @@ export default async (ctx: Context, { artistName }: Args) => {
     mbid: artist?.mbid || artObject.mbid,
   }
   if (!internalArt.mbid) internalArt.mbid = hashName(internalArt.name)
-  await graphEngine.linkArtistNameToMbid(internalArt.name, internalArt.mbid)
+  await linkArtistNameToMbid(internalArt.name, internalArt.mbid, artObject.imageURL)
 
   // try to take the crown
-  const attempt = await graphEngine.tryToStealCrown(ctx.channel.id, internalArt!.mbid!, ctx.registeredUserData.fmUsername.toLowerCase(), artistName, internalArt.playCount)
-  const holders = await graphEngine.getPastCrownHoldersCount(ctx.channel.id, internalArt.mbid)
+  const attempt = await tryToStealCrown(ctx.channel.id, internalArt!.mbid!, ctx.registeredUserData.fmUsername.toLowerCase(), artistName, internalArt.playCount)
+  const holders = await getCountPastCrownHolders(ctx.channel.id, internalArt.mbid)
   const pastHolders = holders.map((r) => ctx.t('commands:whoknows.pastHolder', { name: r.name, playCount: r.playCount }))
   const currentHolder = attempt.crown ? ctx.t('commands:whoknows.currentHolder', {
     name: await getUserDisplayName(attempt.crown.fmusername).then((r: any) => r?.displayName ?? attempt.crown!.fmusername),
@@ -68,7 +68,7 @@ export default async (ctx: Context, { artistName }: Args) => {
 }
 
 export const info = {
-  aliases: ['wk', 'coroa', 'crown'],
+  aliases: ['wka', 'coroa', 'crown'],
   args: [{
     name: 'artistName',
     required: false,

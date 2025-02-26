@@ -37,20 +37,20 @@
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
-    "🧑‍🎤 {{artist}}",
+    "{{artistCrown}} {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
   "album": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "💽 **{{album}}**",
-    "🧑‍🎤 {{artist}}",
+    "{{artistCrown}} {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
   "artist": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
-    "🧑‍🎤 **{{artist}}**",
+    "{{artistCrown}} **{{artist}}**",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
@@ -154,16 +154,14 @@
     "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
   },
   "meartist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
     "🧑‍🎤 **{{artist}}**",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
   "mealbum": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
-    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
   "unlinkfm": {
