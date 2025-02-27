@@ -52,12 +52,12 @@ export const checkIfUserHasCrown = async (
         AND fmusername = ?
         AND artistmbid = ? ALLOW FILTERING;
   `;
-  const r = await client.execute(
-    query,
-    [groupId, fmUsername.toLowerCase(), artistMbid],
-    { prepare: true },
-  );
-  return !!r.rows[0];
+  const r = await client
+    .execute(query, [groupId, fmUsername.toLowerCase(), artistMbid], {
+      prepare: true,
+    })
+    .catch(() => null);
+  return !!r && !!r.rows[0];
 };
 export const getUserCrowns = async (groupId: string, fmUsername: string) => {
   const query = `
