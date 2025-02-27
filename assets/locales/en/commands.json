@@ -115,10 +115,7 @@
     "error": "🤔 Sorry, an error occurred while trying to love this track. Please try again.",
     "notPlaying": "🤨 You need to be listening to a track to interact with it."
   },
-  "assembledLyrics": [
-    "🎶 **{{artist}} - {{track}}**",
-    "{{lyrics}}"
-  ],
+  "assembledLyrics": ["🎶 **{{artist}} - {{track}}**", "{{lyrics}}"],
   "lyrics": {
     "noResult": "🤔 Sorry, I couldn't find the lyrics for this track.",
     "noArgs": "🤔 You need to provide a track name to get its lyrics."
@@ -128,6 +125,7 @@
     "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubos)",
     "list": [
       "**{{displayName}}**'s crowns on **{{groupName}}**",
+      "🎖️ **Total crowns:** {{crownCount}}\n",
       "{{- crownsText}}"
     ],
     "noCrowns": "You don't have any crowns in this group yet!"
@@ -137,7 +135,7 @@
     "claimCount_ordinal_two": "👑 You are the **{{count}}nd** to claim the crown for that artist here.",
     "claimCount_ordinal_few": "👑 You are the **{{count}}rd** to claim the crown for that artist here.",
     "claimCount_ordinal_other": "👑 You are the **{{count}}th** to claim the crown for that artist here.",
-    "success":  [
+    "success": [
       "{{- pretext}}🎉 You're now the holder of the crown for **{{artistName}}** here!",
       "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
     ],
