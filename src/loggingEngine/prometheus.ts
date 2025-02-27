@@ -1,11 +1,12 @@
-import client from 'prom-client'
-import { isDevelopment } from '../utils.js'
+import client from "prom-client";
+import { isDevelopment } from "../utils.js";
 
-export const register = new client.Registry()
+export const register = new client.Registry();
 
-export const prefixed = (name: string) => `lg${isDevelopment ? '_dev' : ''}_${name}`
+export const prefixed = (name: string) =>
+  `lg${isDevelopment ? "_dev" : ""}_${name}`;
 
-client.collectDefaultMetrics({
-  prefix: prefixed(''),
-  register
-})
+//client.collectDefaultMetrics({
+//  prefix: prefixed(''),
+//  register
+//})
