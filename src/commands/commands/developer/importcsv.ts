@@ -11,9 +11,8 @@ const parseCSV = (csv: string) => {
     const data = []
 
     for (let i = 1; i < lines.length; i++) {
-        if (!lines[i].trim()) continue // Skip empty lines
+        if (!lines[i].trim()) continue
 
-        // Simple CSV parsing - handles basic cases
         const values = lines[i].split(',')
         const row: any = {}
 
@@ -21,7 +20,6 @@ const parseCSV = (csv: string) => {
             row[header] = values[index]?.trim() || ''
         })
 
-        // Only add rows that have required fields
         if (row.pid && row.lfm_username) {
             data.push(row)
         }
@@ -35,8 +33,6 @@ export default async (
     { url }: Args
 ) => {
     try {
-        await ctx.reply('⏳ Fetching CSV from URL...')
-
         // Fetch the CSV from the URL
         const response = await fetch(url)
         if (!response.ok) {
@@ -50,8 +46,6 @@ export default async (
             return ctx.reply('❌ No valid rows found in CSV')
         }
 
-        await ctx.reply(`📊 Found ${rows.length} rows to process. Starting import...`)
-
         let created = 0
         let skipped = 0
         let errors = 0
@@ -59,6 +53,7 @@ export default async (
 
         // Process each row
         for (const row of rows) {
+            const id = `telegram_${row.pid}`
             try {
                 // Check if user already exists
                 const existing = await client.user.findUnique({
@@ -73,10 +68,9 @@ export default async (
                 // Create the user
                 await client.user.create({
                     data: {
-                        platformId: row.pid,
+                        platformId: id,
                         fmUsername: row.lfm_username,
-                        isBanned: row.banned === 'true',
-                        // All other fields will use defaults from the schema
+                        isBanned: row.banned == 'true'
                     }
                 })
                 created++

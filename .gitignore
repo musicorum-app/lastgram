@@ -285,3 +285,4 @@ $RECYCLE.BIN/
 
 # missing translation files
 assets/locales/**/*.missing.json
+.idea
