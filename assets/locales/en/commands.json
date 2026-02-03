@@ -59,7 +59,7 @@
     "notLinked": "You don't have a last.fm account linked to this account."
   },
   "botinfo": {
-    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** messages from Telegram since last restart",
+    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n⏱\uFE0F **Uptime:** {{uptime}}m\n\uD83D\uDCE9 **{{updates}}** messages from Telegram since last restart",
     "buttons": {
       "github": "Source code on GitHub"
     }
