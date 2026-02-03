@@ -1,5 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/prisma"
+}
 
 model User {
   id               Int      @id @default(autoincrement())
@@ -10,7 +16,7 @@ model User {
   updatedAt        DateTime @updatedAt
   isBanned         Boolean  @default(false)
   revealUser       Boolean  @default(false)
-  sendPhotosAsLink Boolean  @default(true)
+  sendPhotosAsLink Boolean  @default(false)
   sendTags         Boolean  @default(false)
   likedEmoji       String   @default("❤️")
   banNote          String?
@@ -25,11 +31,131 @@ model FmDisplayName {
   updatedAt   DateTime @updatedAt
 }
 
-generator client {
-  provider = "prisma-client-js"
+/**
+ * these were generated from the previous graph engine which used cassandra. they are in here for reference, as the new postgres schemas will follow a similar logic (but optimized for relational dbs)
+ * model ArtistScrobble {
+ * fmUsername  String   @db.Text
+ * artistMbid  String   @db.Text
+ * playCount   Int
+ * createdAt   DateTime @default(now())
+ * updatedAt   DateTime @updatedAt
+ * user   User    @relation(fields: [fmUsername], references: [fmUsername])
+ * crowns Crown[]
+ * @@id([fmUsername, artistMbid])
+ * @@map("artist_scrobbles")
+ * }
+ * model Crown {
+ * groupId       String   @db.Text
+ * artistMbid    String   @db.Text
+ * fmUsername    String   @db.Text
+ * playCount     Int
+ * switchedTimes Int      @default(0) @map("switchedtimes")
+ * createdAt     DateTime @default(now())
+ * updatedAt     DateTime @updatedAt
+ * artistScrobble ArtistScrobble @relation(fields: [fmUsername, artistMbid], references: [fmUsername, artistMbid])
+ * groupMember    GroupMember    @relation(fields: [groupId, fmUsername], references: [groupId, fmUsername])
+ * @@id([groupId, artistMbid])
+ * @@map("crowns")
+ * }
+ * model CrownHolder {
+ * groupId    String   @db.Text
+ * artistMbid String   @db.Text
+ * fmUsername String   @db.Text
+ * playCount  Int
+ * createdAt  DateTime @default(now())
+ * user User @relation(fields: [fmUsername], references: [fmUsername])
+ * @@id([groupId, artistMbid, fmUsername])
+ * @@map("crown_holders")
+ * }
+ * model ArtistMbidMap {
+ * artistName  String  @db.Text
+ * artistMbid  String  @db.Text
+ * artistCover String? @db.Text
+ * @@id([artistName, artistMbid])
+ * @@map("artist_mbid_map")
+ * }
+ * model GroupMember {
+ * groupId    String   @db.Text
+ * fmUsername String   @db.Text
+ * createdAt  DateTime @default(now())
+ * updatedAt  DateTime @updatedAt
+ * user   User    @relation(fields: [fmUsername], references: [fmUsername])
+ * crowns Crown[]
+ * @@id([groupId, fmUsername])
+ * @@map("group_members")
+ * }
+ */
+
+// Holds the artist in question. If they dont have a real MBID, we generate one by MD5ing their name
+model Artist {
+  mbid            String           @id
+  name            String
+  coverUrl        String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  artistScrobbles ArtistScrobble[]
+  crowns          Crown[]
+  crownHolders    CrownHolder[]
+
+  @@index([name])
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+// Holds the scrobble counts for each user-artist pair
+model ArtistScrobble {
+  id         Int      @id @default(autoincrement())
+  fmUsername String
+  artistId   String
+  artist     Artist   @relation(fields: [artistId], references: [mbid], onDelete: Cascade)
+  playCount  Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([fmUsername, artistId])
+  @@index([fmUsername])
+  @@index([playCount(sort: Desc)])
+}
+
+model GroupMember {
+  id         Int      @id @default(autoincrement())
+  groupId    String
+  fmUsername String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([groupId, fmUsername])
+  @@index([groupId])
+  @@index([fmUsername])
+}
+
+// Holds the crown information for each group-artist pair
+model Crown {
+  id            Int      @id @default(autoincrement())
+  groupId       String
+  artistId      String
+  fmUsername    String // Current crown holder
+  playCount     Int // Current holder's play count
+  artist        Artist   @relation(fields: [artistId], references: [mbid], onDelete: Cascade)
+  switchedTimes Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([groupId, artistId])
+  @@index([artistId])
+  @@index([groupId])
+  @@index([fmUsername])
+}
+
+model CrownHolder {
+  id         Int      @id @default(autoincrement())
+  groupId    String
+  artistId   String
+  fmUsername String
+  playCount  Int
+  createdAt  DateTime @default(now())
+  artist     Artist   @relation(fields: [artistId], references: [mbid], onDelete: Cascade)
+
+  @@unique([groupId, artistId, fmUsername])
+  @@index([groupId, playCount(sort: Desc)])
+  @@index([artistId])
+  @@index([fmUsername])
 }

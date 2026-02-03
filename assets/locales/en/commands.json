@@ -151,6 +151,16 @@
     "holdersTitle": "👑 Crown holders for **{{artistName}}**",
     "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
   },
+  "globalwhoknows": {
+    "listener": "{{position}}. **{{name}}** - *{{playCount}} scrobbles*",
+    "list": [
+      "🌍 **Global top listeners for {{artistName}}**",
+      "📊 **Total tracked listeners:** {{listenerCount}}\n",
+      "{{- listenersText}}"
+    ],
+    "noListeners": "🤔 Nobody has scrobbled **{{artistName}}** yet!",
+    "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
+  },
   "meartist": [
     "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
     "🧑‍🎤 **{{artist}}**",

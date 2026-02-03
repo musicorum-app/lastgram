@@ -4,7 +4,7 @@
     <data-source source="LOCAL" name="lastgram @ cassandra" uuid="2cd64a07-8d58-4175-96bb-4747b1622b25">
       <driver-ref>cassandra</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.ing.data.cassandra.jdbc.CassandraDriver</jdbc-driver>
+      <jdbc-driver>com.dbschema.CassandraJdbcDriver</jdbc-driver>
       <jdbc-url>jdbc:cassandra://localhost:9042/lastgram</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>

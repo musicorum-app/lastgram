@@ -1,11 +1,10 @@
-import { debug, info, rainbow } from './loggingEngine/logging.js'
-import { start as startCaching } from './cachingEngine/index.js'
-import { start as startServer } from './serverEngine/index.js'
-import { start as startCommandEngine } from './commandEngine/index.js'
-import { start as startPlatforms } from './multiplatformEngine/index.js'
-import { start as startDatabase } from './databaseEngine/index.js'
-import { start as startInternalServices } from './internalEngine/index.js'
-import { start as startGraphEngine } from './graphEngine/index.js'
+import { debug, info, rainbow } from './logging/logging.js'
+import { start as startCaching } from './caching/index.js'
+import { start as startServer } from './server/index.js'
+import { start as startCommandEngine } from './commands/index.js'
+import { start as startPlatforms } from './multiplatforms/index.js'
+import { start as startDatabase } from './database/index.js'
+import { start as startInternalServices } from './internal/index.js'
 
 info('index.main', `welcome to ${rainbow('lastgram!')}`)
 debug('index.main', 'debug messages are enabled')
@@ -13,7 +12,6 @@ debug('index.main', 'debug messages are enabled')
 await startInternalServices()
 await startCaching()
 await startDatabase()
-await startGraphEngine()
 await startCommandEngine()
 await startServer()
 await startPlatforms()
