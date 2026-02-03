@@ -1,5 +1,5 @@
 import { client } from '../index'
-import { debug, error } from '../../logging/logging'
+import { error } from '../../logging/logging'
 
 export const upsertArtistScrobbles = async (fmUsername: string, artistMbid: string, playCount: number, artistName: string, coverURL?: string) => {
     // Ensure artist exists first

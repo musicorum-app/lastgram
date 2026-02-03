@@ -2,7 +2,7 @@ import { Context } from '../../../multiplatforms/common/context.js'
 import { client } from '../../../fm'
 import { getUserDisplayName } from '../../../database'
 import { hashName } from '../../../utils.js'
-import { linkArtistNameToMbid, upsertArtistCoverUrl, getTopListenersForArtist } from '../../../database/operations'
+import { getTopListenersForArtist, linkArtistNameToMbid, upsertArtistCoverUrl } from '../../../database/operations'
 
 type Args = {
     artistName: string

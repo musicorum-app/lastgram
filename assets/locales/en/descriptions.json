@@ -21,6 +21,7 @@
   "start": "Start using the bot",
   "crowns": "Shows the crown leaderboard on the current group",
   "eval": "shhh",
+  "importcsv": "shhh",
   "whoknowsartist": "Tries to steal the crown for the artist you're listening to, and shows the leaderboard",
   "globalwhoknows": "Shows the global top listeners for an artist",
   "emoji": "Changes what emoji shows up when you love a track"

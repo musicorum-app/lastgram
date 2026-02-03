@@ -1,8 +1,4 @@
-import {loadedCommands} from '../../commands/loader.js'
-import {Command, CommandArgs} from '../../commands/command.js'
-import {REST, Routes} from 'discord.js'
-import {error, grey, info} from '../../logging/logging.js'
-import {lt} from '../../translations'
+
 
 const regex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u
 
