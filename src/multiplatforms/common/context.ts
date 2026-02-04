@@ -11,19 +11,9 @@ import { lt } from '@/translations'
 import { CommandComponentBuilder } from './components/builder.js'
 import { GuardData } from '@/commands/guards'
 import { fixLanguageFormat } from '@/commands/helpers'
-import { UserGetPayload } from '@/prisma/models/User'
+import { UserCreateInput } from '@/prisma/models/User'
 
-export type CachedUserData = UserGetPayload<{
-    select: {
-        fmUsername: boolean;
-        language: boolean;
-        id: boolean,
-        revealUser: boolean,
-        isBanned: boolean,
-        sessionKey: boolean
-    };
-    where: any
-}>
+export type CachedUserData = UserCreateInput
 
 interface ReplyOptions {
     noTranslation?: boolean

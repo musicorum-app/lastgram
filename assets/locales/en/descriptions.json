@@ -24,5 +24,6 @@
   "importcsv": "shhh",
   "whoknowsartist": "Tries to steal the crown for the artist you're listening to, and shows the leaderboard",
   "globalwhoknows": "Shows the global top listeners for an artist",
-  "emoji": "Changes what emoji shows up when you love a track"
+  "emoji": "Changes what emoji shows up when you love a track",
+  "last": "Shows Last.fm profile information and recent tracks"
 }

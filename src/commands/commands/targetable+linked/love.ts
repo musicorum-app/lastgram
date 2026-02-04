@@ -1,6 +1,6 @@
 import { Context } from '@/multiplatforms/common/context'
-import { loveTrack, LoveTrackRequest, unloveTrack } from '@/behavioral'
 import { getNowPlaying } from '@/fm/completeNowPlaying'
+import { loveTrack, LoveTrackRequest, unloveTrack } from '@/fm/interactions'
 
 export default async (ctx: Context) => {
     const data = await getNowPlaying(ctx, 'track', false, true)

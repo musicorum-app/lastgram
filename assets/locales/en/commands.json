@@ -33,6 +33,17 @@
     "🧑‍🎤 **{{artist}}**",
     "{{-tags}}"
   ],
+  "last": [
+    "{{flagEmoji}} Data for **{{fullName}}**{{-secondaryName}}",
+    "🎧 {{scrobbles}} scrobbles ({{scrobbleRate}} per day)",
+    "📆 Account created {{registrationDistance}} ({{registrationDate}})",
+    "\n📊 Most played",
+    "🧑‍🎤 **{{topArtist}}** ({{topArtistPlays}} plays)",
+    "💽 **{{topAlbum}}** by {{topAlbumArtist}} ({{topAlbumPlays}} plays)",
+    "🎵 **{{topTrack}}** by {{topTrackArtist}} ({{topTrackPlays}} plays)",
+    "\n🗒️ Last scrobbled tracks",
+    "{{- trackList}}"
+  ],
   "listening": [
     "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
     "{{emoji}} **{{track}}**",

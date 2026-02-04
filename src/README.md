@@ -1,37 +1,40 @@
 ## lastgram architectural overview
 
-lastgram is extremely overengineered, but it results in a very modular and scalable bot.
+lastgram is extremely overengineered, but it results in a very modular, dynamic, and scalable bot.
 This document will explain the architecture of the bot, and how it works.
 
 > **Warning**
 >
-> The bot is still under heavy development, and new engines and/or concepts may be added at any time. Therefore, this
-> document may be outdated at any time.
+> The bot is still under heavy development, and new structures and/or concepts may be added at any time. Therefore, this
+> document may be outdated.
 > The Musicorum development team may consult objectives and upcoming changes in the Space issue tracker.
 
 
-The major working parts of the bot are separated into *engines*, which are started by the `index.ts` file. The engines
+The major working parts of the bot are separated into these folders. They may have an `index.ts` file, which will be imported on the bot's start function. The folders
 are:
 
-- `cachingEngine` is responsible for caching data from both last.fm and database, powered by Redis or simple in-memory
+- `caching` is responsible for caching data from both last.fm and database, powered by Redis or simple in-memory
   cache (disallowed in production);
-- `cliEngine` is responsible for handling the CLI interface of the bot, used for advanced operations (such as updating
-  Discord command data);
-- `commandEngine` is responsible for handling commands from every platform lastgram supports;
+- `cli` is responsible for handling the CLI interface of the bot, used for advanced operations (such as updating
+  Discord command data or finding inconsistencies across translations);
+- `command` is responsible for handling commands from every platform lastgram supports;
     - The command engine subdivides the commands into *protection levels*. A *protection level* specifies which
       *execution guard* should be used to ensure sanity *before* command execution. The *execution guard* is responsible
       for check if a user can run a certain group of commands, and, if so, sets up the `Context` with data the commands
       may use.
-- `eventEngine` is responsible for handling events that will happen *after* the command execution. A `Button` click
+- `database` is responsible for handling database operations.
+- `event` is responsible for handling events that will happen *after* the command execution. A `Button` click
   handler, for example, has to be submitted by the command to the `eventEngine`, since commands have to return the
   context as soon as possible (due to webhook support);
-- `fmEngine` is responsible for handling the last.fm API requests and other last.fm-related operations;
-- `loggingEngine` is responsible for metrics across all engines and logging operations;
-- `multiplatformEngine` is responsible for actually interacting with a platform and build abstracted interfaces for
+- `fm` is responsible for handling the last.fm API requests and other last.fm-related operations;
+- `internal` is responsible for integrating the bot with Musicorum's internal services, such as the bot's [ditto](https://github.com/musicorum-app/ditto) instance.
+- `logging` is responsible for metrics across all parts of the bot and logging operations;
+- `lyrics` is responsible for handling lyrics fetching from various providers;
+- `multiplatforms` is responsible for actually interacting with a platform and build abstracted interfaces for
   usage by the other engines;
-- `serverEngine` is responsible for handling HTTP requests to the bot, such as platform webhooks or Prometheus metrics;
-- `translationEngine` is responsible for handling translations and localization;
-- `databaseEngine` is responsible for handling database operations.
+- `prisma` is an auto-generated folder by Prisma ORM, responsible for database schema and queries;
+- `server` is responsible for handling HTTP requests to the bot, such as platform webhooks or Prometheus metrics;
+- `translation` is responsible for handling translations and localization;
 
 The bot has the following objectives regarding its architecture:
 

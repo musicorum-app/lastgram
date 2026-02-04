@@ -23,41 +23,38 @@ export default class Telegram extends Platform {
         this.createCounter('telegram_requests', 'Telegram request count', ['success', 'method'])
     }
 
-    getUpdates(offset?: number) {
+    async getUpdates(offset?: number): Promise<void> {
         if (!this.running) return Promise.resolve()
 
-        return this.request('getUpdates', {
+        const response = await this.request('getUpdates', {
             offset,
             drop_pending_updates: process.env.DROP_PENDING_UPDATES_ON_START === 'true'
-        }).then(async (response: Record<string, any>) => {
-            // set drop pending updates to false now.
-            process.env.DROP_PENDING_UPDATES_ON_START = 'false'
-            if (!(response instanceof Array)) {
-                warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
-                await new Promise(resolve => setTimeout(resolve, 1000))
-                return this.getUpdates(offset)
-            }
-
-            this.incrementMessages(response.length)
-            for (const update of response) {
-                if (update.update_id >= (offset || 0)) {
-                    offset = update.update_id + 1
-                }
-
-                if (update.message && update.message.text) {
-                    handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
-                        if (ctx?.replyWith) return this.deliverMessage(ctx)
-                        return undefined
-                    })
-                }
-
-                if (update.callback_query) {
-                    this.handleInteraction(update.callback_query).then(a => a)
-                }
-            }
-
-            return this.getUpdates(offset)
         })
+        // set drop pending updates to false now.
+        process.env.DROP_PENDING_UPDATES_ON_START = 'false'
+        if (!(response instanceof Array)) {
+            warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            return this.getUpdates(offset)
+        }
+        this.incrementMessages(response.length)
+        for (const update of response) {
+            if (update.update_id >= (offset || 0)) {
+                offset = update.update_id + 1
+            }
+
+            if (update.message && update.message.text) {
+                handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
+                    if (ctx?.replyWith) return this.deliverMessage(ctx)
+                    return undefined
+                })
+            }
+
+            if (update.callback_query) {
+                this.handleInteraction(update.callback_query).then(a => a)
+            }
+        }
+        return await this.getUpdates(offset)
     }
 
     async handleInteraction(query: Record<string, any>) {
