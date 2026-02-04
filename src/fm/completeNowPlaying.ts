@@ -110,7 +110,7 @@ export const getNowPlaying = async (
         artist: track.artist.name,
         album: ('album' in info && info.album?.name) || track.album.name,
         playCount: info?.user?.playCount || 0,
-        loved: (info?.user as any).loved as boolean || false,
+        loved: (info?.user as any)?.loved as boolean || false,
         tags: tags.slice(0, 5),
         isNowPlaying: track.nowPlaying || false,
     }

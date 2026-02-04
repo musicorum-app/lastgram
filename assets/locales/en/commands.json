@@ -194,5 +194,19 @@
   "emoji": {
     "invalid": "🤔 That doesn't look like a valid emoji. $t(errors:common.checkSpelling)",
     "done": "{{emoji}} Done!"
-  }
+  },
+  "peak": [
+    "📊 Peak day for **{{displayName}}**",
+    "🔥 **{{peakDate}}** - {{totalScrobbles}} scrobbles",
+    "📅 Period: {{period}}",
+    "\n🎵 Top tracks that day:",
+    "{{- topTracks}}",
+    "\n🧑‍🎤 Top artists that day:",
+    "{{- topArtists}}",
+    "\n💽 Top albums that day:",
+    "{{- topAlbums}}{{-wandaVisionWarning}}{{-moreDataNote}}"
+  ],
+  "peak.noScrobbles": "🤔 No scrobbles in the {{period}}.",
+  "peak.wandaVision": "\n\n🚨 Is the user on WandaVision? They scrobbled {{hours}} hours more than physically possible in a day.",
+  "peak.moreData": "\n\n*Note: There are more scrobbles available but the peak day shown is from the data analyzed.*"
 }
