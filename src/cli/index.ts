@@ -1,4 +1,4 @@
-import { error, info } from '../logging/logging.js'
+import { error, info } from '@/logging/logging'
 
 const commands = await import('./commands.js')
 

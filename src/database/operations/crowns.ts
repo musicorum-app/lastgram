@@ -1,6 +1,6 @@
-import type { Crown } from '../../prisma/client'
+import type { Crown } from '@/prisma/client'
 import { getArtistScrobble, upsertArtistScrobbles, } from './artist-scrobbles'
-import { debug, error } from '../../logging/logging'
+import { debug, error } from '@/logging/logging'
 import { client, getUserDisplayName } from '../index'
 
 interface PastCrownHolder {

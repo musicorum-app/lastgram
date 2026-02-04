@@ -1,6 +1,6 @@
-import { Context } from '../../../multiplatforms/common/context.js'
-import { loveTrack, LoveTrackRequest, unloveTrack } from '../../../behavioral/index.js'
-import { getNowPlaying } from '../../../fm/completeNowPlaying.js'
+import { Context } from '@/multiplatforms/common/context'
+import { loveTrack, LoveTrackRequest, unloveTrack } from '@/behavioral'
+import { getNowPlaying } from '@/fm/completeNowPlaying'
 
 export default async (ctx: Context) => {
     const data = await getNowPlaying(ctx, 'track', false, true)

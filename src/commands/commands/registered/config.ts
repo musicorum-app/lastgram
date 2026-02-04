@@ -1,7 +1,7 @@
-import { Context, MinimalContext } from '../../../multiplatforms/common/context.js'
-import { CommandButtonComponentType } from '../../../multiplatforms/common/components/button.js'
-import { updateUserByID } from '../../../database/index.js'
-import { lt } from '../../../translations/index.js'
+import { Context, MinimalContext } from '@/multiplatforms/common/context'
+import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
+import { updateUserByID } from '@/database'
+import { lt } from '@/translations'
 
 export default async (ctx: Context) => {
     ctx.components.addButton({

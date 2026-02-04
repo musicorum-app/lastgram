@@ -1,11 +1,11 @@
 import { client } from "./index.js"
-import { NoScrobblesError } from "../commands/errors.js"
-import { Context } from "../multiplatforms/common/context.js"
+import { NoScrobblesError } from "@/commands/errors"
+import { Context } from "@/multiplatforms/common/context"
 import { LastfmRecentTracksTrack } from "@musicorum/lastfm/dist/types/packages/user.js"
 import { LastfmTag } from "@musicorum/lastfm/dist/types/packages/common.js"
-import { debug, error } from "../logging/logging.js"
-import { hashName } from "../utils.js"
-import { upsertArtistScrobbles } from "../database/operations/artist-scrobbles.js"
+import { debug, error } from "@/logging/logging"
+import { hashName } from "@/utils"
+import { upsertArtistScrobbles } from "@/database/operations/artist-scrobbles"
 
 export type NowPlayingEntity = "artist" | "album" | "track";
 

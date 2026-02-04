@@ -2,18 +2,18 @@ import { buildFromDiscordMessage, buildFromTelegramMessage, Message } from './me
 import { buildFromDiscordChannel, buildFromTelegramChannel, Channel } from './channel.js'
 import { Replyable } from '../protocols.js'
 import { buildFromDiscordUser, buildFromTelegramUser, User } from './user.js'
-import { client } from '../../database/index.js'
-import { Prisma } from '@prisma/client'
+import { client } from '@/database'
 import { marked } from 'marked'
-import { MinimalCommand } from '../../commands/command.js'
-import { CommandRunner } from '../../commands/index.js'
+import { MinimalCommand } from '@/commands/command'
+import { CommandRunner } from '@/commands'
 import { ChatInputCommandInteraction } from 'discord.js'
-import { lt } from '../../translations/index.js'
+import { lt } from '@/translations'
 import { CommandComponentBuilder } from './components/builder.js'
-import { GuardData } from '../../commands/guards.js'
-import { fixLanguageFormat } from '../../commands/helpers.js'
+import { GuardData } from '@/commands/guards'
+import { fixLanguageFormat } from '@/commands/helpers'
+import { UserGetPayload } from '@/prisma/models/User'
 
-export type CachedUserData = Prisma.UserGetPayload<{
+export type CachedUserData = UserGetPayload<{
     select: {
         fmUsername: boolean;
         language: boolean;

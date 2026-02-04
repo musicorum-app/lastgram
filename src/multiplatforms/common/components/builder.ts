@@ -2,7 +2,7 @@ import { CommandComponentBuilderPlatforms, CommandComponentBuilderReturnTypes } 
 import { CommandButtonComponent } from './button.js'
 import { buildComponentForPlatform } from './list.js'
 import { MinimalContext } from '../context.js'
-import { eventEngine } from '../../../event/index.js'
+import { eventEngine } from '@/event'
 
 export interface ComponentOptions {
     noTranslate?: boolean

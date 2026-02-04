@@ -20,6 +20,7 @@ export const buildFromDiscordChannel = (channel: TextBasedChannel | null): Chann
 
     return {
         id: channel.id,
+        // @ts-expect-error
         name: channel.isDMBased() ? channel.recipient!.username : (channel as TextChannel).name,
         type: channel.isDMBased() ? 'dm' : channel.type.toString(),
         platform: 'discord'

@@ -1,9 +1,8 @@
 import { Command } from './command.js'
 import { findCommand, loadedCommands } from './loader.js'
-import { Context } from '../multiplatforms/common/context.js'
-import { debug, error, grey } from '../logging/logging.js'
-import { newHistogram } from '../logging/metrics.js'
-import { Histogram } from 'prom-client'
+import { Context } from '@/multiplatforms/common/context'
+import { debug, error, grey } from '@/logging/logging'
+import { newHistogram } from '@/logging/metrics'
 import { CommandError, InvalidArgumentError, MissingArgumentError } from './errors.js'
 import * as guards from './guards.js'
 
@@ -16,14 +15,14 @@ interface LastfmError {
 type GuardFunction = { name: string, execute: (ctx: Context) => Promise<boolean> }
 
 export class CommandRunner {
-    private metric: Histogram = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
+    private metric = newHistogram('command_duration_seconds', 'Duration of commands in seconds', ['name', 'platform', 'error', 'important'])
 
     constructor(
         public commands: Command[]
     ) {
     }
 
-    async runGuard(protectionLevel: string, ctx: Context): Promise<boolean> {
+    async runGuard(protectionLevel: string, ctx: Context) {
         const guardList: GuardFunction[] = protectionLevel.split('+').map((guard: string) => {
             // @ts-ignore
             return { execute: guards[guard], name: guard }
@@ -36,7 +35,7 @@ export class CommandRunner {
         return guardResults.every(result => result)
     }
 
-    hasCommand(name: string): boolean {
+    hasCommand(name: string) {
         return this.commands.some(command => command.name === name || command.aliases?.includes?.(name))
     }
 
@@ -102,7 +101,7 @@ export class CommandRunner {
         }
 
         if ((error as object as LastfmError).error) {
-            const correctError: LastfmError = error as LastfmError
+            const correctError = error as LastfmError
             if (correctError.error === 6) {
                 ctx.reply('errors:lastfm.userNotFound')
                 return false

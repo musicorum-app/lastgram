@@ -1,7 +1,7 @@
-import { Context } from '../../../multiplatforms/common/context.js'
+import { Context } from '@/multiplatforms/common/context'
 import client from 'prom-client'
-import { isDevelopment } from '../../../utils.js'
-import { CommandButtonComponentType } from '../../../multiplatforms/common/components/button.js'
+import { isDevelopment } from '@/utils'
+import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
 
 export default async (ctx: Context) => {
     const processMemory = process.memoryUsage()

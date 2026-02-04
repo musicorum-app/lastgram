@@ -1,6 +1,6 @@
 import { Base } from './base.js'
 import { User as DiscordUser } from 'discord.js'
-import { fixLanguageFormat } from '../../commands/helpers.js'
+import { fixLanguageFormat } from '@/commands/helpers'
 
 export interface User extends Base {
     username?: string

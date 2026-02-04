@@ -1,6 +1,6 @@
-import { newCounter } from '../logging/metrics.js'
+import { newCounter } from '@/logging/metrics'
 import { Counter } from 'prom-client'
-import { error } from '../logging/logging.js'
+import { error } from '@/logging/logging'
 
 export class Platform {
     private counter: Counter

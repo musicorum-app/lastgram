@@ -1,7 +1,7 @@
-import { Context } from '../../../multiplatforms/common/context.js'
+import { Context } from '@/multiplatforms/common/context'
 import { fixLanguageFormat } from '../../helpers.js'
-import { client } from '../../../fm/index.js'
-import { getUser, upsertUserDisplayName } from '../../../database/index.js'
+import { client } from '@/fm'
+import { getUser, upsertUserDisplayName } from '@/database'
 
 type Args = {
     username: string

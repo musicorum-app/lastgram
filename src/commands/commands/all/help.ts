@@ -1,4 +1,4 @@
-import { Context } from '../../../multiplatforms/common/context.js'
+import { Context } from '@/multiplatforms/common/context'
 import { buildCommandUsage } from '../../command.js'
 
 type Args = {

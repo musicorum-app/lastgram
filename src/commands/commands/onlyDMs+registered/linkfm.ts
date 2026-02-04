@@ -1,7 +1,7 @@
-import { Context, MinimalContext } from '../../../multiplatforms/common/context.js'
-import { finishAuth, prepareForAuth } from '../../../fm/connect.js'
-import { CommandButtonComponentType } from '../../../multiplatforms/common/components/button.js'
-import { updateUserByID } from '../../../database/index.js'
+import { Context, MinimalContext } from '@/multiplatforms/common/context'
+import { finishAuth, prepareForAuth } from '@/fm/connect'
+import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
+import { updateUserByID } from '@/database'
 
 export default async (ctx: Context) => {
     const linkURL = await prepareForAuth(ctx.guardData.registeredUserData!.id)

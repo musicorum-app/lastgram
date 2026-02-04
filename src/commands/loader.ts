@@ -1,6 +1,6 @@
 import { Command } from './command.js'
 import { readdirSync } from 'node:fs'
-import { bold, debug, italic } from '../logging/logging.js'
+import { bold, debug, italic } from '@/logging/logging'
 
 const BASE_PATH = './src/commands/commands'
 

@@ -1,7 +1,7 @@
 import { EventListenerHandler, EventListenerIdentifier } from './types/engine.js'
-import { debug, error, grey } from '../logging/logging.js'
-import { MinimalContext } from '../multiplatforms/common/context.js'
-import { backend } from '../caching/index.js'
+import { debug, error, grey } from '@/logging/logging'
+import { MinimalContext } from '@/multiplatforms/common/context'
+import { backend } from '@/caching'
 import { ExpiredError, NoPermissionError, UnknownError } from './types/errors.js'
 
 // event key: event_<id>

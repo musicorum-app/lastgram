@@ -1,5 +1,5 @@
 import { buildCommandUsage } from './command.js'
-import { MinimalContext } from '../multiplatforms/common/context.js'
+import { MinimalContext } from '@/multiplatforms/common/context'
 
 export class CommandError extends Error {
     constructor(public ctx: MinimalContext) {

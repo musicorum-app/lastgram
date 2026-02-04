@@ -1,10 +1,10 @@
-import { Context, MinimalContext } from '../../../multiplatforms/common/context.js'
-import { ClassicCollageData, generateAsymmetricCollage } from '../../../internal/ditto.js'
+import { Context, MinimalContext } from '@/multiplatforms/common/context'
+import { ClassicCollageData, generateAsymmetricCollage } from '@/internal/ditto'
 import { inferDataFromContent, ModifiedClassicCollageData } from '../../helpers.js'
-import { backend } from '../../../caching/index.js'
-import { ExpiredError } from '../../../event/types/errors.js'
-import { CommandButtonComponentType } from '../../../multiplatforms/common/components/button.js'
-import { debug } from '../../../logging/logging.js'
+import { backend } from '@/caching'
+import { ExpiredError } from '@/event/types/errors'
+import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
+import { debug } from '@/logging/logging'
 
 const generateAndSaveData = async (ctx: MinimalContext, names: {
     displayName: string;

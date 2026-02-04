@@ -1,4 +1,4 @@
-import { Context } from '../../../multiplatforms/common/context.js'
+import { Context } from '@/multiplatforms/common/context'
 
 export default async (ctx: Context) => {
     ctx.reply('commands:help.text')

@@ -1,5 +1,5 @@
-import { Context, MinimalContext } from '../multiplatforms/common/context.js'
-import { lt } from '../translations/index.js'
+import { Context, MinimalContext } from '@/multiplatforms/common/context'
+import { lt } from '@/translations'
 
 export interface MinimalCommand {
     name: string
@@ -25,7 +25,7 @@ export interface CommandArgs {
     parse?: (arg: string) => any
 }
 
-export const buildCommandUsage = (command: Command, locale: string): string => {
+export const buildCommandUsage = (command: Command, locale: string) => {
     const args = command.args?.map(arg => {
         const name = lt(locale, `args:${command.name}.${arg.name}`, {})
         if (arg.required) return `<${name}>`

@@ -1,8 +1,8 @@
-import { Context } from '../../../multiplatforms/common/context.js'
-import { client } from '../../../fm'
-import { getUserDisplayName } from '../../../database'
-import { hashName } from '../../../utils.js'
-import { getTopListenersForArtist, linkArtistNameToMbid, upsertArtistCoverUrl } from '../../../database/operations'
+import { Context } from '@/multiplatforms/common/context'
+import { client } from '@/fm'
+import { getUserDisplayName } from '@/database'
+import { hashName } from '@/utils'
+import { getTopListenersForArtist, linkArtistNameToMbid, upsertArtistCoverUrl } from '@/database/operations'
 
 type Args = {
     artistName: string

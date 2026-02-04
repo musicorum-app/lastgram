@@ -1,5 +1,5 @@
 import { client } from '../index'
-import { error } from '../../logging/logging'
+import { error } from '@/logging/logging'
 
 export const upsertArtistScrobbles = async (fmUsername: string, artistMbid: string, playCount: number, artistName: string, coverURL?: string) => {
     // Ensure artist exists first
@@ -52,7 +52,7 @@ export const getArtistScrobble = async (fmUsername: string, artistMbid: string) 
     })
 }
 
-export const getTopListenersForArtist = async (artistMbid: string, limit: number = 10) => {
+export const getTopListenersForArtist = async (artistMbid: string, limit = 10) => {
     return client.artistScrobble.findMany({
         where: {
             artistId: artistMbid,

@@ -1,6 +1,6 @@
 import { CachingBackend } from './backend.js'
 import Redis from 'ioredis'
-import { error } from '../logging/logging.js'
+import { error } from '@/logging/logging'
 
 export default class RedisBackend extends CachingBackend {
     public client?: Redis

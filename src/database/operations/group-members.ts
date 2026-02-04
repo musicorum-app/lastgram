@@ -1,5 +1,5 @@
 import { client } from '../index'
-import { error } from '../../logging/logging'
+import { error } from '@/logging/logging'
 
 export const addUserToGroupList = async (groupId: string, fmUsername: string) => {
     return client.groupMember.upsert({

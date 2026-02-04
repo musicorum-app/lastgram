@@ -1,7 +1,5 @@
-import { Context } from '../../../multiplatforms/common/context.js'
+import { Context } from '@/multiplatforms/common/context'
 import { inspect } from 'node:util'
-import { client } from '../../../database/index.js'
-import { sleep } from 'bun'
 
 const clean = async (val: any) => {
     if (val && val.constructor?.name === 'Promise') val = await val
@@ -46,61 +44,4 @@ export const info = {
         required: true,
         everythingAfter: true
     }]
-}
-
-// {"id":28144,"inserted_at":"2024-10-07 22:50:31.614621+00","updated_at":"2024-10-07 22:50:31.614621+00","pid":7602811788,"lfm_username":"leobshlz","layout":"default","banned":false}
-interface OldDBUser {
-    id: number
-    inserted_at: string
-    updated_at: string
-    pid: number
-    lfm_username: string
-    layout: string
-    banned: boolean
-}
-
-async function runMigrate(url: string) {
-    const d = await fetch(url, {
-        method: 'GET',
-        headers: {
-            Cookie: 'verified=2025-02-23',
-            'User-Agent': 'curl/7.68.0',
-            Accept: '*/*'
-        }
-    }).then(a => a.json())
-    await migrateUsers(d)
-}
-
-async function migrateUsers(users: OldDBUser[]) {
-    // chunk in 1000
-    const chunks = []
-    for (let i = 0; i < users.length; i += 1000) {
-        chunks.push(users.slice(i, i + 1000))
-    }
-
-    let i = 0
-    for (const chunk of chunks) {
-        await Promise.all(chunk.map(upsert))
-        i++
-        console.log(`chunk ${i}/${chunks.length} done`)
-        sleep(1000)
-    }
-}
-
-async function upsert(user: OldDBUser) {
-    if (!user.lfm_username) return
-    if (!user.pid) return
-
-    await client.user.upsert({
-        create: {
-            platformId: `telegram_${user.pid}`,
-            fmUsername: user.lfm_username.toString(),
-            isBanned: user.banned,
-            language: 'pt'
-        },
-        update: {},
-        where: {
-            platformId: `telegram_${user.pid}`
-        }
-    })
 }

@@ -1,4 +1,4 @@
-import { ClassicCollageData } from '../internal/ditto.js'
+import { ClassicCollageData } from '@/internal/ditto'
 
 export const fixLanguageFormat = (code: string | undefined) => code?.split?.('-')?.[0]
 export const inferDataFromContent = (content: string): ClassicCollageData => {

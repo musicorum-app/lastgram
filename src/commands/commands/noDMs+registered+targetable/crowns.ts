@@ -1,6 +1,6 @@
-import { Context } from "../../../multiplatforms/common/context.js"
-import { getUserCrowns } from "../../../database/operations/crowns.js"
-import { getArtistDataByMbid } from "../../../database/operations"
+import { Context } from "@/multiplatforms/common/context"
+import { getUserCrowns } from "@/database/operations/crowns"
+import { getArtistDataByMbid } from "@/database/operations"
 
 export default async (ctx: Context) => {
     const username =

@@ -1,3 +1,3 @@
 #!/bin/bash
-bun run database:migrate --skip-generate
+bun run database:migrate
 bun run src/index.ts

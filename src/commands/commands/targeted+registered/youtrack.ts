@@ -1,5 +1,5 @@
-import { Context } from "../../../multiplatforms/common/context.js"
-import { getNowPlaying } from "../../../fm/completeNowPlaying.js"
+import { Context } from "@/multiplatforms/common/context"
+import { getNowPlaying } from "@/fm/completeNowPlaying"
 
 export default async (ctx: Context) => {
     const data = await getNowPlaying(ctx, "track", true)

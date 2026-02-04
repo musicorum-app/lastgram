@@ -1,4 +1,4 @@
-import { client } from '../fm/index.js'
+import { client } from '@/fm'
 
 export interface LoveTrackRequest {
     sessionKey: string,

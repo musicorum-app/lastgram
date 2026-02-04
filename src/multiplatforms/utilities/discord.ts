@@ -1,4 +1,8 @@
-
+import { error, grey, info } from '@/logging/logging'
+import { REST, Routes } from 'discord.js'
+import { lt } from '@/translations'
+import { loadedCommands } from '@/commands/loader'
+import { CommandArgs, Command } from '@/commands/command'
 
 const regex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u
 

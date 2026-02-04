@@ -1,4 +1,4 @@
-import { debug } from '../logging/logging.js'
+import { debug } from '@/logging/logging'
 
 interface LyricResult {
     instrumental: boolean

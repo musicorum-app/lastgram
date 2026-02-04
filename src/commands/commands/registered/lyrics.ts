@@ -1,6 +1,6 @@
-import { Context } from '../../../multiplatforms/common/context.js'
-import { findLyrics } from '../../../lyrics/index.js'
-import { getNowPlaying } from '../../../fm/completeNowPlaying.js'
+import { Context } from '@/multiplatforms/common/context'
+import { findLyrics } from '@/lyrics'
+import { getNowPlaying } from '@/fm/completeNowPlaying'
 
 export default async (ctx: Context) => {
     let args = ctx.args.join(' ')

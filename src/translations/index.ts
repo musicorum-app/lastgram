@@ -1,7 +1,7 @@
 import i18next from "i18next"
-import { isDevelopment } from "../utils.js"
+import { isDevelopment } from "@/utils"
 import Backend, { FsBackendOptions } from "i18next-fs-backend"
-import { debug } from "../logging/logging.js"
+import { debug } from "@/logging/logging"
 
 i18next
     .use(Backend)
@@ -18,7 +18,7 @@ i18next
             addPath: "assets/locales/{{lng}}/{{ns}}.missing.json",
         },
         interpolation: {
-            escape: (str: string): string => {
+            escape: (str: string) => {
                 return str.replace(/[*_`~#&<>"'\/\[\]]/g, "\\$&")
             },
         },

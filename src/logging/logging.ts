@@ -1,7 +1,7 @@
 // @ts-ignore
 /*import { isWorkerThread } from 'piscina'
 import { threadId } from 'node:worker_threads'*/
-import { isDevelopment } from '../utils.js'
+import { isDevelopment } from '@/utils'
 
 const reset = '\x1b[0m'
 const greyColor = '\x1b[90m'

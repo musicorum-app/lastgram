@@ -1,6 +1,6 @@
-import { CachedUserData, Context } from '../multiplatforms/common/context.js'
-import { error } from '../logging/logging.js'
-import { User } from '../multiplatforms/common/user.js'
+import { CachedUserData, Context } from '@/multiplatforms/common/context'
+import { error, info } from '@/logging/logging'
+import { User } from '@/multiplatforms/common/user'
 
 export interface GuardData {
     targetedUserData?: CachedUserData
@@ -33,6 +33,7 @@ export const targetable = async (ctx: Context) => {
     if (ctx.message.replyingToUser) {
         const u = await ctx.getUserData(ctx.message.replyingToUser, 'registeredUserData')
         if (!u) {
+            info('guards.targetable', `user mentioned not registered: ${ctx.message.replyingToUser.id}`)
             ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
             return false
         }

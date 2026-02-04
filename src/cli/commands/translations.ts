@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { bold, italic } from '../../logging/logging.js'
+import { bold, italic } from '@/logging/logging'
 
 interface MissingKey {
     key: string
@@ -7,8 +7,8 @@ interface MissingKey {
     lang: string
 }
 
-const namespaces: string[] = ['core', 'commands', 'errors', 'args', 'descriptions']
-const allowedMissingKeys: string[] = ['youartist', 'youalbum', 'youtrack', 'meartist', 'mealbum', 'metrack', 'listening', 'assembledLyrics', 'album', 'artist', 'cllg.buttons.m', 'common.tags_hasTags', 'common.tags_noTags']
+const namespaces = ['core', 'commands', 'errors', 'args', 'descriptions']
+const allowedMissingKeys = ['youartist', 'youalbum', 'youtrack', 'meartist', 'mealbum', 'metrack', 'listening', 'assembledLyrics', 'album', 'artist', 'cllg.buttons.m', 'common.tags_hasTags', 'common.tags_noTags']
 
 export const checkTranslations = () => {
     const locales = fs.readdirSync('assets/locales')
@@ -95,7 +95,7 @@ const compareValues = (main: TranslationValue, value: TranslationValue, currentP
     return []
 }
 
-const checkMissing = (main: TranslationFile, missing: TranslationFile, path: string = '') => {
+const checkMissing = (main: TranslationFile, missing: TranslationFile, path = '') => {
     return Object.entries(missing).flatMap(([key, value]) => {
         const currentPath = path ? `${path}.${key}` : key
 

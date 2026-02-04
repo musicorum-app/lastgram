@@ -1,5 +1,5 @@
 import { readdirSync } from 'node:fs'
-import { debug, italic } from '../logging/logging.js'
+import { debug, italic } from '@/logging/logging'
 import { Platform } from './platform.js'
 
 const BASE_PATH = './src/multiplatforms/platforms'

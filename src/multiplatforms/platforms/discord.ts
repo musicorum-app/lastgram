@@ -1,12 +1,12 @@
 import { Platform } from '../platform.js'
-import { debug, error, grey, info } from '../../logging/logging.js'
+import { debug, error, grey, info } from '@/logging/logging'
 import { Context, MinimalContext } from '../common/context.js'
 import { Replyable } from '../protocols.js'
 import { ButtonInteraction, ChatInputCommandInteraction, Client, Interaction } from 'discord.js'
-import { commandRunner } from '../../commands/index.js'
+import { commandRunner } from '@/commands'
 import { buildFromDiscordUser } from '../common/user.js'
-import { eventEngine } from '../../event/index.js'
-import { EngineError } from '../../event/types/errors.js'
+import { eventEngine } from '@/event'
+import { EngineError } from '@/event/types/errors'
 import { updateDiscordCommands } from '../utilities/discord.js'
 
 export default class Discord extends Platform {

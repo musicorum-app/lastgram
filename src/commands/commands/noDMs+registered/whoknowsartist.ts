@@ -1,9 +1,9 @@
-import { Context } from '../../../multiplatforms/common/context.js'
-import { client } from '../../../fm/index.js'
-import { getUserDisplayName, upsertUserDisplayName } from '../../../database/index.js'
-import { hashName } from '../../../utils.js'
+import { Context } from '@/multiplatforms/common/context'
+import { client } from '@/fm'
+import { getUserDisplayName, upsertUserDisplayName } from '@/database'
+import { hashName } from '@/utils'
 import { addUserToGroupList, linkArtistNameToMbid, upsertArtistCoverUrl } from '../../../database/operations'
-import { getCountPastCrownHolders, tryToStealCrown } from '../../../database/operations/crowns.js'
+import { getCountPastCrownHolders, tryToStealCrown } from '@/database/operations/crowns'
 
 type Args = {
     artistName: string

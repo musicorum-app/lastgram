@@ -1,10 +1,10 @@
 import { Platform } from '../platform.js'
-import { debug, error, grey, info, warn } from '../../logging/logging.js'
+import { debug, error, grey, info, warn } from '@/logging/logging'
 import { buildFromTelegramUser, User } from '../common/user.js'
 import { handleTelegramMessage } from '../utilities/telegram.js'
 import { Context, MinimalContext } from '../common/context.js'
-import { eventEngine } from '../../event/index.js'
-import { EngineError } from '../../event/types/errors.js'
+import { eventEngine } from '@/event'
+import { EngineError } from '@/event/types/errors'
 
 const API_URL = 'https://api.telegram.org/bot'
 
@@ -23,7 +23,7 @@ export default class Telegram extends Platform {
         this.createCounter('telegram_requests', 'Telegram request count', ['success', 'method'])
     }
 
-    getUpdates(offset?: number): Promise<void> {
+    getUpdates(offset?: number) {
         if (!this.running) return Promise.resolve()
 
         return this.request('getUpdates', {

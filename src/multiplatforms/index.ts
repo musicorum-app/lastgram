@@ -1,6 +1,6 @@
 import { Platform } from './platform.js'
 import { loadPlatforms } from './loader.js'
-import { bold, debug } from '../logging/logging.js'
+import { bold, debug } from '@/logging/logging'
 
 class PlatformManager {
     constructor(
@@ -27,7 +27,7 @@ class PlatformManager {
     }
 }
 
-export const loadedPlatforms: Platform[] = await loadPlatforms()
+export const loadedPlatforms = await loadPlatforms()
 export let platformManager: PlatformManager | undefined
 
 export const start = () => {

@@ -1,8 +1,8 @@
-import { debug, error, info, warn } from '../logging/logging.js'
+import { debug, error, info, warn } from '@/logging/logging'
 import InMemoryBackend from './inMemory.js'
 import { CachingBackend } from './backend.js'
 import RedisBackend from './redis.js'
-import { isDevelopment } from '../utils.js'
+import { isDevelopment } from '@/utils'
 
 export let backend: CachingBackend | undefined
 

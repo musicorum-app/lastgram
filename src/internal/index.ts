@@ -1,4 +1,4 @@
-import { error } from '../logging/logging.js'
+import { error } from '@/logging/logging'
 
 export const start = () => {
     if (!process.env.DITTO_URL) {

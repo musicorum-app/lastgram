@@ -1,5 +1,5 @@
-import { Context } from '../../../multiplatforms/common/context.js'
-import { updateUserByID } from '../../../database/index.js'
+import { Context } from '@/multiplatforms/common/context'
+import { updateUserByID } from '@/database'
 
 type Args = {
     emoji: string

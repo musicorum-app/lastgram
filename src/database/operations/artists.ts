@@ -1,6 +1,6 @@
 import { client } from '../index'
-import { error } from '../../logging/logging'
-import { hashName } from '../../utils'
+import { error } from '@/logging/logging'
+import { hashName } from '@/utils'
 
 export const linkArtistNameToMbid = async (artistName: string, artistMbid: string | undefined, photoUrl: string | undefined) => {
     const mbid = artistMbid || hashName(artistName)

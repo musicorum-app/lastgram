@@ -1,5 +1,5 @@
-import { info } from '../logging/logging.js'
-import { register } from '../logging/prometheus.js'
+import { info } from '@/logging/logging'
+import { register } from '@/logging/prometheus'
 
 const PORT = process.env.PORT || 4000
 export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:' + PORT

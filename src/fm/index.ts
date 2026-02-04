@@ -1,8 +1,8 @@
 import { LastClient } from '@musicorum/lastfm'
 import { LastfmApiMethod } from '@musicorum/lastfm/dist/types/responses.js'
-import { error } from '../logging/logging.js'
-import { newHistogram } from '../logging/metrics.js'
-import { backend } from '../caching/index.js'
+import { error } from '@/logging/logging'
+import { newHistogram } from '@/logging/metrics'
+import { backend } from '@/caching'
 
 type InternalData = Record<string, any>
 

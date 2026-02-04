@@ -1,6 +1,6 @@
-import { Context } from "../../../multiplatforms/common/context.js"
-import { getNowPlaying } from "../../../fm/completeNowPlaying.js"
-import { checkIfUserHasCrown } from "../../../database/operations/crowns.js"
+import { Context } from "@/multiplatforms/common/context"
+import { getNowPlaying } from "@/fm/completeNowPlaying"
+import { checkIfUserHasCrown } from "@/database/operations/crowns"
 
 export default async (ctx: Context) => {
     const data = await getNowPlaying(ctx, "album")

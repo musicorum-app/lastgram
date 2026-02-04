@@ -1,6 +1,6 @@
-import { MinimalContext } from '../multiplatforms/common/context.js'
-import { CollageError } from '../commands/errors.js'
-import { error, grey } from '../logging/logging.js'
+import { MinimalContext } from '@/multiplatforms/common/context'
+import { CollageError } from '@/commands/errors'
+import { error, grey } from '@/logging/logging'
 
 export interface CollageData {
     period: '7day' | '1month' | '3month' | '6month' | '12month' | 'overall',

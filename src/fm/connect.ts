@@ -1,6 +1,6 @@
 import { client } from './index.js'
-import { backend } from '../caching'
-import { updateUserByID } from '../database'
+import { backend } from '@/caching'
+import { updateUserByID } from '@/database'
 
 export const prepareForAuth = async (id: number) => {
     const token = await client.auth.getToken()
