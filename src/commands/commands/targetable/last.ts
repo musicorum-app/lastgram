@@ -34,7 +34,7 @@ export default async (ctx: Context) => {
     const registrationDate = userInfo.registered
 
     const fullName = displayNameData?.displayName|| user.name
-    const secondaryName = userInfo.name === fullName ? '' : ` (*a.k.a. ${userInfo.name}*)`
+    const secondaryName = userInfo.realName === fullName ? '' : ` (*a.k.a. ${userInfo.realName}*)`
 
     const daysSinceRegistration = differenceInDays(new Date(), registrationDate)
     const scrobbleRate = daysSinceRegistration > 0
