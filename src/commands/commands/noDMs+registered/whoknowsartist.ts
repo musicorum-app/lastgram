@@ -24,6 +24,10 @@ export default async (ctx: Context, { artistName }: Args) => {
     }
 
     const artObject = await client.getArtistInfo(artist?.name || artistName, ctx.registeredUserData.fmUsername) as InternalArtistType
+    if (!artObject) {
+        return ctx.reply('errors:lastfm.genericError')
+    }
+
     if (artObject.playCount <= 3) return ctx.reply('commands:whoknows.failure', {
         reason: 'noScrobbles',
         artistName: artObject.name,
