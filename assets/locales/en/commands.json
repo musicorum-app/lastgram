@@ -197,7 +197,7 @@
   },
   "peak": [
     "📊 Peak day for **{{displayName}}**",
-    "🔥 **{{peakDate}}** - {{totalScrobbles}} scrobbles",
+    "🔥 **{{peakDate}}** - {{totalScrobbles}} scrobbles ({{listeningHours}}h in a single day) {{-totalSirenEmoji}}",
     "📅 Period: {{period}}",
     "\n🎵 Top tracks that day:",
     "{{- topTracks}}",

@@ -80,10 +80,15 @@ export default async (ctx: Context) => {
             ? ctx.t('commands:peak.moreData')
             : ''
 
+        const totalSirenEmoji = cachedData.totalIsSuspicious ? '🚨 ' : ''
+        const listeningHours = ((cachedData.totalScrobbles * 3) / 60).toFixed(1)
+
         ctx.reply('commands:peak', {
             displayName,
             peakDate: format(new Date(cachedData.date), 'MMMM dd, yyyy'),
+            totalSirenEmoji,
             totalScrobbles: cachedData.totalScrobbles,
+            listeningHours,
             period: getPeriodLabel(period),
             topTracks: cachedData.topTracks,
             topArtists: cachedData.topArtists,
@@ -213,21 +218,25 @@ export default async (ctx: Context) => {
                          Array.from(peakDay.artists.values()).some(a => isSuspicious(a)) ||
                          Array.from(peakDay.albums.values()).some(a => isSuspicious(a.count))
 
-    const suspiciousHours = hasSuspicious
+    const totalIsSuspicious = isSuspicious(peakDay.totalScrobbles)
+
+    const suspiciousHours = hasSuspicious || totalIsSuspicious
         ? Math.max(
             ...Array.from(peakDay.tracks.values()).map(t => (t.count * 3) / 60),
             ...Array.from(peakDay.artists.values()).map(a => (a * 3) / 60),
-            ...Array.from(peakDay.albums.values()).map(a => (a.count * 3) / 60)
+            ...Array.from(peakDay.albums.values()).map(a => (a.count * 3) / 60),
+            (peakDay.totalScrobbles * 3) / 60
         )
         : 0
 
     const resultData = {
         date: peakDay.date,
         totalScrobbles: peakDay.totalScrobbles,
+        totalIsSuspicious,
         topTracks,
         topArtists,
         topAlbums,
-        hasSuspicious,
+        hasSuspicious: hasSuspicious || totalIsSuspicious,
         suspiciousHours,
         hasMorePages
     }
@@ -235,7 +244,7 @@ export default async (ctx: Context) => {
     const ttl = period === 'overall' ? 60 * 60 * 6 : 60 * 60
     await backend?.setTTL(cacheKey, JSON.stringify(resultData), ttl)
 
-    const wandaVisionWarning = hasSuspicious
+    const wandaVisionWarning = (hasSuspicious || totalIsSuspicious)
         ? ctx.t('commands:peak.wandaVision', { hours: suspiciousHours.toFixed(1) })
         : ''
 
@@ -243,10 +252,15 @@ export default async (ctx: Context) => {
         ? ctx.t('commands:peak.moreData')
         : ''
 
+    const totalSirenEmoji = totalIsSuspicious ? '🚨 ' : ''
+    const listeningHours = ((peakDay.totalScrobbles * 3) / 60).toFixed(1)
+
     ctx.reply('commands:peak', {
         displayName,
         peakDate: format(new Date(peakDay.date), 'MMMM dd, yyyy'),
+        totalSirenEmoji,
         totalScrobbles: peakDay.totalScrobbles,
+        listeningHours,
         period: getPeriodLabel(period),
         topTracks,
         topArtists,
