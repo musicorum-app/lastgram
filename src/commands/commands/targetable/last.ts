@@ -67,10 +67,10 @@ export default async (ctx: Context) => {
             trackList,
             joinArrays: '\n'
         },
-        {
+        hasPhoto ? {
             imageURL: userInfo.images?.[userInfo.images.length - 1]?.url,
-            sendImageAsPhoto: hasPhoto ? true : undefined
-        }
+            sendImageAsPhoto: true
+        } : undefined
     )
 }
 
