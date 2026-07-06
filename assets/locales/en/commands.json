@@ -150,8 +150,8 @@
       "{{- pretext}}🎉 You're now the holder of the crown for **{{artistName}}** here!",
       "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
     ],
-    "error_notEnough": "because you don't have enough scrobbles to take on the current crown holder.",
-    "error_noScrobbles": "because you don't have enough scrobbles to claim anything.",
+    "error_notEnough": "you don't have enough scrobbles to take on the current crown holder.",
+    "error_noScrobbles": "you don't have enough scrobbles to claim anything.",
     "error_alreadyHas": "you already have the crown for this artist!",
     "failure": [
       "{{- pretext}}❌ You weren't able to claim the crown for **{{artistName}}** because",

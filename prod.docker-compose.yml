@@ -5,7 +5,6 @@ services:
     environment:
       # keys are DATABASE_URL, FM_API_KEY, FM_API_SECRET, DITTO_URL, DITTO_API_KEY, TELEGRAM_TOKEN, GENIUS_SECRET_KEY, DISCORD_TOKEN, DROP_PENDING_UPDATES_ON_START, DISCORD_CLIENT_ID, #DISCORD_UPDATE_COMMANDS_ON_START, DEBUGGING'
       - DATABASE_URL=postgres://lg:lgnextrocks@lastgram-database:5432/lastgram
-      - CASSANDRA_HOST=lastgram-scylla
       - REDIS_URL=redis://lastgram-redis:6379
       - FM_API_KEY=${FM_API_KEY}
       - FM_API_SECRET=${FM_API_SECRET}
@@ -21,7 +20,6 @@ services:
     depends_on:
       - lastgram-database
       - lastgram-redis
-      - lastgram-scylla
 
   lastgram-database:
     image: postgres
@@ -41,15 +39,6 @@ services:
     ports:
       - '127.0.0.1:6379:6379'
 
-  lastgram-scylla:
-    image: scylladb/scylla
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:9042:9042'
-    volumes:
-      - scylla-lg:/var/lib/scylla
-
 volumes:
     pg-lg:
     redis-lg:
-    scylla-lg:
