@@ -21,7 +21,7 @@ export const targeted = async (ctx: Context) => {
         ctx.reply('errors:guards.targetable.userMentionedNotRegistered')
         return false
     }
-    if (u.isBanned) {
+    if (u.isBanned && !ctx.command?.name?.includes?.('ban')) {
         ctx.reply('errors:guards.targetable.userMentionedBanned')
         return false
     }
@@ -81,6 +81,14 @@ export const linked = async (ctx: Context) => {
     }
     if (!ctx.guardData.registeredUserData.sessionKey) {
         ctx.reply('errors:guards.notLinked')
+        return false
+    }
+    return true
+}
+
+export const crownEnabled = (ctx: Context) => {
+    if (ctx.guardData.registeredUserData?.isCrownBanned) {
+        ctx.reply('errors:guards.crownBanned')
         return false
     }
     return true

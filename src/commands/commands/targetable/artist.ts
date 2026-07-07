@@ -1,20 +1,19 @@
 import { Context } from "@/multiplatforms/common/context"
 import { getNowPlaying } from "@/fm/completeNowPlaying"
-import { warn } from "@/logging/logging"
 import { checkIfUserHasCrown } from "@/database/operations/crowns"
+import { EntityType } from "@/prisma/client"
 
 export default async (ctx: Context) => {
-    const data = await getNowPlaying(ctx, "artist")
+    const data = await getNowPlaying(ctx, 'regular', 'artist')
     const user = ctx.targetedUser ?? ctx.registeredUser
     const userData = ctx.targetedUserData ?? ctx.registeredUserData
 
     const hasCrown = await checkIfUserHasCrown(
         ctx.channel.id,
-        userData.fmUsername,
-        data.artistMbid,
+        userData.id,
+        EntityType.ARTIST,
+        data.id, // Epistolares entity ID
     )
-
-    if (!data.mbid) warn("commands.artist", `no mbid found for ${data.artist}`)
 
     ctx.reply(
         `commands:artist`,

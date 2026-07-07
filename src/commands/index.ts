@@ -65,7 +65,7 @@ export class CommandRunner {
                     args[arg.name] = arg.parse ? arg.parse(ctx.args[i]) : ctx.args[i]
                 })
             } catch (error) {
-                this.handleError(error, ctx)
+                this.handleError(error as Error, ctx)
                 return
             }
         }
@@ -78,9 +78,9 @@ export class CommandRunner {
             end({ error: 'false' })
             return r
         } catch (err) {
-            const important = this.handleError(err, ctx)
+            const important = this.handleError(err as Error, ctx)
             end({ error: 'true', important: important ? 'true' : 'false' })
-            important && error('commands.runCommand', `notable exception while running command ${name}\n${grey(err.stack)}`)
+            important && error('commands.runCommand', `notable exception while running command ${name}\n${grey((err as Error).stack!)}`)
         }
     }
 

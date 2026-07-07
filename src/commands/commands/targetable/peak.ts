@@ -2,7 +2,6 @@ import { Context } from "@/multiplatforms/common/context"
 import { client } from "@/fm"
 import { backend } from "@/caching"
 import { inferDataFromContent } from "@/commands/helpers"
-import { getUserDisplayName } from "@/database"
 import { format, subDays, subMonths, startOfDay } from "date-fns"
 
 const getPeriodDates = (period: '7day' | '1month' | '3month' | '6month' | '12month' | 'overall') => {
@@ -63,10 +62,9 @@ export default async (ctx: Context) => {
     const parsed = inferDataFromContent(args || '7day')
     const period = parsed.period
 
-    const displayNameData = await getUserDisplayName(userData.fmUsername)
-    const displayName = displayNameData?.displayName || user.name
+    const displayName = user.name
 
-    const cacheKey = `peak:${userData.fmUsername}:${period}`
+    const cacheKey = `peak:${userData.lastFmUsername}:${period}`
 
     const cached = await backend?.get(cacheKey)
     if (cached) {
@@ -109,7 +107,7 @@ export default async (ctx: Context) => {
     let hasMorePages = false
 
     while (page <= maxPages) {
-        const tracks = await client.user.getRecentTracks(userData.fmUsername, {
+        const tracks = await client.user.getRecentTracks(userData.lastFmUsername, {
             limit: 200,
             page,
             from,

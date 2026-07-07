@@ -11,9 +11,9 @@ import { lt } from '@/translations'
 import { CommandComponentBuilder } from './components/builder.js'
 import { GuardData } from '@/commands/guards'
 import { fixLanguageFormat } from '@/commands/helpers'
-import { UserCreateInput } from '@/prisma/models/User'
+import { UserCreateInput, UserGetPayload, UserSelect } from '@/prisma/models/User'
 
-export type CachedUserData = UserCreateInput
+export type CachedUserData = UserGetPayload<{}>
 
 interface ReplyOptions {
     noTranslation?: boolean
@@ -87,12 +87,29 @@ export class MinimalContext {
      * > ⚠ **WARNING**
      * > This method uses `Context.userPlatformId`.
      */
-    createUserData(fmUsername: string, languageCode?: string, user = this.author) {
-        const data = { fmUsername, language: languageCode }
+    async createUserData(fmUsername: string, languageCode?: string, user = this.author) {
+        // we need to upsert the LastFmUser model with the username, and then link it to the user.
+        await client.lastFmUser.upsert({
+            create: {
+                fmUsername,
+            },
+            update: {
+                fmUsername,
+            },
+            where: {
+                fmUsername
+            }
+        })
+
+        const data = {
+            lastFmUsername: fmUsername,
+            language: languageCode,
+            displayName: user.name
+        }
         return client.user.upsert({
             create: {
                 platformId: this.userPlatformId(user),
-                ...data
+                ...data,
             },
             update: data,
             where: {

@@ -30,24 +30,6 @@ class LastgramFMClient extends LastClient {
             error('fm.onRequestFinished', `error while running method ${method} (${response.error}): ${response.message}`)
         }
     }
-
-    async getArtistInfo(artist: string, username: string | undefined): Promise<ReducedArtistInfo | undefined> {
-        //const d = !username && await backend?.get(`fm:artist:${artist}`)
-        //if (d) return Promise.resolve(JSON.parse(d))
-        return this.artist.getInfo(artist, { autoCorrect: true, username }).then(async (data) => {
-            if (!data) return undefined
-            const imgIndex = (data.images?.length || 0) - 1
-            const reduced: ReducedArtistInfo = {
-                name: data.name,
-                imageURL: data?.images?.[imgIndex]?.url || undefined,
-                mbid: data.mbid,
-                playCount: data.user?.playCount || 0
-            }
-
-            !username && await backend?.setTTL(`fm:artist:${artist}`, JSON.stringify(reduced), 60 * 60 * 6).catch(() => error('fm.getArtistInfo', `error while caching artist info for ${artist}`))
-            return reduced
-        })
-    }
 }
 
 export const client = new LastgramFMClient()

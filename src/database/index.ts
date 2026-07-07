@@ -1,13 +1,14 @@
 import { PrismaClient } from '@/prisma/client'
 import { debug, info, rainbow } from '@/logging/logging'
 import { PrismaPg } from "@prisma/adapter-pg"
+import { UserUpdateInput } from '@/prisma/models'
 
 const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString })
 export const client = new PrismaClient({ adapter })
 
-export const updateUser = (id: string, data: any) => {
+export const updateUser = (id: string, data: UserUpdateInput) => {
     return client.user.update({
         where: {
             platformId: id
@@ -16,12 +17,33 @@ export const updateUser = (id: string, data: any) => {
     })
 }
 
-export const updateUserByID = (id: number, data: any) => {
+export const updateUserByID = (id: number, data: UserUpdateInput) => {
     return client.user.update({
         where: {
             id
         },
         data
+    })
+}
+
+export const setUserLastFmUsername = async (id: number, username: string) => {
+    await client.lastFmUser.upsert({
+        where: {
+            fmUsername: username.toLowerCase()
+        },
+        update: {},
+        create: {
+            fmUsername: username.toLowerCase(),
+        },
+    })
+
+    return client.user.update({
+        where: {
+            id
+        },
+        data: {
+            lastFmUsername: username
+        }
     })
 }
 
@@ -37,32 +59,6 @@ export const userExists = (platformId: string) => {
     return client.user.count({
         where: {
             platformId
-        }
-    })
-}
-
-export const getUserDisplayName = (fmUsername: string) => {
-    return client.fmDisplayName.findFirst({
-        where: {
-            fmUsername: {
-                equals: fmUsername,
-                mode: 'insensitive'
-            }
-        }
-    })
-}
-
-export const upsertUserDisplayName = (displayName: string, username: string) => {
-    return client.fmDisplayName.upsert({
-        update: {
-            displayName
-        },
-        create: {
-            displayName,
-            fmUsername: username.toLowerCase()
-        },
-        where: {
-            fmUsername: username.toLowerCase()
         }
     })
 }

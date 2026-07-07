@@ -7,13 +7,15 @@
     "strictNullChecks": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
-    // alias for @ to src
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
-    }
+    },
+    "types": [
+      "node",
+      "bun"
+    ]
   },
   "include": [
     "src/**/*"

@@ -10,7 +10,7 @@ import { EngineError } from '@/event/types/errors'
 import { updateDiscordCommands } from '../utilities/discord.js'
 
 export default class Discord extends Platform {
-    private client: Client
+    private client: Client = new Client({ intents: ['Guilds'] })
 
     constructor() {
         super('discord')
@@ -19,7 +19,6 @@ export default class Discord extends Platform {
             return
         }
 
-        this.client = new Client({ intents: ['Guilds'] })
         this.client.on('clientReady', () => this.onReady())
         this.client.on('interactionCreate', (...args) => this.onInteraction(...args))
 
@@ -57,7 +56,7 @@ export default class Discord extends Platform {
                 await interaction.reply({ content: minimalCtx.t(e.translationKey), ephemeral: true })
                 return
             }
-            error('discord.onButtonInteraction', `error while handling button interaction\n${grey(e.stack)}`)
+            error('discord.onButtonInteraction', `error while handling button interaction\n${grey((e as Error).stack!)}`)
         }
     }
 

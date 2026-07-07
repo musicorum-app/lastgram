@@ -36,7 +36,7 @@ export type EntitySumAggregateOutputType = {
 
 export type EntityMinAggregateOutputType = {
   id: number | null
-  mbid: string | null
+  externalId: string | null
   name: string | null
   type: $Enums.EntityType | null
   coverUrl: string | null
@@ -46,7 +46,7 @@ export type EntityMinAggregateOutputType = {
 
 export type EntityMaxAggregateOutputType = {
   id: number | null
-  mbid: string | null
+  externalId: string | null
   name: string | null
   type: $Enums.EntityType | null
   coverUrl: string | null
@@ -56,7 +56,7 @@ export type EntityMaxAggregateOutputType = {
 
 export type EntityCountAggregateOutputType = {
   id: number
-  mbid: number
+  externalId: number
   name: number
   type: number
   coverUrl: number
@@ -76,7 +76,7 @@ export type EntitySumAggregateInputType = {
 
 export type EntityMinAggregateInputType = {
   id?: true
-  mbid?: true
+  externalId?: true
   name?: true
   type?: true
   coverUrl?: true
@@ -86,7 +86,7 @@ export type EntityMinAggregateInputType = {
 
 export type EntityMaxAggregateInputType = {
   id?: true
-  mbid?: true
+  externalId?: true
   name?: true
   type?: true
   coverUrl?: true
@@ -96,7 +96,7 @@ export type EntityMaxAggregateInputType = {
 
 export type EntityCountAggregateInputType = {
   id?: true
-  mbid?: true
+  externalId?: true
   name?: true
   type?: true
   coverUrl?: true
@@ -193,7 +193,7 @@ export type EntityGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type EntityGroupByOutputType = {
   id: number
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -226,7 +226,7 @@ export type EntityWhereInput = {
   OR?: Prisma.EntityWhereInput[]
   NOT?: Prisma.EntityWhereInput | Prisma.EntityWhereInput[]
   id?: Prisma.IntFilter<"Entity"> | number
-  mbid?: Prisma.StringFilter<"Entity"> | string
+  externalId?: Prisma.StringFilter<"Entity"> | string
   name?: Prisma.StringFilter<"Entity"> | string
   type?: Prisma.EnumEntityTypeFilter<"Entity"> | $Enums.EntityType
   coverUrl?: Prisma.StringFilter<"Entity"> | string
@@ -238,7 +238,7 @@ export type EntityWhereInput = {
 
 export type EntityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  mbid?: Prisma.SortOrder
+  externalId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
@@ -250,11 +250,11 @@ export type EntityOrderByWithRelationInput = {
 
 export type EntityWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  type_mbid?: Prisma.EntityTypeMbidCompoundUniqueInput
+  type_externalId?: Prisma.EntityTypeExternalIdCompoundUniqueInput
   AND?: Prisma.EntityWhereInput | Prisma.EntityWhereInput[]
   OR?: Prisma.EntityWhereInput[]
   NOT?: Prisma.EntityWhereInput | Prisma.EntityWhereInput[]
-  mbid?: Prisma.StringFilter<"Entity"> | string
+  externalId?: Prisma.StringFilter<"Entity"> | string
   name?: Prisma.StringFilter<"Entity"> | string
   type?: Prisma.EnumEntityTypeFilter<"Entity"> | $Enums.EntityType
   coverUrl?: Prisma.StringFilter<"Entity"> | string
@@ -262,11 +262,11 @@ export type EntityWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Entity"> | Date | string
   entityScrobbles?: Prisma.EntityScrobbleListRelationFilter
   crowns?: Prisma.CrownListRelationFilter
-}, "id" | "type_mbid">
+}, "id" | "type_externalId">
 
 export type EntityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  mbid?: Prisma.SortOrder
+  externalId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
@@ -284,7 +284,7 @@ export type EntityScalarWhereWithAggregatesInput = {
   OR?: Prisma.EntityScalarWhereWithAggregatesInput[]
   NOT?: Prisma.EntityScalarWhereWithAggregatesInput | Prisma.EntityScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Entity"> | number
-  mbid?: Prisma.StringWithAggregatesFilter<"Entity"> | string
+  externalId?: Prisma.StringWithAggregatesFilter<"Entity"> | string
   name?: Prisma.StringWithAggregatesFilter<"Entity"> | string
   type?: Prisma.EnumEntityTypeWithAggregatesFilter<"Entity"> | $Enums.EntityType
   coverUrl?: Prisma.StringWithAggregatesFilter<"Entity"> | string
@@ -293,7 +293,7 @@ export type EntityScalarWhereWithAggregatesInput = {
 }
 
 export type EntityCreateInput = {
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -305,7 +305,7 @@ export type EntityCreateInput = {
 
 export type EntityUncheckedCreateInput = {
   id?: number
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -316,7 +316,7 @@ export type EntityUncheckedCreateInput = {
 }
 
 export type EntityUpdateInput = {
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -328,7 +328,7 @@ export type EntityUpdateInput = {
 
 export type EntityUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -340,7 +340,7 @@ export type EntityUncheckedUpdateInput = {
 
 export type EntityCreateManyInput = {
   id?: number
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -349,7 +349,7 @@ export type EntityCreateManyInput = {
 }
 
 export type EntityUpdateManyMutationInput = {
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -359,7 +359,7 @@ export type EntityUpdateManyMutationInput = {
 
 export type EntityUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -367,14 +367,14 @@ export type EntityUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type EntityTypeMbidCompoundUniqueInput = {
+export type EntityTypeExternalIdCompoundUniqueInput = {
   type: $Enums.EntityType
-  mbid: string
+  externalId: string
 }
 
 export type EntityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  mbid?: Prisma.SortOrder
+  externalId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
@@ -388,7 +388,7 @@ export type EntityAvgOrderByAggregateInput = {
 
 export type EntityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  mbid?: Prisma.SortOrder
+  externalId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
@@ -398,7 +398,7 @@ export type EntityMaxOrderByAggregateInput = {
 
 export type EntityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  mbid?: Prisma.SortOrder
+  externalId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
@@ -448,7 +448,7 @@ export type EntityUpdateOneRequiredWithoutCrownsNestedInput = {
 }
 
 export type EntityCreateWithoutEntityScrobblesInput = {
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -459,7 +459,7 @@ export type EntityCreateWithoutEntityScrobblesInput = {
 
 export type EntityUncheckedCreateWithoutEntityScrobblesInput = {
   id?: number
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -485,7 +485,7 @@ export type EntityUpdateToOneWithWhereWithoutEntityScrobblesInput = {
 }
 
 export type EntityUpdateWithoutEntityScrobblesInput = {
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -496,7 +496,7 @@ export type EntityUpdateWithoutEntityScrobblesInput = {
 
 export type EntityUncheckedUpdateWithoutEntityScrobblesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -506,7 +506,7 @@ export type EntityUncheckedUpdateWithoutEntityScrobblesInput = {
 }
 
 export type EntityCreateWithoutCrownsInput = {
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -517,7 +517,7 @@ export type EntityCreateWithoutCrownsInput = {
 
 export type EntityUncheckedCreateWithoutCrownsInput = {
   id?: number
-  mbid: string
+  externalId: string
   name: string
   type: $Enums.EntityType
   coverUrl: string
@@ -543,7 +543,7 @@ export type EntityUpdateToOneWithWhereWithoutCrownsInput = {
 }
 
 export type EntityUpdateWithoutCrownsInput = {
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -554,7 +554,7 @@ export type EntityUpdateWithoutCrownsInput = {
 
 export type EntityUncheckedUpdateWithoutCrownsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  mbid?: Prisma.StringFieldUpdateOperationsInput | string
+  externalId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -605,7 +605,7 @@ export type EntityCountOutputTypeCountCrownsArgs<ExtArgs extends runtime.Types.E
 
 export type EntitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  mbid?: boolean
+  externalId?: boolean
   name?: boolean
   type?: boolean
   coverUrl?: boolean
@@ -618,7 +618,7 @@ export type EntitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type EntitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  mbid?: boolean
+  externalId?: boolean
   name?: boolean
   type?: boolean
   coverUrl?: boolean
@@ -628,7 +628,7 @@ export type EntitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type EntitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  mbid?: boolean
+  externalId?: boolean
   name?: boolean
   type?: boolean
   coverUrl?: boolean
@@ -638,7 +638,7 @@ export type EntitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type EntitySelectScalar = {
   id?: boolean
-  mbid?: boolean
+  externalId?: boolean
   name?: boolean
   type?: boolean
   coverUrl?: boolean
@@ -646,7 +646,7 @@ export type EntitySelectScalar = {
   updatedAt?: boolean
 }
 
-export type EntityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mbid" | "name" | "type" | "coverUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["entity"]>
+export type EntityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "externalId" | "name" | "type" | "coverUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["entity"]>
 export type EntityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entityScrobbles?: boolean | Prisma.Entity$entityScrobblesArgs<ExtArgs>
   crowns?: boolean | Prisma.Entity$crownsArgs<ExtArgs>
@@ -663,7 +663,7 @@ export type $EntityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    mbid: string
+    externalId: string
     name: string
     type: $Enums.EntityType
     coverUrl: string
@@ -1095,7 +1095,7 @@ export interface Prisma__EntityClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface EntityFieldRefs {
   readonly id: Prisma.FieldRef<"Entity", 'Int'>
-  readonly mbid: Prisma.FieldRef<"Entity", 'String'>
+  readonly externalId: Prisma.FieldRef<"Entity", 'String'>
   readonly name: Prisma.FieldRef<"Entity", 'String'>
   readonly type: Prisma.FieldRef<"Entity", 'EntityType'>
   readonly coverUrl: Prisma.FieldRef<"Entity", 'String'>

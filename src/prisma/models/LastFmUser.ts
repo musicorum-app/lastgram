@@ -26,21 +26,18 @@ export type AggregateLastFmUser = {
 
 export type LastFmUserMinAggregateOutputType = {
   fmUsername: string | null
-  displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type LastFmUserMaxAggregateOutputType = {
   fmUsername: string | null
-  displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type LastFmUserCountAggregateOutputType = {
   fmUsername: number
-  displayName: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -49,21 +46,18 @@ export type LastFmUserCountAggregateOutputType = {
 
 export type LastFmUserMinAggregateInputType = {
   fmUsername?: true
-  displayName?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type LastFmUserMaxAggregateInputType = {
   fmUsername?: true
-  displayName?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type LastFmUserCountAggregateInputType = {
   fmUsername?: true
-  displayName?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -143,7 +137,6 @@ export type LastFmUserGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type LastFmUserGroupByOutputType = {
   fmUsername: string
-  displayName: string | null
   createdAt: Date
   updatedAt: Date
   _count: LastFmUserCountAggregateOutputType | null
@@ -171,7 +164,6 @@ export type LastFmUserWhereInput = {
   OR?: Prisma.LastFmUserWhereInput[]
   NOT?: Prisma.LastFmUserWhereInput | Prisma.LastFmUserWhereInput[]
   fmUsername?: Prisma.StringFilter<"LastFmUser"> | string
-  displayName?: Prisma.StringNullableFilter<"LastFmUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"LastFmUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LastFmUser"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -180,7 +172,6 @@ export type LastFmUserWhereInput = {
 
 export type LastFmUserOrderByWithRelationInput = {
   fmUsername?: Prisma.SortOrder
-  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -192,7 +183,6 @@ export type LastFmUserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.LastFmUserWhereInput | Prisma.LastFmUserWhereInput[]
   OR?: Prisma.LastFmUserWhereInput[]
   NOT?: Prisma.LastFmUserWhereInput | Prisma.LastFmUserWhereInput[]
-  displayName?: Prisma.StringNullableFilter<"LastFmUser"> | string | null
   createdAt?: Prisma.DateTimeFilter<"LastFmUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LastFmUser"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -201,7 +191,6 @@ export type LastFmUserWhereUniqueInput = Prisma.AtLeast<{
 
 export type LastFmUserOrderByWithAggregationInput = {
   fmUsername?: Prisma.SortOrder
-  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LastFmUserCountOrderByAggregateInput
@@ -214,14 +203,12 @@ export type LastFmUserScalarWhereWithAggregatesInput = {
   OR?: Prisma.LastFmUserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.LastFmUserScalarWhereWithAggregatesInput | Prisma.LastFmUserScalarWhereWithAggregatesInput[]
   fmUsername?: Prisma.StringWithAggregatesFilter<"LastFmUser"> | string
-  displayName?: Prisma.StringNullableWithAggregatesFilter<"LastFmUser"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LastFmUser"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LastFmUser"> | Date | string
 }
 
 export type LastFmUserCreateInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutLastFmUserInput
@@ -230,7 +217,6 @@ export type LastFmUserCreateInput = {
 
 export type LastFmUserUncheckedCreateInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutLastFmUserInput
@@ -239,7 +225,6 @@ export type LastFmUserUncheckedCreateInput = {
 
 export type LastFmUserUpdateInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutLastFmUserNestedInput
@@ -248,7 +233,6 @@ export type LastFmUserUpdateInput = {
 
 export type LastFmUserUncheckedUpdateInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutLastFmUserNestedInput
@@ -257,21 +241,18 @@ export type LastFmUserUncheckedUpdateInput = {
 
 export type LastFmUserCreateManyInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type LastFmUserUpdateManyMutationInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LastFmUserUncheckedUpdateManyInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -283,21 +264,18 @@ export type LastFmUserScalarRelationFilter = {
 
 export type LastFmUserCountOrderByAggregateInput = {
   fmUsername?: Prisma.SortOrder
-  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type LastFmUserMaxOrderByAggregateInput = {
   fmUsername?: Prisma.SortOrder
-  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type LastFmUserMinOrderByAggregateInput = {
   fmUsername?: Prisma.SortOrder
-  displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -332,7 +310,6 @@ export type LastFmUserUpdateOneRequiredWithoutEntityScrobblesNestedInput = {
 
 export type LastFmUserCreateWithoutUsersInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entityScrobbles?: Prisma.EntityScrobbleCreateNestedManyWithoutLastFmUserInput
@@ -340,7 +317,6 @@ export type LastFmUserCreateWithoutUsersInput = {
 
 export type LastFmUserUncheckedCreateWithoutUsersInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   entityScrobbles?: Prisma.EntityScrobbleUncheckedCreateNestedManyWithoutLastFmUserInput
@@ -364,7 +340,6 @@ export type LastFmUserUpdateToOneWithWhereWithoutUsersInput = {
 
 export type LastFmUserUpdateWithoutUsersInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entityScrobbles?: Prisma.EntityScrobbleUpdateManyWithoutLastFmUserNestedInput
@@ -372,7 +347,6 @@ export type LastFmUserUpdateWithoutUsersInput = {
 
 export type LastFmUserUncheckedUpdateWithoutUsersInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entityScrobbles?: Prisma.EntityScrobbleUncheckedUpdateManyWithoutLastFmUserNestedInput
@@ -380,7 +354,6 @@ export type LastFmUserUncheckedUpdateWithoutUsersInput = {
 
 export type LastFmUserCreateWithoutEntityScrobblesInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutLastFmUserInput
@@ -388,7 +361,6 @@ export type LastFmUserCreateWithoutEntityScrobblesInput = {
 
 export type LastFmUserUncheckedCreateWithoutEntityScrobblesInput = {
   fmUsername: string
-  displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutLastFmUserInput
@@ -412,7 +384,6 @@ export type LastFmUserUpdateToOneWithWhereWithoutEntityScrobblesInput = {
 
 export type LastFmUserUpdateWithoutEntityScrobblesInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutLastFmUserNestedInput
@@ -420,7 +391,6 @@ export type LastFmUserUpdateWithoutEntityScrobblesInput = {
 
 export type LastFmUserUncheckedUpdateWithoutEntityScrobblesInput = {
   fmUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutLastFmUserNestedInput
@@ -468,7 +438,6 @@ export type LastFmUserCountOutputTypeCountEntityScrobblesArgs<ExtArgs extends ru
 
 export type LastFmUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   fmUsername?: boolean
-  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   users?: boolean | Prisma.LastFmUser$usersArgs<ExtArgs>
@@ -478,26 +447,23 @@ export type LastFmUserSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type LastFmUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   fmUsername?: boolean
-  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["lastFmUser"]>
 
 export type LastFmUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   fmUsername?: boolean
-  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["lastFmUser"]>
 
 export type LastFmUserSelectScalar = {
   fmUsername?: boolean
-  displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LastFmUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"fmUsername" | "displayName" | "createdAt" | "updatedAt", ExtArgs["result"]["lastFmUser"]>
+export type LastFmUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"fmUsername" | "createdAt" | "updatedAt", ExtArgs["result"]["lastFmUser"]>
 export type LastFmUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.LastFmUser$usersArgs<ExtArgs>
   entityScrobbles?: boolean | Prisma.LastFmUser$entityScrobblesArgs<ExtArgs>
@@ -514,7 +480,6 @@ export type $LastFmUserPayload<ExtArgs extends runtime.Types.Extensions.Internal
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     fmUsername: string
-    displayName: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["lastFmUser"]>
@@ -943,7 +908,6 @@ export interface Prisma__LastFmUserClient<T, Null = never, ExtArgs extends runti
  */
 export interface LastFmUserFieldRefs {
   readonly fmUsername: Prisma.FieldRef<"LastFmUser", 'String'>
-  readonly displayName: Prisma.FieldRef<"LastFmUser", 'String'>
   readonly createdAt: Prisma.FieldRef<"LastFmUser", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"LastFmUser", 'DateTime'>
 }

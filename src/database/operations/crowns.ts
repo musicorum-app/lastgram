@@ -1,256 +1,267 @@
-import type { Crown } from '@/prisma/client'
-import { getArtistScrobble, upsertArtistScrobbles, } from './artist-scrobbles'
+import { EntityType, Prisma } from '@/prisma/client'
+import { client } from '../index'
+import { getEntityScrobble, upsertEntityScrobble } from './entity-scrobbles'
 import { debug, error } from '@/logging/logging'
-import { client, getUserDisplayName } from '../index'
 
-interface PastCrownHolder {
-    name: string
-    playCount: number
-}
+type CrownWithHolders = Prisma.CrownGetPayload<{ include: { crownHolders: { include: { user: true } } } }>
 
 interface CrownResult {
     success: boolean
-    reason?: string
-    crown?: Crown | null
+    reason?: 'noScrobbles' | 'alreadyHas' | 'notEnough'
+    crown?: CrownWithHolders | null
 }
 
-interface UserWithMostCrowns {
-    name: string
-    playCount: number
+const ensureEntityId = async (
+    entityType: EntityType, 
+    externalId: string, 
+    name?: string,
+    coverUrl?: string
+): Promise<number> => {
+    const entity = await client.entity.findUnique({
+        where: { type_externalId: { type: entityType, externalId } }
+    })
+    if (entity) return entity.id
+
+    if (!name) throw new Error(`Entity not found and cannot create without a name string reference.`)
+    
+    const newEntity = await client.entity.create({
+        data: { type: entityType, externalId, name, coverUrl: coverUrl || "" }
+    })
+    return newEntity.id
 }
 
-export const getCrown = async (groupId: string, artistMbid: string) => {
+export const getCrown = async (groupId: string, entityId: number) => {
     return client.crown.findUnique({
         where: {
-            groupId_artistId: {
+            groupId_entityId: {
                 groupId,
-                artistId: artistMbid,
+                entityId,
             },
         },
+        include: {
+            crownHolders: {
+                include: {
+                    user: true
+                }
+            }
+        }
     })
 }
 
 export const checkIfUserHasCrown = async (
     groupId: string,
-    fmUsername: string,
-    artistMbid: string,
-    artistCover?: string,
+    userId: number,
+    entityType: EntityType,
+    externalId: string,
+    entityCover?: string,
 ) => {
-    const crown = await client.crown.findFirst({
+    const entity = await client.entity.findUnique({
+        where: { type_externalId: { type: entityType, externalId } }
+    })
+    if (!entity) return false
+
+    const holderRecord = await client.crownHolder.findFirst({
         where: {
-            groupId,
-            fmUsername: fmUsername.toLowerCase(),
-            artistId: artistMbid,
+            crown: { groupId, entityId: entity.id },
+            userId,
+            isCurrentHolder: true
         },
     }).catch(() => null)
 
-    if (artistCover) {
-        client.artist.update({
-            where: {
-                mbid: artistMbid,
-            },
-            data: {
-                coverUrl: artistCover,
-            },
-        }).then(() => null).catch(() => null)
+    if (entityCover) {
+        await client.entity.update({
+            where: { id: entity.id },
+            data: { coverUrl: entityCover },
+        }).catch(() => null)
     }
 
-    return !!crown
+    return !!holderRecord
 }
-export const getUserCrowns = async (groupId: string, fmUsername: string) => {
+
+export const getUserCrowns = async (groupId: string, userId: number) => {
     return client.crown.findMany({
         where: {
             groupId,
-            fmUsername: fmUsername.toLowerCase(),
+            crownHolders: {
+                some: {
+                    userId,
+                    isCurrentHolder: true
+                }
+            }
         },
+        include: {
+            entity: true,
+            crownHolders: {
+                where: {
+                    userId,
+                    isCurrentHolder: true
+                },
+                take: 1
+            }
+        }
     })
 }
 
 export const createCrown = async (
     groupId: string,
-    artistMbid: string,
-    fmUsername: string,
+    entityId: number,
+    userId: number,
     playCount: number,
 ) => {
     return client.crown.create({
         data: {
             groupId,
-            artistId: artistMbid,
-            fmUsername: fmUsername.toLowerCase(),
-            playCount,
+            entityId,
+            claimed: true,
             switchedTimes: 0,
+            crownHolders: {
+                create: {
+                    userId,
+                    playCount,
+                    isCurrentHolder: true
+                }
+            }
         },
+        include: {
+            crownHolders: {
+                include: {
+                    user: true
+                }
+            }
+        }
     })
 }
 
 export const updateCrownPlays = async (
-    groupId: string,
-    artistMbid: string,
-    fmUsername: string,
+    crownId: number,
+    userId: number,
     playCount: number,
 ) => {
     debug(
-        'graph.upsertCrown',
-        `updating crown for ${groupId} on ${artistMbid} with ${fmUsername} and ${playCount}`,
+        'graph.updateCrownPlays',
+        `Updating score on crown ${crownId} for user ${userId} to ${playCount}`,
     )
 
-    await client.crown.update({
+    await client.crownHolder.update({
         where: {
-            groupId_artistId: {
-                groupId,
-                artistId: artistMbid,
+            crownId_userId: {
+                crownId,
+                userId,
             },
         },
         data: {
             playCount,
+            isCurrentHolder: true
         },
     })
 }
 
 export const transferCrownOwnership = async (
-    crown: Crown,
-    fmUsername: string,
+    crownId: number,
+    previousHolderId: number | null,
+    newHolderId: number,
     playCount: number,
+    currentSwitchedCount: number
 ) => {
-    await client.crown
-        .update({
-            where: {
-                groupId_artistId: {
-                    groupId: crown.groupId,
-                    artistId: crown.artistId,
-                },
-            },
-            data: {
-                fmUsername: fmUsername.toLowerCase(),
-                playCount,
-                switchedTimes: crown.switchedTimes + 1,
-            },
+    await client.$transaction([
+        client.crown.update({
+            where: { id: crownId },
+            data: { claimed: true, switchedTimes: currentSwitchedCount + 1 }
+        }),
+        ...(previousHolderId ? [
+            client.crownHolder.update({
+                where: { crownId_userId: { crownId, userId: previousHolderId } },
+                data: { isCurrentHolder: false }
+            })
+        ] : []),
+        client.crownHolder.upsert({
+            where: { crownId_userId: { crownId, userId: newHolderId } },
+            update: { playCount, isCurrentHolder: true },
+            create: { crownId, userId: newHolderId, playCount, isCurrentHolder: true }
         })
-        .catch((e) => {
-            error('graph.tryGetToCrown', 'failed to update crown: ' + e.stack)
-            throw e
-        })
-}
-
-export const appendToPastCrownHolders = async (
-    groupId: string,
-    artistMbid: string,
-    fmUsername: string,
-    playCount: number,
-) => {
-    return client.crownHolder.create({
-        data: {
-            groupId,
-            artistId: artistMbid,
-            fmUsername: fmUsername.toLowerCase(),
-            playCount,
-        },
+    ]).catch((e) => {
+        error('graph.transferCrownOwnership', 'Failed to safely transition crown ownership indices: ' + e.stack)
+        throw e
     })
 }
 
 export const tryToStealCrown = async (
     groupId: string,
-    artistMbid: string,
-    fmUsername: string,
-    artistName: string,
+    entityType: EntityType,
+    externalId: string,
+    userId: number,
+    entityName: string,
     playCount: number,
+    coverURL: string,
 ): Promise<CrownResult> => {
-    // first, we must get the fmUser's artist scrobble
-    let artistScrobble = await getArtistScrobble(fmUsername, artistMbid).catch(
-        (e) => {
-            error(
-                'graph.tryGetToCrown',
-                'failed to get artist scrobble: ' + e.stack,
-            )
-            throw e
-        },
-    )
+    const entityId = await ensureEntityId(entityType, externalId, entityName, coverURL)
 
-    // now, we compare the artist scrobble's playCount to the crown's playCount
-    const crown = await getCrown(groupId, artistMbid).catch((e) => {
-        error('graph.tryGetToCrown', 'failed to get crown: ' + e.stack)
+    const targetUser = await client.user.findUnique({
+        where: { id: userId }
+    })
+    
+    if (!targetUser || !targetUser.lastFmUsername) {
+        throw new Error(`Cannot query dynamic scrobble pools for an unlinked database user profile.`)
+    }
+
+    const fmUsername = targetUser.lastFmUsername
+
+    // Unconditionally upsert scrobble data so the user appears on the global who knows podiums
+    // even if they don't have enough scrobbles to claim the crown.
+    await upsertEntityScrobble(fmUsername, entityType, externalId, playCount, entityName, coverURL)
+    
+    let entityScrobble = await getEntityScrobble(fmUsername, entityType, externalId).catch((e) => {
+        error('graph.tryToStealCrown', 'failed to get entity scrobble: ' + e.stack)
         throw e
     })
 
-    if ((!artistScrobble || artistScrobble.playCount < 3) && playCount < 3) {
+    const crown = await getCrown(groupId, entityId)
+    const currentHolderRecord = crown?.crownHolders.find(h => h.isCurrentHolder)
+
+    if (!entityScrobble || entityScrobble.playCount < 3) {
         return { success: false, reason: 'noScrobbles', crown }
-    } else {
-        await upsertArtistScrobbles(fmUsername, artistMbid, playCount, artistName)
-        artistScrobble = await getArtistScrobble(fmUsername, artistMbid)
-        if (!artistScrobble) {
-            return { success: false, reason: 'noScrobbles', crown }
-        }
     }
 
-    // if the username is the same as the crown's, we just update the play count
-    if (crown && crown.fmUsername.toLowerCase() === fmUsername.toLowerCase()) {
-        if (!crown.playCount || playCount > crown.playCount)
-            await updateCrownPlays(
-                groupId,
-                artistMbid,
-                fmUsername,
-                artistScrobble.playCount,
-            )
-        return { success: false, reason: 'alreadyHas', crown }
+    // Checking if current claimant matches the incoming request
+    if (currentHolderRecord && currentHolderRecord.userId === userId) {
+        if (playCount > currentHolderRecord.playCount) {
+            await updateCrownPlays(crown!.id, userId, entityScrobble.playCount)
+        }
+        const updatedCrown = await getCrown(groupId, entityId)
+        return { success: false, reason: 'alreadyHas', crown: updatedCrown }
     }
 
     if (!crown) {
-        // if it doesn't exist, the user can get the crown
-        await createCrown(
-            groupId,
-            artistMbid,
-            fmUsername,
-            artistScrobble.playCount,
-        )
-        return { success: true }
+        const freshCrown = await createCrown(groupId, entityId, userId, entityScrobble.playCount)
+        return { success: true, crown: freshCrown }
     }
 
-    if (artistScrobble.playCount > crown.playCount) {
-        // now, just to be sure, we get the artistscrobbleid from the crown and check if it's still less than fmUser's playCount
-        const artistScrobbleFromCrown = await getArtistScrobble(
-            crown.fmUsername,
-            artistMbid,
-        ).catch((e) => {
-            error(
-                'graph.tryGetToCrown',
-                'failed to get artist scrobble from crown: ' + e.stack,
-            )
-            throw e
+    if (currentHolderRecord && entityScrobble.playCount > currentHolderRecord.playCount) {
+        // Double-check mechanism: verify the current holder hasn't listened more in the background
+        const currentHolderUser = await client.user.findUnique({
+            where: { id: currentHolderRecord.userId }
         })
 
-        if (!artistScrobbleFromCrown || artistScrobble.playCount > artistScrobbleFromCrown.playCount) {
-            // if it is, we give the crown to the other user
-            await transferCrownOwnership(crown, fmUsername, artistScrobble.playCount)
-
-            await appendToPastCrownHolders(
-                groupId,
-                artistMbid,
-                crown.fmUsername,
-                crown.playCount,
-            ).catch((e) => {
-                error(
-                    'graph.tryGetToCrown',
-                    'failed to append to past crown holders: ' + e.stack,
-                )
-                throw e
-            })
-
-            const crownNow = await getCrown(groupId, artistMbid).catch((e) => {
-                error('graph.tryGetToCrown', 'failed to get crown: ' + e.stack)
-                throw e
-            })
-
-            return { success: true, crown: crownNow }
-        } else {
-            // if it's not, we update the play count
-            await updateCrownPlays(
-                groupId,
-                artistMbid,
-                fmUsername,
-                artistScrobble.playCount,
-            )
-            return { success: false, reason: 'notEnough', crown }
+        if (currentHolderUser?.lastFmUsername) {
+            const holderScrobble = await getEntityScrobble(currentHolderUser.lastFmUsername, entityType, externalId)
+            if (holderScrobble && entityScrobble.playCount <= holderScrobble.playCount) {
+                // The current holder actually has more plays now, update their score and deny the steal
+                await updateCrownPlays(crown.id, currentHolderRecord.userId, holderScrobble.playCount)
+                return { success: false, reason: 'notEnough', crown: await getCrown(groupId, entityId) }
+            }
         }
+
+        // Steal successful: transfer the crown
+        await transferCrownOwnership(
+            crown.id,
+            currentHolderRecord.userId,
+            userId,
+            entityScrobble.playCount,
+            crown.switchedTimes
+        )
+
+        const crownNow = await getCrown(groupId, entityId)
+        return { success: true, crown: crownNow }
     } else {
         return { success: false, reason: 'notEnough', crown }
     }
@@ -258,59 +269,126 @@ export const tryToStealCrown = async (
 
 export const getCountPastCrownHolders = async (
     groupId: string,
-    artistMbid: string,
+    entityType: EntityType,
+    externalId: string,
 ) => {
+    const entityId = await ensureEntityId(entityType, externalId)
+
     const crownHolders = await client.crownHolder.findMany({
         where: {
-            groupId,
-            artistId: artistMbid,
+            crown: { groupId, entityId },
+            isCurrentHolder: false // Isolates only previous/past log lines
         },
-        select: {
-            fmUsername: true,
-            playCount: true,
-        },
+        include: {
+            user: true
+        }
     })
 
-    if (!crownHolders || crownHolders.length === 0) return []
+    return crownHolders.map(holder => ({
+        name: holder.user.displayName || holder.user.platformId,
+        playCount: holder.playCount
+    }))
+}
 
-    const holders: PastCrownHolder[] = await Promise.all(
-        crownHolders.map(async (holder) => {
-            const name = await getUserDisplayName(holder.fmUsername)
-            return { name: name?.displayName || holder.fmUsername, playCount: holder.playCount }
-        }),
-    )
+export const getGroupCrownStats = async (groupId: string) => {
+    const totalCrowns = await client.crown.count({
+        where: { groupId, claimed: true }
+    })
 
-    return holders
+    const mostSwitched = await client.crown.findMany({
+        where: { groupId, claimed: true, switchedTimes: { gt: 0 } },
+        orderBy: { switchedTimes: 'desc' },
+        take: 5,
+        include: { entity: true }
+    })
+
+    const topPlayed = await client.crownHolder.findMany({
+        where: {
+            isCurrentHolder: true,
+            crown: { groupId, claimed: true }
+        },
+        orderBy: { playCount: 'desc' },
+        take: 5,
+        include: {
+            crown: {
+                include: { entity: true }
+            },
+            user: true
+        }
+    })
+
+    return { totalCrowns, mostSwitched, topPlayed }
+}
+
+export const getUserCrownWorth = async (groupId: string, userId: number) => {
+    const aggregate = await client.crownHolder.aggregate({
+        where: {
+            isCurrentHolder: true,
+            userId,
+            crown: { groupId, claimed: true }
+        },
+        _sum: {
+            playCount: true
+        }
+    })
+
+    return aggregate._sum.playCount || 0
+}
+
+export const getUnclaimedGroupCrowns = async (groupId: string, fmUsername: string, limit: number = 10) => {
+    const rawData = await client.$queryRaw`
+        SELECT
+            e.id as "entityId",
+            e.name as "entityName",
+            e.type as "entityType",
+            e."coverUrl" as "entityCover",
+            es."playCount" as "totalPlays"
+        FROM "EntityScrobble" es
+        JOIN "Entity" e ON e.id = es."entityId"
+        WHERE es."fmUsername" = ${fmUsername}
+          AND e.type = 'ARTIST'
+          AND NOT EXISTS (
+              SELECT 1 FROM "Crown" c
+              WHERE c."groupId" = ${groupId}
+                AND c."entityId" = e.id
+                AND c.claimed = true
+          )
+        ORDER BY "totalPlays" DESC
+        LIMIT ${limit}
+    `
+    return rawData as any[]
 }
 
 export const getUsersWithMostCrowns = async (groupId: string) => {
-    // Get all crown holders for the group, grouped by username with their total play count
-    const crownHolders = await client.crownHolder.groupBy({
-        by: ['fmUsername'],
+    const activeHolders = await client.crownHolder.findMany({
         where: {
-            groupId,
+            crown: { groupId },
+            isCurrentHolder: true
         },
-        _sum: {
-            playCount: true,
-        },
-        orderBy: {
-            _sum: {
-                playCount: 'desc',
-            },
-        },
-        take: 10,
+        include: {
+            user: true
+        }
     })
 
-    if (!crownHolders || crownHolders.length === 0) return []
+    if (!activeHolders.length) return []
 
-    const users: UserWithMostCrowns[] = await Promise.all(
-        crownHolders.map(async (holder) => {
-            const name = (await getUserDisplayName(holder.fmUsername)) || {
-                displayName: holder.fmUsername,
-            }
-            return { name: name.displayName, playCount: holder._sum.playCount || 0 }
-        }),
-    )
+    // Map total accumulation aggregates safely in application space
+    const countMap: Record<string, { name: string; score: number }> = {}
 
-    return users
+    for (const record of activeHolders) {
+        const key = `${record.userId}`
+        const name = record.user.displayName || record.user.platformId
+        if (!countMap[key]) {
+            countMap[key] = { name, score: 0 }
+        }
+        countMap[key].score += 1 // Increment by 1 per crown held
+    }
+
+    return Object.values(countMap)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+        .map(user => ({
+            name: user.name,
+            playCount: user.score
+        }))
 }

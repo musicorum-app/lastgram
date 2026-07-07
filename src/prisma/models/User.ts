@@ -41,6 +41,7 @@ export type UserMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   isBanned: boolean | null
+  isCrownBanned: boolean | null
   revealUser: boolean | null
   sendPhotosAsLink: boolean | null
   sendTags: boolean | null
@@ -59,6 +60,7 @@ export type UserMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   isBanned: boolean | null
+  isCrownBanned: boolean | null
   revealUser: boolean | null
   sendPhotosAsLink: boolean | null
   sendTags: boolean | null
@@ -77,6 +79,7 @@ export type UserCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   isBanned: number
+  isCrownBanned: number
   revealUser: number
   sendPhotosAsLink: number
   sendTags: number
@@ -105,6 +108,7 @@ export type UserMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   isBanned?: true
+  isCrownBanned?: true
   revealUser?: true
   sendPhotosAsLink?: true
   sendTags?: true
@@ -123,6 +127,7 @@ export type UserMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   isBanned?: true
+  isCrownBanned?: true
   revealUser?: true
   sendPhotosAsLink?: true
   sendTags?: true
@@ -141,6 +146,7 @@ export type UserCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   isBanned?: true
+  isCrownBanned?: true
   revealUser?: true
   sendPhotosAsLink?: true
   sendTags?: true
@@ -246,6 +252,7 @@ export type UserGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   isBanned: boolean
+  isCrownBanned: boolean
   revealUser: boolean
   sendPhotosAsLink: boolean
   sendTags: boolean
@@ -287,6 +294,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   isBanned?: Prisma.BoolFilter<"User"> | boolean
+  isCrownBanned?: Prisma.BoolFilter<"User"> | boolean
   revealUser?: Prisma.BoolFilter<"User"> | boolean
   sendPhotosAsLink?: Prisma.BoolFilter<"User"> | boolean
   sendTags?: Prisma.BoolFilter<"User"> | boolean
@@ -308,6 +316,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
+  isCrownBanned?: Prisma.SortOrder
   revealUser?: Prisma.SortOrder
   sendPhotosAsLink?: Prisma.SortOrder
   sendTags?: Prisma.SortOrder
@@ -332,6 +341,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   isBanned?: Prisma.BoolFilter<"User"> | boolean
+  isCrownBanned?: Prisma.BoolFilter<"User"> | boolean
   revealUser?: Prisma.BoolFilter<"User"> | boolean
   sendPhotosAsLink?: Prisma.BoolFilter<"User"> | boolean
   sendTags?: Prisma.BoolFilter<"User"> | boolean
@@ -353,6 +363,7 @@ export type UserOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
+  isCrownBanned?: Prisma.SortOrder
   revealUser?: Prisma.SortOrder
   sendPhotosAsLink?: Prisma.SortOrder
   sendTags?: Prisma.SortOrder
@@ -379,6 +390,7 @@ export type UserScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   isBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isCrownBanned?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   revealUser?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   sendPhotosAsLink?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   sendTags?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -396,6 +408,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -416,6 +429,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -435,6 +449,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -455,6 +470,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -475,6 +491,7 @@ export type UserCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -492,6 +509,7 @@ export type UserUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -509,6 +527,7 @@ export type UserUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -527,6 +546,7 @@ export type UserCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
+  isCrownBanned?: Prisma.SortOrder
   revealUser?: Prisma.SortOrder
   sendPhotosAsLink?: Prisma.SortOrder
   sendTags?: Prisma.SortOrder
@@ -549,6 +569,7 @@ export type UserMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
+  isCrownBanned?: Prisma.SortOrder
   revealUser?: Prisma.SortOrder
   sendPhotosAsLink?: Prisma.SortOrder
   sendTags?: Prisma.SortOrder
@@ -567,6 +588,7 @@ export type UserMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isBanned?: Prisma.SortOrder
+  isCrownBanned?: Prisma.SortOrder
   revealUser?: Prisma.SortOrder
   sendPhotosAsLink?: Prisma.SortOrder
   sendTags?: Prisma.SortOrder
@@ -697,6 +719,7 @@ export type UserCreateWithoutLastFmUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -716,6 +739,7 @@ export type UserUncheckedCreateWithoutLastFmUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -764,6 +788,7 @@ export type UserScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   isBanned?: Prisma.BoolFilter<"User"> | boolean
+  isCrownBanned?: Prisma.BoolFilter<"User"> | boolean
   revealUser?: Prisma.BoolFilter<"User"> | boolean
   sendPhotosAsLink?: Prisma.BoolFilter<"User"> | boolean
   sendTags?: Prisma.BoolFilter<"User"> | boolean
@@ -781,6 +806,7 @@ export type UserCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -800,6 +826,7 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -834,6 +861,7 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -853,6 +881,7 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -871,6 +900,7 @@ export type UserCreateWithoutCrownHoldersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -890,6 +920,7 @@ export type UserUncheckedCreateWithoutCrownHoldersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -924,6 +955,7 @@ export type UserUpdateWithoutCrownHoldersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -943,6 +975,7 @@ export type UserUncheckedUpdateWithoutCrownHoldersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -962,6 +995,7 @@ export type UserCreateManyLastFmUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -978,6 +1012,7 @@ export type UserUpdateWithoutLastFmUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -997,6 +1032,7 @@ export type UserUncheckedUpdateWithoutLastFmUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1016,6 +1052,7 @@ export type UserUncheckedUpdateManyWithoutLastFmUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCrownBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   revealUser?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendPhotosAsLink?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sendTags?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1073,6 +1110,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -1095,6 +1133,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -1114,6 +1153,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -1133,6 +1173,7 @@ export type UserSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   isBanned?: boolean
+  isCrownBanned?: boolean
   revealUser?: boolean
   sendPhotosAsLink?: boolean
   sendTags?: boolean
@@ -1144,7 +1185,7 @@ export type UserSelectScalar = {
   lastFmUsername?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "platformId" | "language" | "createdAt" | "updatedAt" | "isBanned" | "revealUser" | "sendPhotosAsLink" | "sendTags" | "private" | "likedEmoji" | "banNote" | "sessionKey" | "displayName" | "lastFmUsername", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "platformId" | "language" | "createdAt" | "updatedAt" | "isBanned" | "isCrownBanned" | "revealUser" | "sendPhotosAsLink" | "sendTags" | "private" | "likedEmoji" | "banNote" | "sessionKey" | "displayName" | "lastFmUsername", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lastFmUser?: boolean | Prisma.LastFmUserDefaultArgs<ExtArgs>
   groupMemberships?: boolean | Prisma.User$groupMembershipsArgs<ExtArgs>
@@ -1172,6 +1213,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdAt: Date
     updatedAt: Date
     isBanned: boolean
+    isCrownBanned: boolean
     revealUser: boolean
     sendPhotosAsLink: boolean
     sendTags: boolean
@@ -1613,6 +1655,7 @@ export interface UserFieldRefs {
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly isBanned: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isCrownBanned: Prisma.FieldRef<"User", 'Boolean'>
   readonly revealUser: Prisma.FieldRef<"User", 'Boolean'>
   readonly sendPhotosAsLink: Prisma.FieldRef<"User", 'Boolean'>
   readonly sendTags: Prisma.FieldRef<"User", 'Boolean'>

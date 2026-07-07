@@ -1,13 +1,12 @@
 import { Context } from "@/multiplatforms/common/context"
 import { getUserCrowns } from "@/database/operations/crowns"
-import { getArtistDataByMbid } from "@/database/operations"
 
 export default async (ctx: Context) => {
-    const username =
-        ctx.targetedUserData?.fmUsername ?? ctx.registeredUserData!.fmUsername
+    const userId =
+        ctx.targetedUserData?.id ?? ctx.registeredUserData!.id
     const displayName = ctx.targetedUser?.name ?? ctx.registeredUser!.name
 
-    const crowns = await getUserCrowns(ctx.channel.id, username).then((r) => {
+    const crowns = await getUserCrowns(ctx.channel.id, userId).then((r) => {
         if (!r?.length) return undefined
         return r.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     })
@@ -18,20 +17,15 @@ export default async (ctx: Context) => {
         return ctx.reply("commands:crowns.noCrowns", { displayName })
     }
 
-    // sort by createdAt
-    const artistNames = await Promise.all(
-        crowns.map((c) =>
-            getArtistDataByMbid(c.artistId).then((a) => a.name),
-        ),
-    )
     let crownsText = ""
     for (let i = 0; i < crownCount; i++) {
         const crown = crowns[i]
+        const currentHolder = crown.crownHolders[0]
         crownsText +=
             ctx.t("commands:crowns.crown", {
                 position: i + 1,
-                artistName: artistNames[i],
-                playCount: crown.playCount,
+                artistName: crown.entity.name,
+                playCount: currentHolder?.playCount ?? 0,
                 count: crown.switchedTimes,
             }) + "\n"
     }

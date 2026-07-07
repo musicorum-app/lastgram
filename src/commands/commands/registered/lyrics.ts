@@ -5,7 +5,7 @@ import { getNowPlaying } from '@/fm/completeNowPlaying'
 export default async (ctx: Context) => {
     let args = ctx.args.join(' ')
     if (!args) {
-        const data = await getNowPlaying(ctx, 'track')
+        const data = await getNowPlaying(ctx, 'regular', 'track')
         if (!data.isNowPlaying) return ctx.reply('commands:lyrics.noArgs')
         args = `${data.artist} - ${data.name}`
     }

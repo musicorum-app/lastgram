@@ -1049,6 +1049,7 @@ export const UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isBanned: 'isBanned',
+  isCrownBanned: 'isCrownBanned',
   revealUser: 'revealUser',
   sendPhotosAsLink: 'sendPhotosAsLink',
   sendTags: 'sendTags',
@@ -1065,7 +1066,6 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const LastFmUserScalarFieldEnum = {
   fmUsername: 'fmUsername',
-  displayName: 'displayName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1098,7 +1098,7 @@ export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[key
 
 export const EntityScalarFieldEnum = {
   id: 'id',
-  mbid: 'mbid',
+  externalId: 'externalId',
   name: 'name',
   type: 'type',
   coverUrl: 'coverUrl',

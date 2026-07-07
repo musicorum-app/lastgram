@@ -1,7 +1,7 @@
 import { Context, MinimalContext } from '@/multiplatforms/common/context'
 import { finishAuth, prepareForAuth } from '@/fm/connect'
 import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
-import { updateUserByID } from '@/database'
+import { setUserLastFmUsername } from '@/database'
 
 export default async (ctx: Context) => {
     const linkURL = await prepareForAuth(ctx.guardData.registeredUserData!.id)
@@ -41,10 +41,8 @@ export const doneLinking = async (ctx: MinimalContext) => {
         return
     }
 
-    if (data.username.toLowerCase() !== ctx.guardData.registeredUserData!.fmUsername.toLowerCase()) {
-        updateUserByID(ctx.guardData.registeredUserData!.id, {
-            fmUsername: data.username
-        })
+    if (data.username.toLowerCase() !== ctx.guardData.registeredUserData!.lastFmUsername.toLowerCase()) {
+        await setUserLastFmUsername(ctx.guardData.registeredUserData!.id, data.username)
         ctx.reply('commands:linkfm.successWithUsername', {
             username: data.username
         })

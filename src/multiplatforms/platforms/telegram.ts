@@ -9,8 +9,7 @@ import { EngineError } from '@/event/types/errors'
 const API_URL = 'https://api.telegram.org/bot'
 
 export default class Telegram extends Platform {
-    bot: User
-
+    bot: User | undefined
     private running = false
 
     constructor() {
@@ -44,7 +43,7 @@ export default class Telegram extends Platform {
             }
 
             if (update.message && update.message.text) {
-                handleTelegramMessage(this.bot.username!, update.message)?.then?.((ctx) => {
+                handleTelegramMessage(this.bot!.username!, update.message)?.then?.((ctx) => {
                     if (ctx?.replyWith) return this.deliverMessage(ctx)
                     return undefined
                 })
@@ -73,7 +72,7 @@ export default class Telegram extends Platform {
                 await this.answerCallbackQuery(query.id, ctx.t(e.translationKey), true)
                 return
             }
-            error('telegram.onInteraction', `error while handling button interaction\n${grey(e.stack)}`)
+            error('telegram.onInteraction', `error while handling button interaction\n${grey((e as Error).stack!)}`)
         }
     }
 
@@ -116,7 +115,7 @@ export default class Telegram extends Platform {
         const basedReply = ctx.message.id
         const replyTo = ctx.message.replyingTo ? ctx.message.id : basedReply
 
-        if (ctx.replyOptions?.sendImageAsPhoto) {
+        if (ctx.replyOptions?.sendImageAsPhoto && ctx.replyOptions.imageURL) {
 
             return this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
                 replyTo,
@@ -213,7 +212,7 @@ export default class Telegram extends Platform {
     async start() {
         this.running = true
         this.bot = await this.request('getMe').then(buildFromTelegramUser)
-        info('telegram.start', `running as @${this.bot.username}`)
+        info('telegram.start', `running as @${this.bot!.username}`)
         return this.getUpdates()
     }
 

@@ -1,13 +1,23 @@
 import { Context } from "@/multiplatforms/common/context"
 import { getNowPlaying } from "@/fm/completeNowPlaying"
+import { checkIfUserHasCrown } from "@/database/operations/crowns"
+import { EntityType } from "@/prisma/client"
 
 export default async (ctx: Context) => {
-    const data = await getNowPlaying(ctx, "track", true)
+    const data = await getNowPlaying(ctx, 'you', 'track')
+
+    const hasCrown = await checkIfUserHasCrown(
+        ctx.channel.id,
+        ctx.targetedUserData!.id,
+        EntityType.TRACK,
+        data.id,
+    )
 
     ctx.reply(
         `commands:youtrack`,
         {
             user: ctx.targetedUser?.name,
+            artistCrown: hasCrown ? "👑" : "🧑‍🎤",
             track: data.name,
             artist: data.artist,
             album: data.album,

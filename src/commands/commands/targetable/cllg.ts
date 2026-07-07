@@ -20,7 +20,7 @@ const generateAndSaveData = async (ctx: MinimalContext, names: {
 
 export default async (ctx: Context) => {
     const data = inferDataFromContent(ctx.message.content)
-    const username = ctx.targetedUserData?.fmUsername ?? ctx.registeredUserData!.fmUsername
+    const username = ctx.targetedUserData?.lastFmUsername ?? ctx.registeredUserData!.lastFmUsername
     const displayName = ctx.targetedUser?.name ?? ctx.registeredUser!.name
 
     const imageURL = await generateAndSaveData(ctx, { username, displayName }, data)

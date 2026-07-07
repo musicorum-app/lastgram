@@ -67,6 +67,6 @@ export const updateDiscordCommands = async (globalUpdate = true) => {
       )
     info('discord.updateDiscordCommands', 'Successfully registered application commands.')
   } catch (err) {
-    error('discord.updateDiscordCommands', `Failed to register application commands. Stack:\n${grey(err.stack)}`)
+    error('discord.updateDiscordCommands', `Failed to register application commands. Stack:\n${grey((err as Error).stack!)}`)
   }
 }
