@@ -73,11 +73,19 @@ export class MinimalContext {
     }
 
     async getUserData(user: User | undefined, guardKey: keyof GuardData): Promise<CachedUserData | null> {
-        const r = await client.user.findFirst({
+        const targetUser = user || this.author
+        let r = await client.user.findFirst({
             where: {
-                platformId: this.userPlatformId(user || this.author)
+                platformId: this.userPlatformId(targetUser)
             }
         })
+
+        if (r && r.displayName !== targetUser.name) {
+            r = await client.user.update({
+                where: { id: r.id },
+                data: { displayName: targetUser.name }
+            })
+        }
 
         this.setGuardData(guardKey, r)
         return r
