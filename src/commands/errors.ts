@@ -25,7 +25,10 @@ export class InvalidArgumentError extends CommandError {
 
 export class NoScrobblesError extends CommandError {
     get display() {
-        return this.ctx.t('errors:command.noScrobbles')
+        if (this.ctx.targetedUser) {
+            return this.ctx.t('errors:command.noScrobblesTarget')
+        }
+        return this.ctx.t('errors:command.noScrobblesSelf')
     }
 }
 
