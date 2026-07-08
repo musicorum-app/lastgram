@@ -443,8 +443,7 @@ export default class Telegram extends Platform {
             }
             const baseUrl = webhookUrl.replace(/\/$/, '')
             const fullWebhookUrl = `${baseUrl}/${secretPath}`
-            info('telegram.start', `Registering webhook to ${fullWebhookUrl}`)
-            await this.request('setWebhook', { url: fullWebhookUrl, max_requests: 100 })
+            info('telegram.start', `Running in webhook mode for ${fullWebhookUrl} (auto setWebhook disabled)`)
         } else {
             await this.request('deleteWebhook', {})
             return this.getUpdates()
