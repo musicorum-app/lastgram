@@ -270,5 +270,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Find out your peak listening day for an artist",
     aliases: ["bestday", "peakday", "topday", "best"],
 }

@@ -171,5 +171,6 @@ export const cancelOperation = async (ctx: MinimalContext) => {
 }
 
 export const info = {
+    description: "Configure your bot preferences",
     aliases: ['settings']
 }

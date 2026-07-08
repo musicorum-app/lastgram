@@ -14,5 +14,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Unlink your Last.fm account",
     aliases: ['unlinklast']
 }

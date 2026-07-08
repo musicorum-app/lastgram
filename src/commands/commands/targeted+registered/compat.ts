@@ -124,5 +124,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Check your music compatibility with another user",
     aliases: ['compatibility', 'taste', 'match']
 }

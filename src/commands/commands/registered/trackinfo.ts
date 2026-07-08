@@ -57,6 +57,7 @@ export default async (ctx: Context, { rawArgs }: Args) => {
 }
 
 export const info = {
+    description: "See information about a track",
     aliases: ['ti', 'tif'],
     args: [{
         name: 'rawArgs',

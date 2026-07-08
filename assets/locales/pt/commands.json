@@ -90,8 +90,8 @@
   },
   "whoknows": {
     "failure": [
-      "{{- pretext}}❌ Você não conseguiu pegar a coroa de **{{artistName}}** porque",
-      "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
+      "{{- pretext}}❌ Você não conseguiu se tornar o detentor da coroa de **{{- artistName}}** porque",
+      "$t(commands:whoknows.error, {\"context\": \"{{- reason}}\"})"
     ],
     "claimCount_ordinal_one": "👑 Você é o **primeiro** a reivindicar a coroa deste artista aqui.",
     "claimCount_ordinal_two": "👑 Você é o **{{count}}º** a reivindicar a coroa deste artista aqui.",
@@ -99,7 +99,7 @@
     "claimCount_ordinal_other": "👑 Você é o **{{count}}º** a reivindicar a coroa deste artista aqui.",
     "success": [
       "{{- pretext}}🎉 Você agora é o detentor da coroa de **{{artistName}}** aqui!",
-      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
+      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{- artistName}}\", \"ordinal\": true})"
     ],
     "error_notEnough": "porque você não tem scrobbles suficientes para superar o atual detentor da coroa.",
     "error_noScrobbles": "porque você não tem scrobbles suficientes para reivindicar nada.",

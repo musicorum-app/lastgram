@@ -70,6 +70,7 @@ export default async (ctx: Context, { artistName }: Args) => {
 }
 
 export const info = {
+    description: "See the top global listeners for an artist",
     aliases: ['gwk'],
     args: [{
         name: 'artistName',

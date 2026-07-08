@@ -14,5 +14,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "See artists that have no crowns in the server",
     aliases: ['hunt', 'unclaimedcrowns']
 }

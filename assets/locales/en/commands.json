@@ -16,27 +16,27 @@
     "linked": "You have a last.fm account linked to this account. If you want to change your username, use the `/unlinkfm` command first."
   },
   "youtrack": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": \"{{- user}}\", \"count\": {{playCount}}})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
     "🧑‍🎤 {{artist}}",
     "{{-tags}}"
   ],
   "youalbum": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": \"{{- user}}\", \"count\": {{playCount}}})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
     "{{-tags}}"
   ],
   "youartist": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": \"{{- user}}\", \"count\": {{playCount}}})",
     "🧑‍🎤 **{{artist}}**",
     "{{-tags}}"
   ],
   "last": [
-    "{{flagEmoji}} Data for **{{fullName}}**{{-secondaryName}}",
-    "🎧 {{scrobbles}} scrobbles ({{scrobbleRate}} per day)",
-    "📆 Account created {{registrationDistance}} ({{registrationDate}})",
+    "{{flagEmoji}} Data for **{{fullName}}**",
+    "🎧 **{{scrobbles}}** scrobbles ({{scrobbleRate}} per day)",
+    "📆 Account created **{{registrationDistance}}** ({{registrationDate}})",
     "\n📊 Most played",
     "🧑‍🎤 **{{topArtist}}** ({{topArtistPlays}} plays)",
     "💽 **{{topAlbum}}** by {{topAlbumArtist}} ({{topAlbumPlays}} plays)",
@@ -45,7 +45,7 @@
     "{{- trackList}}"
   ],
   "listening": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": \"{{- user}}\", \"context\": \"{{isListening}}\"})",
     "{{emoji}} **{{track}}**",
     "💽 {{album}}",
     "{{artistCrown}} {{artist}}",
@@ -53,14 +53,14 @@
     "{{-tags}}"
   ],
   "album": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": \"{{- user}}\", \"context\": \"{{isListening}}\"})",
     "💽 **{{album}}**",
     "{{artistCrown}} {{artist}}",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
   ],
   "artist": [
-    "$t(commands:common.lnTitle, {\"name\": \"{{user}}\", \"context\": \"{{isListening}}\"})",
+    "$t(commands:common.lnTitle, {\"name\": \"{{- user}}\", \"context\": \"{{isListening}}\"})",
     "{{artistCrown}} **{{artist}}**",
     "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
     "{{-tags}}"
@@ -126,7 +126,10 @@
     "error": "🤔 Sorry, an error occurred while trying to love this track. Please try again.",
     "notPlaying": "🤨 You need to be listening to a track to interact with it."
   },
-  "assembledLyrics": ["🎶 **{{artist}} - {{track}}**", "{{lyrics}}"],
+  "assembledLyrics": [
+    "🎶 **{{artist}} - {{track}}**",
+    "{{lyrics}}"
+  ],
   "lyrics": {
     "noResult": "🤔 Sorry, I couldn't find the lyrics for this track.",
     "noArgs": "🤔 You need to provide a track name to get its lyrics."
@@ -148,14 +151,14 @@
     "claimCount_ordinal_other": "👑 You are the **{{count}}th** to claim the crown for that artist here.",
     "success": [
       "{{- pretext}}🎉 You're now the holder of the crown for **{{artistName}}** here!",
-      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{artistName}}\", \"ordinal\": true})"
+      "$t(commands:whoknows.claimCount, {\"count\": {{position}}, \"artistName\": \"{{- artistName}}\", \"ordinal\": true})"
     ],
     "error_notEnough": "you don't have enough scrobbles to take on the current crown holder.",
     "error_noScrobbles": "you don't have enough scrobbles to claim anything.",
     "error_alreadyHas": "you already have the crown for this artist!",
     "failure": [
       "{{- pretext}}❌ You weren't able to claim the crown for **{{artistName}}** because",
-      "$t(commands:whoknows.error, {\"context\": \"{{reason}}\"})"
+      "$t(commands:whoknows.error, {\"context\": \"{{- reason}}\"})"
     ],
     "pastHolder": "👤 **{{name}}** - *{{playCount}} scrobbles*",
     "currentHolder": "👑 **{{name}}** - **{{playCount}} scrobbles**",
@@ -173,18 +176,36 @@
     "noScrobbles": "🤔 You didn't give me an artist name nor are you listening to anything right now. What do you want me to check?"
   },
   "meartist": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": \"{{- user}}\", \"count\": {{playCount}}})",
     "🧑‍🎤 **{{artist}}**",
     "{{-tags}}"
   ],
   "mealbum": [
-    "$t(commands:common.lnOther, {\"name\": \"{{user}}\", \"count\": {{playCount}}})",
+    "$t(commands:common.lnOther, {\"name\": \"{{- user}}\", \"count\": {{playCount}}})",
     "💽 **{{album}}**",
     "🧑‍🎤 {{artist}}",
     "{{-tags}}"
   ],
   "unlinkfm": {
     "done": "Your last.fm account has been successfully unlinked."
+  },
+  "crownsinfo": [
+    "👑 **Crowns in this group**",
+    "Total crowns claimed: **{{total}}**\n",
+    "🏆 **Top Crown Holders**",
+    "{{- topUsers}}\n",
+    "⚔️ **Most Contested Crowns**",
+    "{{- switched}}\n",
+    "📈 **Most Played Crowns**",
+    "{{- played}}"
+  ],
+  "crownworth": "👑 **{{user}}'s Crown Worth**: {{worth}} total plays.",
+  "unclaimed": {
+    "list": [
+      "🔍 **Top Unclaimed Artists**",
+      "{{- list}}"
+    ],
+    "none": "Wow! Every scrobbled artist in this group already has a crown claimed."
   },
   "eval": [
     "**Code**: <pre><code class=\"language-javascript\">{{code}}</code></pre>",
@@ -208,5 +229,73 @@
   ],
   "peak.noScrobbles": "🤔 No scrobbles in the {{period}}.",
   "peak.wandaVision": "\n\n🚨 Is the user on WandaVision? They scrobbled {{hours}} hours more than physically possible in a day.",
-  "peak.moreData": "\n\n*Note: There are more scrobbles available but the peak day shown is from the data analyzed.*"
+  "peak.moreData": "\n\n*(Missing some data because you have too many scrobbles)*",
+  "lastgramban": {
+    "success": "🔨 User **{{target}}** has been globally banned from lastgram."
+  },
+  "lastgramunban": {
+    "success": "✅ User **{{target}}** has been unbanned and can use lastgram again."
+  },
+  "crownban": {
+    "success": "🚫 User **{{target}}** has been banned from using crown commands.",
+    "clearCrowns": "Clear all crowns?",
+    "cleared": "🗑️ All crowns belonging to user ID **{{target}}** have been cleared and reclaimed."
+  },
+  "crownunban": {
+    "success": "✅ User **{{target}}** is no longer crown banned."
+  },
+  "artistinfo": [
+    "🧑‍🎤 **{{name}}**",
+    "{{- tags}}",
+    "🎎 Similar to **{{- similar}}**",
+    "",
+    "🌐 **{{globalListeners}}** listeners (**{{globalScrobbles}}** total scrobbles)",
+    "🤖 **{{lastgramListeners}}** lastgram users have listened to this artist",
+    "*(you have {{userScrobbles}} scrobbles on this artist)*",
+    "",
+    "{{bio}}"
+  ],
+  "albuminfo": [
+    "💽 **{{name}}** by **{{artist}}**",
+    "{{- tags}}",
+    "💿 **{{tracksCount}}** tracks",
+    "",
+    "🌐 **{{globalListeners}}** listeners (**{{globalScrobbles}}** total scrobbles)",
+    "🤖 **{{lastgramListeners}}** lastgram users have listened to this album",
+    "*(you have {{userScrobbles}} scrobbles on this album)*"
+  ],
+  "trackinfo": [
+    "{{trackEmoji}} **{{name}}** by **{{artist}}**",
+    "{{- album}}",
+    "{{- tags}}",
+    "",
+    "🌐 **{{globalListeners}}** listeners (**{{globalScrobbles}}** total scrobbles)",
+    "🤖 **{{lastgramListeners}}** lastgram users have listened to this track",
+    "*(you have {{userScrobbles}} scrobbles on this track)*"
+  ],
+  "compat": {
+    "message": [
+      "{{tierEmoji}} **{{userA}}** and **{{userB}}** have a compatibility of **{{percentage}}%**!",
+      "**Tier**: {{tier}}",
+      "",
+      "{{- commonText}}"
+    ],
+    "tiers": {
+      "soulmates": "Soulmates",
+      "highSchoolSweethearts": "High School Sweethearts",
+      "marriedCouple": "Married Couple",
+      "closeFriends": "Close Friends",
+      "friends": "Friends",
+      "schoolAcquaintances": "School acquaintances",
+      "yourEx": "Your ex",
+      "notReally": "Hmm... not really.",
+      "absolutelyNot": "Absolutely not!"
+    },
+    "artistLine": "- **{{name}}** (you: {{playsA}}, them: {{playsB}})",
+    "sharedArtists": [
+      "You both listen to:",
+      "{{- artists}}"
+    ],
+    "noSharedArtists": "You don't have any top artists in common."
+  }
 }

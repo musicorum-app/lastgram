@@ -5,5 +5,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Shows how to use the bot",
     hidden: true
 }

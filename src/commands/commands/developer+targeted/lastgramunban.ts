@@ -13,5 +13,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Developer only. Unban a user from the bot",
     aliases: ['unbanuser']
 }

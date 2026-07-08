@@ -35,5 +35,6 @@ export default async (ctx: Context) => {
 };
 
 export const info = {
+    description: "See your current album or targeted album stats",
     aliases: ["alb"],
 }

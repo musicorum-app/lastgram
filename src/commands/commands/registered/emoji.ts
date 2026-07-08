@@ -18,6 +18,7 @@ export default async (ctx: Context, { emoji }: Args) => {
 }
 
 export const info = {
+    description: "Set your custom emoji",
     aliases: ['em'],
     args: [{
         name: 'emoji',

@@ -50,5 +50,6 @@ export const clearCrowns = async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Developer only. Ban a user from crowns",
     aliases: ['bancrown']
 }

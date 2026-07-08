@@ -52,5 +52,6 @@ export const doneLinking = async (ctx: MinimalContext) => {
     ctx.reply('commands:linkfm.success', { username: data.username })
 }
 export const info = {
+    description: "Link your Last.fm account",
     aliases: ['linklast']
 }

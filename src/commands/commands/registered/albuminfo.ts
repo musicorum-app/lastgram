@@ -50,6 +50,7 @@ export default async (ctx: Context, { rawArgs }: Args) => {
 }
 
 export const info = {
+    description: "See information about an album",
     aliases: ['ali', 'alif'],
     args: [{
         name: 'rawArgs',

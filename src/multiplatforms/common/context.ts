@@ -147,6 +147,8 @@ export class MinimalContext {
                     .replace(/"/g, '&quot;')
                     .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                     .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
             }
         }
 

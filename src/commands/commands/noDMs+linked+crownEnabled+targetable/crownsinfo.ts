@@ -14,5 +14,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Get information about crowns",
     aliases: ['cinfo', 'crownsstats']
 }

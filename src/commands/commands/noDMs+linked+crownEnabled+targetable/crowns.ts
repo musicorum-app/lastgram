@@ -44,5 +44,6 @@ export default async (ctx: Context) => {
 };
 
 export const info = {
+    description: "View a list of your crowns",
     aliases: ["crws", "coroas"],
 }

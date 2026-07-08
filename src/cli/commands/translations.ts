@@ -39,6 +39,42 @@ export const checkTranslations = () => {
     }
 }
 
+export const checkStructure = () => {
+    const locales = fs.readdirSync('assets/locales').filter(l => l !== 'en' && fs.statSync(`assets/locales/${l}`).isDirectory())
+    const errors = new Map<string, MissingKey[]>()
+
+    for (const locale of locales) {
+        for (const ns of namespaces) {
+            const english = JSON.parse(fs.readFileSync(`assets/locales/en/${ns}.json`, 'utf-8'))
+            let target
+            try {
+                target = JSON.parse(fs.readFileSync(`assets/locales/${locale}/${ns}.json`, 'utf-8'))
+            } catch (e) {
+                continue
+            }
+
+            // check missing/mismatched from english
+            const missingKeys = checkMissing(target, english).map(key => ({ key, ns, lang: locale }))
+            if (missingKeys.length) {
+                const err = errors.get(locale)
+                errors.set(locale, err ? [...err, ...missingKeys] : missingKeys)
+            }
+
+            console.log(italic(`Checking structure ${locale}/${ns}...`), bold(missingKeys.length.toString()), 'issues found')
+        }
+    }
+
+    let hasErrors = false
+    for (const missingKeys of errors.values()) {
+        if (missingKeys.length) {
+            hasErrors = true
+            printMissingKeys(missingKeys)
+        }
+    }
+
+    if (!hasErrors) console.log(bold('All translations match the English structure perfectly!'))
+}
+
 const getMissingKeys = (locale: string, ns: string) => {
     // we basically load the ns.missing.json file. if we can load it, we load the actual file.
     // if the missing file has keys that the main file doesn't have, we add them to it, save the file and return its issues

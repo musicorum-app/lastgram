@@ -106,6 +106,7 @@ export default async (ctx: Context, { artistName }: Args) => {
 }
 
 export const info = {
+    description: "See who knows an artist the most in this group",
     aliases: ['wka', 'coroa', 'crown'],
     args: [{
         name: 'artistName',

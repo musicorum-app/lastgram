@@ -19,5 +19,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Love or unlove a track on Last.fm",
     aliases: ['amei', '❤️', 'unlove', 'desamei', 'gostei', 'desgostar']
 }

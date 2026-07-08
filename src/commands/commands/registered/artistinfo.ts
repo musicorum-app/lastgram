@@ -40,6 +40,7 @@ export default async (ctx: Context, { artistName }: Args) => {
 }
 
 export const info = {
+    description: "See information about an artist",
     aliases: ['ai', 'aif'],
     args: [{
         name: 'artistName',

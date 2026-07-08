@@ -45,26 +45,29 @@ export default class Telegram extends Platform {
                 if (update.update_id >= (offset || 0)) {
                     offset = update.update_id + 1
                 }
-
-                if (update.inline_query) {
-                    this.handleInlineQuery(update.inline_query).then(a => a)
-                }
-
-                if (update.chosen_inline_result) {
-                    this.handleChosenInlineResult(update.chosen_inline_result).then(a => a)
-                }
-
-                if (update.message && update.message.text) {
-                    handleTelegramMessage(this.bot!.username!, update.message)?.then?.((ctx) => {
-                        if (ctx?.replyWith) return this.deliverMessage(ctx)
-                        return undefined
-                    })
-                }
-
-                if (update.callback_query) {
-                    this.handleInteraction(update.callback_query).then(a => a)
-                }
+                this.processUpdate(update)
             }
+        }
+    }
+
+    async processUpdate(update: Record<string, any>) {
+        if (update.inline_query) {
+            this.handleInlineQuery(update.inline_query).catch(e => error('telegram.processUpdate', e.stack))
+        }
+
+        if (update.chosen_inline_result) {
+            this.handleChosenInlineResult(update.chosen_inline_result).catch(e => error('telegram.processUpdate', e.stack))
+        }
+
+        if (update.message && update.message.text) {
+            handleTelegramMessage(this.bot!.username!, update.message)?.then?.((ctx) => {
+                if (ctx?.replyWith) return this.deliverMessage(ctx)
+                return undefined
+            }).catch(e => error('telegram.processUpdate', e.stack))
+        }
+
+        if (update.callback_query) {
+            this.handleInteraction(update.callback_query).catch(e => error('telegram.processUpdate', e.stack))
         }
     }
 
@@ -132,6 +135,8 @@ export default class Telegram extends Platform {
                 .replace(/"/g, '&quot;')
                 .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                 .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
         }
 
         const trackCaptionRaw = lt(lang, 'commands:listening', {
@@ -428,7 +433,22 @@ export default class Telegram extends Platform {
         this.running = true
         this.bot = await this.request('getMe').then(buildFromTelegramUser)
         info('telegram.start', `running as @${this.bot!.username}`)
-        return this.getUpdates()
+
+        const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL
+        if (webhookUrl) {
+            const secretPath = process.env.WEBHOOK_SECRET_PATH
+            if (!secretPath) {
+                error('telegram.start', 'WEBHOOK_SECRET_PATH is required when using webhooks!')
+                process.exit(1)
+            }
+            const baseUrl = webhookUrl.replace(/\/$/, '')
+            const fullWebhookUrl = `${baseUrl}/${secretPath}`
+            info('telegram.start', `Registering webhook to ${fullWebhookUrl}`)
+            await this.request('setWebhook', { url: fullWebhookUrl, max_requests: 100 })
+        } else {
+            await this.request('deleteWebhook', {})
+            return this.getUpdates()
+        }
     }
 
     private async clearInteractions(query: Record<string, any>) {

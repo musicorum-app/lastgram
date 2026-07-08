@@ -149,5 +149,6 @@ const buildComponents = (ctx: MinimalContext, data: ClassicCollageData, id: stri
 }
 
 export const info = {
+    description: "Generate a collage of your top artists",
     aliases: []
 }

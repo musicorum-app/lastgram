@@ -20,6 +20,7 @@ export default (ctx: Context, { command }: Args) => {
 }
 
 export const info = {
+    description: "Show the help menu",
     aliases: ['ajuda'],
     args: [{
         name: 'command',

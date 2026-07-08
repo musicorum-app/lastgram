@@ -68,5 +68,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "See your last scrobbles",
     aliases: ["userinfo", "lastinfo"],
 }

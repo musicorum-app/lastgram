@@ -18,5 +18,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Check how many crowns a user has and their worth",
     aliases: ['cworth', 'worth']
 }

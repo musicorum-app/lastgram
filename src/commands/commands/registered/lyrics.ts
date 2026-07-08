@@ -29,5 +29,6 @@ export default async (ctx: Context) => {
 }
 
 export const info = {
+    description: "Get lyrics for a track",
     aliases: ['letras', 'letra']
 }

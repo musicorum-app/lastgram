@@ -39,6 +39,7 @@ export default async (ctx: Context, { code }: Args) => {
 }
 
 export const info = {
+    description: "Developer only. Evaluate javascript code",
     args: [{
         name: 'code',
         required: true,
