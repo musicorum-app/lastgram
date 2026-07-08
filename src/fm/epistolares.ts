@@ -104,7 +104,7 @@ export const getRecentTracks = async (username: string, limit: number) => {
         limit
     })
     if (data.error) {
-        if (data.reason === 'Not Found' || data.reason === 'User not found') return []
+        if (data.reason === 'User not found') return []
         throw new Error(data.reason)
     }
 
