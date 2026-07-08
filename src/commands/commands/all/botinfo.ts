@@ -23,7 +23,7 @@ export default async (ctx: Context) => {
         })
     })
 
-    ctx.reply('commands:botinfo.data', {
+    let text = ctx.t('commands:botinfo.data', {
         mode: isDevelopment ? 'development' : 'stable',
         rss: rss.toFixed(2),
         heapTotal: heapTotal.toFixed(2),
@@ -31,6 +31,15 @@ export default async (ctx: Context) => {
         updates: totalTelegramMessages,
         uptime: uptimeInMinutes
     })
+
+    if (process.env.COMMIT_ID) {
+        text += ctx.t('commands:botinfo.commit', {
+            commitId: process.env.COMMIT_ID.substring(0, 7),
+            commitMsg: process.env.COMMIT_MSG || 'Unknown'
+        })
+    }
+
+    ctx.reply(text, {}, { noTranslation: true })
 }
 
 export const info = {

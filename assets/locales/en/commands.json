@@ -71,6 +71,7 @@
   },
   "botinfo": {
     "data": "lastgram {{mode}}\n\uD83D\uDCBB **Memory usage:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n⏱\uFE0F **Uptime:** {{uptime}}m\n\uD83D\uDCE9 **{{updates}}** messages from Telegram since last restart",
+    "commit": "\n\n📌 **Version:** `{{commitId}}`\n💬 {{commitMsg}}",
     "buttons": {
       "github": "Source code on GitHub"
     }

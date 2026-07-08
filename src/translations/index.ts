@@ -19,7 +19,7 @@ i18next
         },
         interpolation: {
             escape: (str: string) => {
-                return str.replace(/[*_`~#&<>\/\[\]]/g, "\\$&")
+                return str.replace(/[*_`~\[\]]/g, "\\$&")
             },
         },
     })
