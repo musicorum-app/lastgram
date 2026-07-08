@@ -84,7 +84,7 @@ export const getNowPlaying = async (
             name: me.track.name,
             id: findIdForEntity(me, entity),
             artist: me.artist.name,
-            album: me.album.name,
+            album: me.album?.name || '',
             playCount: findScrobblesForEntity(me, entity),
             loved: me.track.userScrobbles?.loved || false,
             tags: me.track.tags,
@@ -94,12 +94,12 @@ export const getNowPlaying = async (
     } else if (usingCommandStyle === 'you') { // what I am listening to, then how much scrobbles the targeted user has
         const me = await getRecentTracks(ctx.registeredUserData.lastFmUsername, 1).then(r => r?.[0])
         if (!me) throw new NoScrobblesError(ctx)
-        const you = await getMatchingEntityRequestForUser(entity, ctx.targetedUserData!.lastFmUsername, me.track.name, me.artist.name, me.album.name)
+        const you = await getMatchingEntityRequestForUser(entity, ctx.targetedUserData!.lastFmUsername, me.track.name, me.artist.name, me.album?.name || '')
         nowPlaying = {
             name: me.track.name,
             id: findIdForEntity(me, entity),
             artist: me.artist.name,
-            album: me.album.name,
+            album: me.album?.name || '',
             playCount: you?.userScrobbles?.playCount || 0,
             // @ts-ignore
             loved: you?.userScrobbles?.loved || false,
@@ -110,12 +110,12 @@ export const getNowPlaying = async (
     } else if (usingCommandStyle === 'me') { // what I am listening to, then how much scrobbles the targeted user has
        const me = await getRecentTracks(ctx.targetedUserData!.lastFmUsername, 1).then(r => r?.[0])
        if (!me) throw new NoScrobblesError(ctx)
-        const you = await getMatchingEntityRequestForUser(entity, ctx.registeredUserData!.lastFmUsername, me.track.name, me.artist.name, me.album.name)
+        const you = await getMatchingEntityRequestForUser(entity, ctx.registeredUserData!.lastFmUsername, me.track.name, me.artist.name, me.album?.name || '')
         nowPlaying = {
             name: me.track.name,
             id: findIdForEntity(me, entity),
             artist: me.artist.name,
-            album: me.album.name,
+            album: me.album?.name || '',
             playCount: you?.userScrobbles?.playCount || 0,
             // @ts-ignore
             loved: you?.userScrobbles?.loved || false,
