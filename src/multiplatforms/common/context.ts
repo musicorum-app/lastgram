@@ -80,13 +80,6 @@ export class MinimalContext {
             }
         })
 
-        if (r && r.displayName !== targetUser.name) {
-            r = await client.user.update({
-                where: { id: r.id },
-                data: { displayName: targetUser.name }
-            })
-        }
-
         this.setGuardData(guardKey, r)
         return r
     }

@@ -1,5 +1,6 @@
 import { commandRunner } from '@/commands'
 import { Context } from '../common/context.js'
+import { client } from '@/database'
 
 const trashBotEasterEgg = async (data: Record<string, any>) => {
     const ctx = Context.fromTelegramMessage(data, [], commandRunner)
@@ -8,6 +9,18 @@ const trashBotEasterEgg = async (data: Record<string, any>) => {
 }
 
 export const handleTelegramMessage = async (botUser: string, data: Record<string, any>): Promise<Context | undefined> => {
+    // Aggressive background display name updater
+    if (data.from && data.from.id) {
+        const name = data.from.first_name || data.from.username || data.from.id.toString()
+        client.user.updateMany({
+            where: {
+                platformId: `telegram_${data.from.id}`,
+                displayName: { not: name }
+            },
+            data: { displayName: name }
+        }).catch(() => null)
+    }
+
     if (data.text.toLowerCase().includes('lastfmplusbot')) return trashBotEasterEgg(data)
     // if the text is "st" or "now", use Math.random() and if its smaller than 15%, run the easter egg
     if (['st', 'now'].some((d) => data.text.toLowerCase().startsWith(d)) && Math.random() < 0.1) return trashBotEasterEgg(data)
