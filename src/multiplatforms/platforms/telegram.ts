@@ -5,6 +5,9 @@ import { handleTelegramMessage } from '../utilities/telegram.js'
 import { Context, MinimalContext } from '../common/context.js'
 import { eventEngine } from '@/event'
 import { EngineError } from '@/event/types/errors'
+import { commandRunner } from '@/commands'
+import { client } from '@/database'
+import { lt } from '@/translations'
 
 const API_URL = 'https://api.telegram.org/bot'
 
@@ -22,38 +25,210 @@ export default class Telegram extends Platform {
         this.createCounter('telegram_requests', 'Telegram request count', ['success', 'method'])
     }
 
-    async getUpdates(offset?: number): Promise<void> {
-        if (!this.running) return Promise.resolve()
+    async getUpdates(initialOffset?: number): Promise<void> {
+        let offset = initialOffset;
 
-        const response = await this.request('getUpdates', {
-            offset,
-            drop_pending_updates: process.env.DROP_PENDING_UPDATES_ON_START === 'true'
+        while (this.running) {
+            const response = await this.request('getUpdates', {
+                offset,
+                drop_pending_updates: process.env.DROP_PENDING_UPDATES_ON_START === 'true'
+            })
+            // set drop pending updates to false now.
+            process.env.DROP_PENDING_UPDATES_ON_START = 'false'
+            if (!(response instanceof Array)) {
+                warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                continue
+            }
+            this.incrementMessages(response.length)
+            for (const update of response) {
+                if (update.update_id >= (offset || 0)) {
+                    offset = update.update_id + 1
+                }
+
+                if (update.inline_query) {
+                    this.handleInlineQuery(update.inline_query).then(a => a)
+                }
+
+                if (update.chosen_inline_result) {
+                    this.handleChosenInlineResult(update.chosen_inline_result).then(a => a)
+                }
+
+                if (update.message && update.message.text) {
+                    handleTelegramMessage(this.bot!.username!, update.message)?.then?.((ctx) => {
+                        if (ctx?.replyWith) return this.deliverMessage(ctx)
+                        return undefined
+                    })
+                }
+
+                if (update.callback_query) {
+                    this.handleInteraction(update.callback_query).then(a => a)
+                }
+            }
+        }
+    }
+
+    async handleInlineQuery(inlineQuery: Record<string, any>) {
+        debug('telegram.onInlineQuery', `received inline query from ${inlineQuery.from.id}`)
+        const user = buildFromTelegramUser(inlineQuery.from)
+        const platformId = `telegram_${user.id}`
+        const dbUser = await client.user.findFirst({ where: { platformId } })
+
+        if (!dbUser || !dbUser.lastFmUsername) {
+            debug('telegram.onInlineQuery', `user not registered, returning article`)
+            const results = [{
+                type: 'article',
+                id: 'not_registered',
+                title: 'Not Registered',
+                description: 'You need to register your Last.fm account to use this bot.',
+                input_message_content: { message_text: 'I tried to use the @lastgrambot, but I am not registered yet!' }
+            }]
+            await this.request('answerInlineQuery', {
+                inline_query_id: inlineQuery.id,
+                results: JSON.stringify(results),
+                cache_time: 0
+            })
+            return
+        }
+
+        let me: any = null
+        try {
+            const { getRecentTracks } = await import('@/fm/epistolares')
+            const tracks = await getRecentTracks(dbUser.lastFmUsername, 1)
+            me = tracks?.[0]
+        } catch (e: any) {
+            error('telegram.onInlineQuery', `error fetching tracks: ${e.stack}`)
+        }
+
+        if (!me) {
+            debug('telegram.onInlineQuery', `no recent tracks found for ${dbUser.lastFmUsername}, returning article`)
+            const results = [{
+                type: 'article',
+                id: 'no_tracks',
+                title: 'No Recent Tracks',
+                description: 'You have no recent scrobbles.',
+                input_message_content: { message_text: 'I have no recent scrobbles on Last.fm!' }
+            }]
+            await this.request('answerInlineQuery', {
+                inline_query_id: inlineQuery.id,
+                results: JSON.stringify(results),
+                cache_time: 0
+            })
+            return
+        }
+
+        const trackPhoto = me.track.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Track'
+        const albumPhoto = me.album.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Album'
+        const artistPhoto = me.artist.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Artist'
+
+        const lang = dbUser.language || 'en'
+        const userDisplayName = inlineQuery.from.first_name || inlineQuery.from.username || dbUser.lastFmUsername
+
+        const formatTelegramHTML = (text: string) => {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>')
+        }
+
+        const trackCaptionRaw = lt(lang, 'commands:listening', {
+            user: userDisplayName,
+            artistCrown: '🧑‍🎤',
+            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
+            track: me.track.name,
+            artist: me.artist.name,
+            album: me.album.name,
+            playCount: me.track.userScrobbles?.playCount || 0,
+            emoji: me.track.userScrobbles?.loved ? dbUser.likedEmoji || '❤️' : '🎵',
+            tags: '',
+            joinArrays: '\n'
+        }).trim()
+        const trackCaption = formatTelegramHTML(trackCaptionRaw)
+
+        const albumCaptionRaw = lt(lang, 'commands:album', {
+            user: userDisplayName,
+            artistCrown: '🧑‍🎤',
+            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
+            artist: me.artist.name,
+            album: me.album.name,
+            playCount: me.album.userScrobbles?.playCount || 0,
+            tags: '',
+            joinArrays: '\n'
+        }).trim()
+        const albumCaption = formatTelegramHTML(albumCaptionRaw)
+
+        const artistCaptionRaw = lt(lang, 'commands:artist', {
+            user: userDisplayName,
+            artistCrown: '🧑‍🎤',
+            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
+            artist: me.artist.name,
+            playCount: me.artist.userScrobbles?.playCount || 0,
+            tags: '',
+            joinArrays: '\n'
+        }).trim()
+        const artistCaption = formatTelegramHTML(artistCaptionRaw)
+
+        const results = [
+            {
+                type: 'photo',
+                id: 'listening',
+                photo_url: trackPhoto,
+                thumbnail_url: trackPhoto,
+                title: 'Current Track',
+                description: 'Share your now playing track',
+                caption: trackCaption,
+                parse_mode: 'HTML'
+            },
+            {
+                type: 'photo',
+                id: 'album',
+                photo_url: albumPhoto,
+                thumbnail_url: albumPhoto,
+                title: 'Current Album',
+                description: 'Share your now playing album',
+                caption: albumCaption,
+                parse_mode: 'HTML'
+            },
+            {
+                type: 'photo',
+                id: 'artist',
+                photo_url: artistPhoto,
+                thumbnail_url: artistPhoto,
+                title: 'Current Artist',
+                description: 'Share your now playing artist',
+                caption: artistCaption,
+                parse_mode: 'HTML'
+            }
+        ]
+
+        debug('telegram.onInlineQuery', `answering inline query for ${inlineQuery.from.id}`)
+        const response = await this.request('answerInlineQuery', {
+            inline_query_id: inlineQuery.id,
+            results: JSON.stringify(results),
+            cache_time: 5
         })
-        // set drop pending updates to false now.
-        process.env.DROP_PENDING_UPDATES_ON_START = 'false'
-        if (!(response instanceof Array)) {
-            warn('platforms.telegram', 'getUpdates did not return an array. waiting 1 second before trying again...')
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            return this.getUpdates(offset)
-        }
-        this.incrementMessages(response.length)
-        for (const update of response) {
-            if (update.update_id >= (offset || 0)) {
-                offset = update.update_id + 1
-            }
+        debug('telegram.onInlineQuery', `answerInlineQuery response: ${JSON.stringify(response)}`)
+    }
 
-            if (update.message && update.message.text) {
-                handleTelegramMessage(this.bot!.username!, update.message)?.then?.((ctx) => {
-                    if (ctx?.replyWith) return this.deliverMessage(ctx)
-                    return undefined
-                })
-            }
+    async handleChosenInlineResult(chosenResult: Record<string, any>) {
+        debug('telegram.onChosenInlineResult', `received chosen inline result ${chosenResult.result_id} from ${chosenResult.from.id}`)
+        if (!chosenResult.inline_message_id) return
 
-            if (update.callback_query) {
-                this.handleInteraction(update.callback_query).then(a => a)
-            }
+        const parts = chosenResult.result_id.split(' ')
+        const commandName = parts[0]
+        const args = parts.slice(1)
+
+        const ctx = Context.fromTelegramInlineResult(chosenResult, args, commandRunner)
+        ctx.setCommand({ name: commandName, protectionLevel: 'unknown' })
+
+        await commandRunner.runCommand(commandName, ctx)
+
+        if (ctx.replyWith) {
+            await this.deliverMessage(ctx)
         }
-        return await this.getUpdates(offset)
     }
 
     async handleInteraction(query: Record<string, any>) {
@@ -111,6 +286,29 @@ export default class Telegram extends Platform {
     }
 
     deliverMessage(ctx: Context) {
+        if (ctx.inlineMessageId) {
+            // Inline queries now use real Photo messages!
+            if (ctx.replyOptions?.imageURL) {
+                return this.updateMessageMedia({
+                    inlineMessageId: ctx.inlineMessageId
+                }, {
+                    url: ctx.replyOptions.imageURL,
+                    caption: ctx.replyWith!.toString()
+                }, {
+                    parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
+                })
+            } else {
+                return this.updateMessageCaption({
+                    inlineMessageId: ctx.inlineMessageId
+                }, ctx.replyWith!.toString(), {
+                    parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
+                    replyMarkup: ctx.components.components[0]
+                        ? JSON.stringify({ inline_keyboard: ctx.components.components })
+                        : undefined
+                })
+            }
+        }
+
         const id = ctx.channel?.id || ctx.author.id
         const basedReply = ctx.message.id
         const replyTo = ctx.message.replyingTo ? ctx.message.id : basedReply
@@ -136,12 +334,13 @@ export default class Telegram extends Platform {
         })
     }
 
-    updateMessageMedia(data: { messageID: number, chatID: number }, media: { url: string, caption?: string }, options: {
+    updateMessageMedia(data: { messageID?: number, chatID?: number, inlineMessageId?: string }, media: { url: string, caption?: string }, options: {
         parseMode?: 'MarkdownV2' | 'HTML'
     }) {
         return this.request('editMessageMedia', {
             chat_id: data.chatID,
             message_id: data.messageID,
+            inline_message_id: data.inlineMessageId,
             media: {
                 type: 'photo',
                 media: media.url,
@@ -180,23 +379,39 @@ export default class Telegram extends Platform {
         })
     }
 
-    public updateMessageText(data: { messageID: number, chatID: number }, text: string, options: {
+    public updateMessageText(data: { messageID?: number, chatID?: number, inlineMessageId?: string }, text: string, options: {
         parseMode?: 'MarkdownV2' | 'HTML',
         replyMarkup?: string | undefined
     }) {
         return this.request('editMessageText', {
             chat_id: data.chatID,
             message_id: data.messageID,
+            inline_message_id: data.inlineMessageId,
             text,
             parse_mode: options?.parseMode,
             reply_markup: options?.replyMarkup
         })
     }
 
-    public updateMessageReplyMarkup(data: { messageID: number, chatID: number }, replyMarkup: string) {
+    public updateMessageCaption(data: { messageID?: number, chatID?: number, inlineMessageId?: string }, caption: string, options: {
+        parseMode?: 'MarkdownV2' | 'HTML',
+        replyMarkup?: string | undefined
+    }) {
+        return this.request('editMessageCaption', {
+            chat_id: data.chatID,
+            message_id: data.messageID,
+            inline_message_id: data.inlineMessageId,
+            caption,
+            parse_mode: options?.parseMode,
+            reply_markup: options?.replyMarkup
+        })
+    }
+
+    public updateMessageReplyMarkup(data: { messageID?: number, chatID?: number, inlineMessageId?: string }, replyMarkup: string) {
         return this.request('editMessageReplyMarkup', {
             chat_id: data.chatID,
             message_id: data.messageID,
+            inline_message_id: data.inlineMessageId,
             reply_markup: replyMarkup
         })
     }

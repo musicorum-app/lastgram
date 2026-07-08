@@ -158,3 +158,76 @@ export const getTrackInfo = async (username: string, artist: string, album: stri
         artist: ArtistInfo
     }
 }
+
+export interface ChartsAllResponse {
+    tracks: {
+        total: number
+        page: number
+        totalPages: number
+        items: {
+            id: string
+            playCount: number
+            artist: string
+            name: string
+            cover?: { template: string, defaultURL: string }
+        }[]
+    }
+    artists: {
+        total: number
+        page: number
+        totalPages: number
+        items: {
+            id: string
+            name: string
+            playCount: number
+            cover?: { template: string, defaultURL: string }
+        }[]
+    }
+    albums: {
+        total: number
+        page: number
+        totalPages: number
+        items: {
+            id: string
+            artist: string
+            name: string
+            playCount: number
+            cover?: { template: string, defaultURL: string }
+        }[]
+    }
+}
+
+export const getUserChartsAll = async (username: string, period: string = 'overall', limit: number = 5): Promise<ChartsAllResponse | undefined> => {
+    try {
+        const req = await fetch(`${EPISTOLARES_ROOT_URL}/user/charts/all?username=${encodeURIComponent(username)}&period=${period}&limit=${limit}`)
+        if (!req.ok) return undefined
+        return await req.json()
+    } catch (e) {
+        error('epistolares.getUserChartsAll', `Error fetching all charts for ${username}: ${(e as Error).message}`)
+        return undefined
+    }
+}
+
+export interface ChartsResponse {
+    items: {
+        id: string
+        name?: string
+        artist?: string
+        playCount: number
+        cover?: { template: string, defaultURL: string }
+    }[]
+    total: number
+    page: number
+    totalPages: number
+}
+
+export const getUserCharts = async (username: string, type: 'artist' | 'album' | 'track', period: string = 'overall', limit: number = 50): Promise<ChartsResponse | undefined> => {
+    try {
+        const req = await fetch(`${EPISTOLARES_ROOT_URL}/user/charts?username=${encodeURIComponent(username)}&period=${period}&limit=${limit}&type=${type}`)
+        if (!req.ok) return undefined
+        return await req.json()
+    } catch (e) {
+        error('epistolares.getUserCharts', `Error fetching charts for ${username}: ${(e as Error).message}`)
+        return undefined
+    }
+}

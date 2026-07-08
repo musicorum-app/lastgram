@@ -3,7 +3,7 @@ import { buildFromDiscordChannel, buildFromTelegramChannel, Channel } from './ch
 import { Replyable } from '../protocols.js'
 import { buildFromDiscordUser, buildFromTelegramUser, User } from './user.js'
 import { client } from '@/database'
-import { marked } from 'marked'
+
 import { MinimalCommand } from '@/commands/command'
 import { CommandRunner } from '@/commands'
 import { ChatInputCommandInteraction } from 'discord.js'
@@ -34,6 +34,7 @@ export class MinimalContext {
     public replyMarkup?: string
     public command?: MinimalCommand
     public guardData: GuardData = {}
+    public inlineMessageId?: string
     private currentGuard?: string
 
     constructor(
@@ -139,7 +140,13 @@ export class MinimalContext {
         if (hasMarkdown) {
             this.replyMarkup = 'markdown'
             if (this.author.platform === 'telegram') {
-                this.replyWith = marked.parseInline(this.replyWith as string)
+                this.replyWith = (this.replyWith as string)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                    .replace(/\*(.*?)\*/g, '<i>$1</i>')
             }
         }
 
@@ -184,6 +191,18 @@ export class Context extends MinimalContext {
             args,
             runner
         )
+    }
+
+    static fromTelegramInlineResult(inlineQuery: Record<string, any>, args: string[], runner: CommandRunner) {
+        const ctx = new Context(
+            { id: inlineQuery.inline_message_id, text: '' } as unknown as Message,
+            buildFromTelegramUser(inlineQuery.from),
+            { id: inlineQuery.from.id.toString(), type: 'private', username: inlineQuery.from.username } as unknown as Channel,
+            args,
+            runner
+        )
+        ctx.inlineMessageId = inlineQuery.inline_message_id
+        return ctx
     }
 }
 
