@@ -44,7 +44,8 @@ export default async (ctx: Context, { artistName }: Args) => {
 
     // Get display names for all listeners
     const listenerDetails = topListeners.map((listener, index) => {
-        const user = listener.lastFmUser.users[0]
+        const users = listener.lastFmUser.users
+        const user = users.find(u => u.platformId.startsWith(ctx.author.platform)) || users[0]
         return {
             position: index + 1,
             name: user?.displayName || user?.platformId || listener.fmUsername,

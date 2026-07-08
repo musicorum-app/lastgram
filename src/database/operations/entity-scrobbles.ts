@@ -89,8 +89,7 @@ export const getTopListenersForEntity = async (
                         select: {
                             displayName: true,
                             platformId: true
-                        },
-                        take: 1
+                        }
                     }
                 }
             }

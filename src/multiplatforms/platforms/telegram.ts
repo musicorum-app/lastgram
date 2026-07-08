@@ -290,11 +290,10 @@ export default class Telegram extends Platform {
         await this.updateInteraction(query, ctx)
     }
 
-    deliverMessage(ctx: Context) {
+    async deliverMessage(ctx: Context) {
         if (ctx.inlineMessageId) {
-            // Inline queries now use real Photo messages!
             if (ctx.replyOptions?.imageURL) {
-                return this.updateMessageMedia({
+                let res = await this.updateMessageMedia({
                     inlineMessageId: ctx.inlineMessageId
                 }, {
                     url: ctx.replyOptions.imageURL,
@@ -302,16 +301,33 @@ export default class Telegram extends Platform {
                 }, {
                     parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
                 })
-            } else {
-                return this.updateMessageCaption({
-                    inlineMessageId: ctx.inlineMessageId
-                }, ctx.replyWith!.toString(), {
-                    parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
-                    replyMarkup: ctx.components.components[0]
-                        ? JSON.stringify({ inline_keyboard: ctx.components.components })
-                        : undefined
-                })
+                
+                if (!res) {
+                    const bypassedUrl = ctx.replyOptions.imageURL.includes('?')
+                        ? `${ctx.replyOptions.imageURL}&id=${Bun.randomUUIDv7()}`
+                        : `${ctx.replyOptions.imageURL}?id=${Bun.randomUUIDv7()}`
+                        
+                    res = await this.updateMessageMedia({
+                        inlineMessageId: ctx.inlineMessageId
+                    }, {
+                        url: bypassedUrl,
+                        caption: ctx.replyWith!.toString()
+                    }, {
+                        parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined
+                    })
+                }
+                
+                if (res) return res
             }
+
+            return this.updateMessageCaption({
+                inlineMessageId: ctx.inlineMessageId
+            }, ctx.replyWith!.toString(), {
+                parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
+                replyMarkup: ctx.components.components[0]
+                    ? JSON.stringify({ inline_keyboard: ctx.components.components })
+                    : undefined
+            })
         }
 
         const id = ctx.channel?.id || ctx.author.id
@@ -319,8 +335,7 @@ export default class Telegram extends Platform {
         const replyTo = ctx.message.replyingTo ? ctx.message.id : basedReply
 
         if (ctx.replyOptions?.sendImageAsPhoto && ctx.replyOptions.imageURL) {
-
-            return this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
+            let res = await this.sendPhoto(id, { url: ctx.replyOptions!.imageURL!, caption: ctx.replyWith!.toString() }, {
                 replyTo,
                 parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
                 replyMarkup: ctx.components.components[0]
@@ -328,6 +343,23 @@ export default class Telegram extends Platform {
                     : undefined,
                 showCaptionBelowMedia: true
             })
+            
+            if (!res) {
+                const bypassedUrl = ctx.replyOptions.imageURL.includes('?')
+                    ? `${ctx.replyOptions.imageURL}&id=${Bun.randomUUIDv7()}`
+                    : `${ctx.replyOptions.imageURL}?id=${Bun.randomUUIDv7()}`
+                    
+                res = await this.sendPhoto(id, { url: bypassedUrl, caption: ctx.replyWith!.toString() }, {
+                    replyTo,
+                    parseMode: ctx.replyMarkup === 'markdown' ? 'HTML' : undefined,
+                    replyMarkup: ctx.components.components[0]
+                        ? JSON.stringify({ inline_keyboard: ctx.components.components })
+                        : undefined,
+                    showCaptionBelowMedia: true
+                })
+            }
+            
+            if (res) return res
         }
 
         return this.sendMessage(id, ctx.replyWith!.toString(), {
