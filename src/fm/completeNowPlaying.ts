@@ -28,7 +28,7 @@ const getMatchingEntityRequestForUser = (
 ) => {
     switch (entity) {
         case 'artist':
-            return getArtistInfo(user, name)
+            return getArtistInfo(user, artist!)
         case 'album':
             return getAlbumInfo(user, artist!, name)
         case 'track':
