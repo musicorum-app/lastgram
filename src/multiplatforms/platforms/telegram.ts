@@ -8,8 +8,35 @@ import { EngineError } from '@/event/types/errors'
 import { commandRunner } from '@/commands'
 import { client } from '@/database'
 import { lt } from '@/translations'
+import { getNowPlaying } from '@/fm/completeNowPlaying'
 
 const API_URL = 'https://api.telegram.org/bot'
+
+const buildInlineResult = (id: string, title: string, description: string, caption: string, photo: string | undefined) => {
+    if (photo) {
+        return {
+            type: 'photo',
+            id,
+            photo_url: photo,
+            thumbnail_url: photo,
+            title,
+            description,
+            caption,
+            parse_mode: 'HTML'
+        }
+    } else {
+        return {
+            type: 'article',
+            id,
+            title,
+            description,
+            input_message_content: {
+                message_text: caption,
+                parse_mode: 'HTML'
+            }
+        }
+    }
+}
 
 export default class Telegram extends Platform {
     bot: User | undefined
@@ -94,16 +121,26 @@ export default class Telegram extends Platform {
             return
         }
 
-        let me: any = null
+        let trackMe: any = null
+        let albumMe: any = null
+        let artistMe: any = null
         try {
-            const { getRecentTracks } = await import('@/fm/epistolares')
-            const tracks = await getRecentTracks(dbUser.lastFmUsername, 1)
-            me = tracks?.[0]
+            const ctx = new MinimalContext(user, '') as any
+            ctx.setGuardData('registeredUserData', dbUser)
+            
+            const results = await Promise.all([
+                getNowPlaying(ctx, 'regular', 'track'),
+                getNowPlaying(ctx, 'regular', 'album'),
+                getNowPlaying(ctx, 'regular', 'artist')
+            ])
+            trackMe = results[0]
+            albumMe = results[1]
+            artistMe = results[2]
         } catch (e: any) {
             error('telegram.onInlineQuery', `error fetching tracks: ${e.stack}`)
         }
 
-        if (!me) {
+        if (!trackMe) {
             debug('telegram.onInlineQuery', `no recent tracks found for ${dbUser.lastFmUsername}, returning article`)
             const results = [{
                 type: 'article',
@@ -120,9 +157,9 @@ export default class Telegram extends Platform {
             return
         }
 
-        const trackPhoto = me.track.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Track'
-        const albumPhoto = me.album.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Album'
-        const artistPhoto = me.artist.cover?.defaultURL || 'https://placehold.co/300x300/333333/cccccc.png?text=No+Artist'
+        const trackPhoto = trackMe.imageURL
+        const albumPhoto = albumMe.imageURL
+        const artistPhoto = artistMe.imageURL
 
         const lang = dbUser.language || 'en'
         const userDisplayName = inlineQuery.from.first_name || inlineQuery.from.username || dbUser.lastFmUsername
@@ -142,12 +179,12 @@ export default class Telegram extends Platform {
         const trackCaptionRaw = lt(lang, 'commands:listening', {
             user: userDisplayName,
             artistCrown: '🧑‍🎤',
-            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
-            track: me.track.name,
-            artist: me.artist.name,
-            album: me.album.name,
-            playCount: me.track.userScrobbles?.playCount || 0,
-            emoji: me.track.userScrobbles?.loved ? dbUser.likedEmoji || '❤️' : '🎵',
+            isListening: trackMe.isNowPlaying ? 'isPlaying' : 'wasPlaying',
+            track: trackMe.name,
+            artist: trackMe.artist,
+            album: trackMe.album,
+            playCount: trackMe.playCount || 0,
+            emoji: trackMe.loved ? dbUser.likedEmoji || '❤️' : '🎵',
             tags: '',
             joinArrays: '\n'
         }).trim()
@@ -156,10 +193,10 @@ export default class Telegram extends Platform {
         const albumCaptionRaw = lt(lang, 'commands:album', {
             user: userDisplayName,
             artistCrown: '🧑‍🎤',
-            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
-            artist: me.artist.name,
-            album: me.album.name,
-            playCount: me.album.userScrobbles?.playCount || 0,
+            isListening: albumMe.isNowPlaying ? 'isPlaying' : 'wasPlaying',
+            artist: albumMe.artist,
+            album: albumMe.album,
+            playCount: albumMe.playCount || 0,
             tags: '',
             joinArrays: '\n'
         }).trim()
@@ -168,45 +205,18 @@ export default class Telegram extends Platform {
         const artistCaptionRaw = lt(lang, 'commands:artist', {
             user: userDisplayName,
             artistCrown: '🧑‍🎤',
-            isListening: me.nowPlaying ? 'isPlaying' : 'wasPlaying',
-            artist: me.artist.name,
-            playCount: me.artist.userScrobbles?.playCount || 0,
+            isListening: artistMe.isNowPlaying ? 'isPlaying' : 'wasPlaying',
+            artist: artistMe.artist,
+            playCount: artistMe.playCount || 0,
             tags: '',
             joinArrays: '\n'
         }).trim()
         const artistCaption = formatTelegramHTML(artistCaptionRaw)
 
         const results = [
-            {
-                type: 'photo',
-                id: 'listening',
-                photo_url: trackPhoto,
-                thumbnail_url: trackPhoto,
-                title: 'Current Track',
-                description: 'Share your now playing track',
-                caption: trackCaption,
-                parse_mode: 'HTML'
-            },
-            {
-                type: 'photo',
-                id: 'album',
-                photo_url: albumPhoto,
-                thumbnail_url: albumPhoto,
-                title: 'Current Album',
-                description: 'Share your now playing album',
-                caption: albumCaption,
-                parse_mode: 'HTML'
-            },
-            {
-                type: 'photo',
-                id: 'artist',
-                photo_url: artistPhoto,
-                thumbnail_url: artistPhoto,
-                title: 'Current Artist',
-                description: 'Share your now playing artist',
-                caption: artistCaption,
-                parse_mode: 'HTML'
-            }
+            buildInlineResult('listening', 'Current Track', 'Share your now playing track', trackCaption, trackPhoto),
+            buildInlineResult('album', 'Current Album', 'Share your now playing album', albumCaption, albumPhoto),
+            buildInlineResult('artist', 'Current Artist', 'Share your now playing artist', artistCaption, artistPhoto)
         ]
 
         debug('telegram.onInlineQuery', `answering inline query for ${inlineQuery.from.id}`)
