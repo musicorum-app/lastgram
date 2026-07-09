@@ -30,7 +30,7 @@ const getMatchingEntityRequestForUser = (
         case 'artist':
             return getArtistInfo(user, artist!)
         case 'album':
-            return getAlbumInfo(user, artist!, name)
+            return getAlbumInfo(user, artist!, album!)
         case 'track':
             return getTrackInfo(user, artist!, album!, name).then(a => a?.track)
     }
