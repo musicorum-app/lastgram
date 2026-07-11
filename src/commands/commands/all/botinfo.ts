@@ -12,7 +12,7 @@ export default async (ctx: Context) => {
         const v = s.split(' ')
         return v[v.length - 1]
     })
-    const uptimeInMinutes = Math.round(process.uptime() / 60)
+    const uptimeInHours = (process.uptime() / 3600).toFixed(1)
 
     ctx.components.newGroup((b) => {
         b.addButton({
@@ -29,7 +29,7 @@ export default async (ctx: Context) => {
         heapTotal: heapTotal.toFixed(2),
         heapUsed: heapUsed.toFixed(2),
         updates: totalTelegramMessages,
-        uptime: uptimeInMinutes
+        uptime: uptimeInHours
     })
 
     if (process.env.COMMIT_ID) {
