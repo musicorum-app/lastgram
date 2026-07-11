@@ -3,7 +3,7 @@ import { Context } from "@/multiplatforms/common/context"
 import { debug, error } from "@/logging/logging"
 import { getRecentTracks, RecentTrack, getAlbumInfo, getArtistInfo, getTrackInfo } from "./epistolares"
 import { EntityType } from "@/prisma/client"
-import { linkEntity, upsertEntityScrobble } from "@/database/operations"
+import { upsertEntityScrobble } from "@/database/operations"
 
 export type NowPlayingEntity = "artist" | "album" | "track";
 
@@ -75,11 +75,14 @@ export const getNowPlaying = async (
     entity: NowPlayingEntity
 ): Promise<NowPlayingData> => {
     let nowPlaying: NowPlayingData | null = null
+    let recentTrack: RecentTrack | null = null
+    let fmUsername: string
 
     if (usingCommandStyle === 'regular') {
         const me = await getRecentTracks(ctx.registeredUserData.lastFmUsername, 1).then(r => r?.[0])
         if (!me) throw new NoScrobblesError(ctx)
-        
+        recentTrack = me
+        fmUsername = ctx.registeredUserData.lastFmUsername
         nowPlaying = {
             name: me.track.name,
             id: findIdForEntity(me, entity),
@@ -94,6 +97,8 @@ export const getNowPlaying = async (
     } else if (usingCommandStyle === 'you') { // what I am listening to, then how much scrobbles the targeted user has
         const me = await getRecentTracks(ctx.registeredUserData.lastFmUsername, 1).then(r => r?.[0])
         if (!me) throw new NoScrobblesError(ctx)
+        recentTrack = me
+        fmUsername = ctx.registeredUserData.lastFmUsername
         const you = await getMatchingEntityRequestForUser(entity, ctx.targetedUserData!.lastFmUsername, me.track.name, me.artist.name, me.album?.name || '')
         nowPlaying = {
             name: me.track.name,
@@ -107,9 +112,11 @@ export const getNowPlaying = async (
             isNowPlaying: me.nowPlaying,
             imageURL: findCoverForEntity(me, entity)
         }
-    } else if (usingCommandStyle === 'me') { // what I am listening to, then how much scrobbles the targeted user has
-       const me = await getRecentTracks(ctx.targetedUserData!.lastFmUsername, 1).then(r => r?.[0])
-       if (!me) throw new NoScrobblesError(ctx)
+    } else { // what I am listening to, then how much scrobbles the targeted user has
+        const me = await getRecentTracks(ctx.targetedUserData!.lastFmUsername, 1).then(r => r?.[0])
+        if (!me) throw new NoScrobblesError(ctx)
+        recentTrack = me
+        fmUsername = ctx.registeredUserData!.lastFmUsername
         const you = await getMatchingEntityRequestForUser(entity, ctx.registeredUserData!.lastFmUsername, me.track.name, me.artist.name, me.album?.name || '')
         nowPlaying = {
             name: me.track.name,
@@ -129,34 +136,25 @@ export const getNowPlaying = async (
     nowPlaying.tags = nowPlaying.tags.map((a: string) =>
         a.toLowerCase().replaceAll("-", "_").replaceAll(" ", "_"),
     )
-    
+
     try {
-        const entityTypeMapping = {
-            'artist': EntityType.ARTIST,
-            'album': EntityType.ALBUM,
-            'track': EntityType.TRACK
-        }
-        const type = entityTypeMapping[entity]
-        const name = entity === 'artist' ? nowPlaying.artist : (entity === 'album' ? nowPlaying.album : nowPlaying.name)
-        const fmUsername = usingCommandStyle === 'me' 
-            ? ctx.targetedUserData!.lastFmUsername 
-            : ctx.registeredUserData!.lastFmUsername
-            
-        if (nowPlaying.playCount !== undefined) {
-            linkEntity(type, name!, nowPlaying.id, nowPlaying.imageURL || '')
-                .then(() => upsertEntityScrobble(
-                    fmUsername,
-                    type,
-                    nowPlaying.id,
-                    nowPlaying!.playCount || 0,
-                    name!,
-                    nowPlaying!.imageURL || ''
-                ))
-                .catch(e => error('fm.completeNowPlaying.cache', e.stack))
-        }
+        const rt = recentTrack!
+        const entitiesToCache: Array<[EntityType, string, string, number | undefined, string]> = [
+            [EntityType.ARTIST, rt.artist.id, rt.artist.name, rt.artist.userScrobbles?.playCount, rt.artist.cover?.defaultURL || ''],
+            [EntityType.ALBUM, rt.album.id, rt.album.name, rt.album.userScrobbles?.playCount, rt.album.cover?.defaultURL || ''],
+            [EntityType.TRACK, rt.track.id, rt.track.name, rt.track.userScrobbles?.playCount, rt.track.cover?.defaultURL || ''],
+        ]
+
+        Promise.all(
+            entitiesToCache
+                .filter(([, id, , playCount]) => id && playCount !== undefined)
+                .map(([type, externalId, name, playCount, coverUrl]) =>
+                    upsertEntityScrobble(fmUsername!, type, externalId, playCount!, name, coverUrl)
+                )
+        ).catch(e => error('fm.completeNowPlaying.cache', e.stack))
     } catch (e: any) {
         error('fm.completeNowPlaying.cacheOuter', e.stack)
     }
-    
+
     return nowPlaying
 }

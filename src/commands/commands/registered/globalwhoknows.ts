@@ -2,7 +2,7 @@ import { Context } from '@/multiplatforms/common/context'
 import { getRecentTracks, getArtistInfo } from '@/fm/epistolares'
 import { EntityType } from '@/prisma/client'
 import { linkEntity, upsertEntityCoverUrl } from '@/database/operations'
-import { getTopListenersForEntity } from '@/database/operations/entity-scrobbles'
+import { getTopListenersForEntity, getGlobalLastgramListeners } from '@/database/operations/entity-scrobbles'
 
 type Args = {
     artistName: string
@@ -35,8 +35,11 @@ export default async (ctx: Context, { artistName }: Args) => {
     await linkEntity(EntityType.ARTIST, resolvedArtistName!, artistId, imageURL || '')
     if (imageURL) await upsertEntityCoverUrl(EntityType.ARTIST, artistId, resolvedArtistName!, imageURL)
 
-    // get top listeners for this artist
-    const topListeners = await getTopListenersForEntity(EntityType.ARTIST, artistId, 10)
+    // get top listeners and total count in parallel
+    const [topListeners, totalListenerCount] = await Promise.all([
+        getTopListenersForEntity(EntityType.ARTIST, artistId),
+        getGlobalLastgramListeners(EntityType.ARTIST, artistId),
+    ])
 
     if (topListeners.length === 0) {
         return ctx.reply('commands:globalwhoknows.noListeners', { artistName: resolvedArtistName })
@@ -64,7 +67,7 @@ export default async (ctx: Context, { artistName }: Args) => {
 
     return ctx.reply('commands:globalwhoknows.list', {
         artistName: resolvedArtistName,
-        listenerCount: topListeners.length,
+        listenerCount: totalListenerCount,
         listenersText,
         joinArrays: '\n',
     }, imageURL ? { imageURL, sendImageAsPhoto: true } : undefined)
