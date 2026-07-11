@@ -1,5 +1,6 @@
 import { Context } from '@/multiplatforms/common/context'
 import client from 'prom-client'
+import { formatDistanceStrict } from 'date-fns'
 import { isDevelopment } from '@/utils'
 import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
 
@@ -12,7 +13,7 @@ export default async (ctx: Context) => {
         const v = s.split(' ')
         return v[v.length - 1]
     })
-    const uptimeInHours = (process.uptime() / 3600).toFixed(1)
+    const uptimeFormatted = formatDistanceStrict(0, process.uptime() * 1000)
 
     ctx.components.newGroup((b) => {
         b.addButton({
@@ -29,7 +30,7 @@ export default async (ctx: Context) => {
         heapTotal: heapTotal.toFixed(2),
         heapUsed: heapUsed.toFixed(2),
         updates: totalTelegramMessages,
-        uptime: uptimeInHours
+        uptime: uptimeFormatted
     })
 
     if (process.env.COMMIT_ID) {
