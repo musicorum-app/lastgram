@@ -67,7 +67,6 @@ export default class Telegram extends Platform {
                 await new Promise(resolve => setTimeout(resolve, 1000))
                 continue
             }
-            this.incrementMessages(response.length)
             for (const update of response) {
                 if (update.update_id >= (offset || 0)) {
                     offset = update.update_id + 1
@@ -78,6 +77,7 @@ export default class Telegram extends Platform {
     }
 
     async processUpdate(update: Record<string, any>) {
+        this.incrementMessages(1)
         if (update.inline_query) {
             this.handleInlineQuery(update.inline_query).catch(e => error('telegram.processUpdate', e.stack))
         }
