@@ -8,7 +8,7 @@ import { EngineError } from '@/event/types/errors'
 import { commandRunner } from '@/commands'
 import { client } from '@/database'
 import { lt } from '@/translations'
-import { getNowPlaying } from '@/fm/completeNowPlaying'
+import { getRecentTracks } from '@/fm/epistolares'
 
 const API_URL = 'https://api.telegram.org/bot'
 
@@ -125,17 +125,31 @@ export default class Telegram extends Platform {
         let albumMe: any = null
         let artistMe: any = null
         try {
-            const ctx = new MinimalContext(user, '') as any
-            ctx.setGuardData('registeredUserData', dbUser)
-            
-            const results = await Promise.all([
-                getNowPlaying(ctx, 'regular', 'track'),
-                getNowPlaying(ctx, 'regular', 'album'),
-                getNowPlaying(ctx, 'regular', 'artist')
-            ])
-            trackMe = results[0]
-            albumMe = results[1]
-            artistMe = results[2]
+            const me = await getRecentTracks(dbUser.lastFmUsername, 1).then(r => r?.[0])
+            if (me) {
+                trackMe = {
+                    name: me.track.name,
+                    artist: me.artist.name,
+                    album: me.album?.name || '',
+                    playCount: me.track.userScrobbles?.playCount || 0,
+                    loved: me.track.userScrobbles?.loved || false,
+                    isNowPlaying: me.nowPlaying,
+                    imageURL: me.track?.cover?.defaultURL || me.album?.cover?.defaultURL || me.artist?.cover?.defaultURL,
+                }
+                albumMe = {
+                    artist: me.artist.name,
+                    album: me.album?.name || '',
+                    playCount: me.album?.userScrobbles?.playCount || 0,
+                    isNowPlaying: me.nowPlaying,
+                    imageURL: me.album?.cover?.defaultURL || me.artist?.cover?.defaultURL,
+                }
+                artistMe = {
+                    artist: me.artist.name,
+                    playCount: me.artist.userScrobbles?.playCount || 0,
+                    isNowPlaying: me.nowPlaying,
+                    imageURL: me.artist?.cover?.defaultURL,
+                }
+            }
         } catch (e: any) {
             error('telegram.onInlineQuery', `error fetching tracks: ${e.stack}`)
         }
@@ -157,9 +171,9 @@ export default class Telegram extends Platform {
             return
         }
 
-        const trackPhoto = trackMe.imageURL
-        const albumPhoto = albumMe.imageURL
-        const artistPhoto = artistMe.imageURL
+        const trackPhoto = trackMe.imageURL?.replaceAll('300x300', '1000x1000')
+        const albumPhoto = albumMe.imageURL?.replaceAll('300x300', '1000x1000')
+        const artistPhoto = artistMe.imageURL?.replaceAll('300x300', '1000x1000')
 
         const lang = dbUser.language || 'en'
         const userDisplayName = inlineQuery.from.first_name || inlineQuery.from.username || dbUser.lastFmUsername
