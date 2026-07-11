@@ -1,0 +1,16 @@
+{
+  "common": {
+    "lnTitle_isPlaying": "**{{name}}** מאזין עכשיו ל:",
+    "lnTitle_wasPlaying": "**{{name}}** האזין ל:",
+    "scrobbles_one": "\n📊 *{{count}} סקרובל*",
+    "scrobbles_other": "\n📊 *{{count}} סקרובלים*"
+  },
+  "listening": [
+    "$t(commands:common.lnTitle, {\"name\": \"{{- user}}\", \"context\": \"{{isListening}}\"})",
+    "{{emoji}} **{{track}}**",
+    "💽 {{album}}",
+    "{{artistCrown}} {{artist}}",
+    "$t(commands:common.scrobbles, {\"count\": {{playCount}}})",
+    "{{-tags}}"
+  ]
+}
