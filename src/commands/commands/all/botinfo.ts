@@ -1,5 +1,5 @@
 import { Context } from '@/multiplatforms/common/context'
-import client from 'prom-client'
+import { register } from '@/logging/prometheus'
 import { formatDistanceStrict } from 'date-fns'
 import { isDevelopment } from '@/utils'
 import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
@@ -9,10 +9,10 @@ export default async (ctx: Context) => {
     const rss = processMemory.rss / 1024 / 1024
     const heapTotal = processMemory.heapTotal / 1024 / 1024
     const heapUsed = processMemory.heapUsed / 1024 / 1024
-    const totalTelegramMessages = await client.register.getSingleMetricAsString(isDevelopment ? 'lg_dev_platform_telegram_total_handled_messages' : 'lg_platform_telegram_total_handled_messages').then((s) => {
-        const v = s.split(' ')
-        return v[v.length - 1]
-    })
+    const metricName = isDevelopment ? 'lg_dev_platform_telegram_total_handled_messages' : 'lg_platform_telegram_total_handled_messages'
+    const metric = await register.getSingleMetric(metricName)
+    const metricData = await metric?.get()
+    const totalTelegramMessages = metricData?.values?.[0]?.value ?? 0
     const uptimeFormatted = formatDistanceStrict(0, process.uptime() * 1000)
 
     ctx.components.newGroup((b) => {
