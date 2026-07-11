@@ -1,10 +1,16 @@
 import { Context, MinimalContext } from '@/multiplatforms/common/context'
 import { finishAuth, prepareForAuth } from '@/fm/connect'
 import { CommandButtonComponentType } from '@/multiplatforms/common/components/button'
-import { setUserLastFmUsername } from '@/database'
+import { setUserLastFmUsername, updateUserByID } from '@/database'
+import { fixLanguageFormat } from '../../helpers.js'
 
 export default async (ctx: Context) => {
-    const linkURL = await prepareForAuth(ctx.guardData.registeredUserData!.id)
+    const user = await ctx.getUserData(ctx.author, 'registeredUserData')
+    if (user?.sessionKey) {
+        return ctx.reply('commands:register.linked')
+    }
+
+    const linkURL = await prepareForAuth(ctx.userPlatformId())
 
     ctx.components.addButton({
         name: 'commands:linkfm.buttons.link',
@@ -35,23 +41,36 @@ export const cancelLinking = async (ctx: MinimalContext) => {
 }
 
 export const doneLinking = async (ctx: MinimalContext) => {
-    const data = await finishAuth(ctx.guardData.registeredUserData!.id)
-    if (!data) {
+    const session = await finishAuth(ctx.userPlatformId())
+    if (!session) {
         ctx.reply('commands:linkfm.linkingError')
         return
     }
 
-    if (data.username.toLowerCase() !== ctx.guardData.registeredUserData!.lastFmUsername.toLowerCase()) {
-        await setUserLastFmUsername(ctx.guardData.registeredUserData!.id, data.username)
+    const createdUser = await ctx.createUserData(session.username, fixLanguageFormat(ctx.author.languageCode))
+    await updateUserByID(createdUser.id, {
+        sessionKey: session.key,
+        lastFmUser: {
+            connectOrCreate: {
+                where: { fmUsername: session.username.toLowerCase() },
+                create: { fmUsername: session.username.toLowerCase() }
+            }
+        }
+    })
+
+    const previousFmUsername = ctx.guardData.registeredUserData?.lastFmUsername
+
+    if (previousFmUsername && session.username.toLowerCase() !== previousFmUsername.toLowerCase()) {
+        await setUserLastFmUsername(createdUser.id, session.username)
         ctx.reply('commands:linkfm.successWithUsername', {
-            username: data.username
+            username: session.username
         })
         return
     }
 
-    ctx.reply('commands:linkfm.success', { username: data.username })
+    ctx.reply('commands:linkfm.success', { username: session.username })
 }
 export const info = {
     description: "Link your Last.fm account",
-    aliases: ['linklast']
+    aliases: ['linklast', 'register', 'reg']
 }
