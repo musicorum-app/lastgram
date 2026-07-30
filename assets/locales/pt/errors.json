@@ -22,13 +22,16 @@
     "notLinked": "Desculpe, este comando só está disponível para usuários que vincularam sua conta last.fm. Execute `/linkfm` para vincular sua conta.",
     "onlyDMs": "Desculpe, este comando só pode ser usado em mensagens privadas.",
     "developer": "Desculpe, este comando só está disponível para a equipe de desenvolvimento do lastgram.",
-    "noDMs": "Desculpe, mas este comando não pode ser usado em mensagens privadas."
+    "noDMs": "Desculpe, mas este comando não pode ser usado em mensagens privadas.",
+    "crownBanned": "Desculpe, você foi banido de usar comandos de coroa. $t(errors:common.consultSupport)"
   },
   "command": {
     "missingArgument": "Argumentos faltando.\nEste comando deve ser usado assim: `{{- usage}}`",
     "generic": "Desculpe, ocorreu um erro desconhecido ao processar seu comando. $t(errors:common.consultSupport)",
     "invalidArgument": "Argumento inválido.\nEste comando deve ser usado assim: `{{- usage}}`",
-    "collage": "Desculpe, ocorreu um erro desconhecido ao processar sua colagem. $t(errors:common.tryAgain)"
+    "collage": "Desculpe, ocorreu um erro desconhecido ao processar sua colagem. $t(errors:common.tryAgain)",
+    "noScrobblesSelf": "Desculpe, você ainda não deu scrobble em nada.",
+    "noScrobblesTarget": "Desculpe, o usuário que você indicou ainda não deu scrobble em nada."
   },
   "lastfm": {
     "genericError": "Desculpe, ocorreu um erro desconhecido com o last.fm. $t(errors:common.tryAgain)",

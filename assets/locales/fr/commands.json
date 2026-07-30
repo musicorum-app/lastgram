@@ -20,7 +20,7 @@
     "notLinked": "Vous n'avez pas de compte last.fm lié."
   },
   "botinfo": {
-    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Utilisation mémoire :** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** messages de Telegram depuis le dernier redémarrage",
+    "data": "lastgram {{mode}}\n💻 **Utilisation mémoire :** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** messages de Telegram depuis le dernier redémarrage",
     "commit": "\n\n📌 **Version:** `{{commitId}}`\n💬 {{commitMsg}}",
     "buttons": {
       "github": "Code source sur GitHub"
@@ -85,6 +85,7 @@
     "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} vols)",
     "list": [
       "Couronnes de **{{displayName}}** sur **{{groupName}}**\n",
+      "🎖️ **Total des couronnes :** {{crownCount}}\n",
       "{{- crownsText}}"
     ],
     "noCrowns": "Vous n'avez pas encore de couronnes dans ce groupe !"
@@ -112,5 +113,135 @@
   },
   "unlinkfm": {
     "done": "Votre compte last.fm a été délié avec succès."
+  },
+  "last": [
+    "{{flagEmoji}} Données pour **{{fullName}}**",
+    "🎧 **{{scrobbles}}** scrobbles ({{scrobbleRate}} par jour)",
+    "📆 Compte créé **{{registrationDistance}}** ({{registrationDate}})",
+    "\n📊 Les plus écoutés",
+    "🧑‍🎤 **{{topArtist}}** ({{topArtistPlays}} écoutes)",
+    "💽 **{{topAlbum}}** de {{topAlbumArtist}} ({{topAlbumPlays}} écoutes)",
+    "🎵 **{{topTrack}}** de {{topTrackArtist}} ({{topTrackPlays}} écoutes)",
+    "\n🗒️ Derniers titres scrobblés",
+    "{{- trackList}}"
+  ],
+  "globalwhoknows": {
+    "listener": "{{position}}. **{{name}}** - *{{playCount}} scrobbles*",
+    "list": [
+      "🌍 **Meilleurs auditeurs mondiaux pour {{artistName}}**",
+      "📊 **Total d'auditeurs suivis :** {{listenerCount}}\n",
+      "{{- listenersText}}"
+    ],
+    "noListeners": "🤔 Personne n'a encore scrobblé **{{artistName}}** !",
+    "noScrobbles": "🤔 Vous ne m'avez donné aucun nom d'artiste et vous n'écoutez rien en ce moment. Que voulez-vous que je vérifie ?"
+  },
+  "crownsinfo": [
+    "👑 **Couronnes dans ce groupe**",
+    "Total de couronnes obtenues : **{{total}}**\n",
+    "🏆 **Meilleurs détenteurs de couronnes**",
+    "{{- topUsers}}\n",
+    "⚔️ **Couronnes les plus disputées**",
+    "{{- switched}}\n",
+    "📈 **Couronnes les plus écoutées**",
+    "{{- played}}"
+  ],
+  "crownworth": "👑 **Valeur des couronnes de {{user}}** : {{worth}} écoutes au total.",
+  "unclaimed": {
+    "list": [
+      "🔍 **Top des artistes non réclamés**",
+      "{{- list}}"
+    ],
+    "none": "Ouah ! Chaque artiste scrobblé dans ce groupe a déjà une couronne réclamée."
+  },
+  "eval": [
+    "**Code** : <pre><code class=\"language-javascript\">{{code}}</code></pre>",
+    "**Sortie** : <pre><code class=\"language-javascript\">{{output}}</code></pre>",
+    "⏱️ **Temps écoulé** : {{time}}ms"
+  ],
+  "emoji": {
+    "invalid": "🤔 Ça ne ressemble pas à un emoji valide. $t(errors:common.checkSpelling)",
+    "done": "{{emoji}} C'est fait !"
+  },
+  "peak": [
+    "📊 Jour de pic pour **{{displayName}}**",
+    "🔥 **{{peakDate}}** - {{totalScrobbles}} scrobbles ({{listeningHours}}h en une seule journée) {{-totalSirenEmoji}}",
+    "📅 Période : {{period}}",
+    "\n🎵 Titres les plus écoutés ce jour-là :",
+    "{{- topTracks}}",
+    "\n🧑‍🎤 Artistes les plus écoutés ce jour-là :",
+    "{{- topArtists}}",
+    "\n💽 Albums les plus écoutés ce jour-là :",
+    "{{- topAlbums}}{{-wandaVisionWarning}}{{-moreDataNote}}"
+  ],
+  "peak.noScrobbles": "🤔 Aucun scrobble pendant {{period}}.",
+  "peak.wandaVision": "\n\n🚨 Cet utilisateur ne serait pas dans WandaVision ? Il a scrobblé {{hours}} heures de plus que ce qui est physiquement possible en une journée.",
+  "peak.moreData": "\n\n*(Certaines données manquent car vous avez trop de scrobbles)*",
+  "lastgramban": {
+    "success": "🔨 L'utilisateur **{{target}}** a été banni globalement de lastgram."
+  },
+  "lastgramunban": {
+    "success": "✅ L'utilisateur **{{target}}** a été débanni et peut de nouveau utiliser lastgram."
+  },
+  "crownban": {
+    "success": "🚫 L'utilisateur **{{target}}** a été banni des commandes de couronne.",
+    "clearCrowns": "Retirer toutes les couronnes ?",
+    "cleared": "🗑️ Toutes les couronnes de l'utilisateur avec l'ID **{{target}}** ont été retirées et réattribuées."
+  },
+  "crownunban": {
+    "success": "✅ L'utilisateur **{{target}}** n'est plus banni des commandes de couronne."
+  },
+  "artistinfo": [
+    "🧑‍🎤 **{{name}}**",
+    "{{- tags}}",
+    "🎎 Similaire à **{{- similar}}**",
+    "",
+    "🌐 **{{globalListeners}}** auditeurs (**{{globalScrobbles}}** scrobbles au total)",
+    "🤖 **{{lastgramListeners}}** utilisateurs de lastgram ont écouté cet artiste",
+    "*(vous avez {{userScrobbles}} scrobbles pour cet artiste)*",
+    "",
+    "{{bio}}"
+  ],
+  "albuminfo": [
+    "💽 **{{name}}** de **{{artist}}**",
+    "{{- tags}}",
+    "💿 **{{tracksCount}}** titres",
+    "",
+    "🌐 **{{globalListeners}}** auditeurs (**{{globalScrobbles}}** scrobbles au total)",
+    "🤖 **{{lastgramListeners}}** utilisateurs de lastgram ont écouté cet album",
+    "*(vous avez {{userScrobbles}} scrobbles pour cet album)*"
+  ],
+  "trackinfo": [
+    "{{trackEmoji}} **{{name}}** de **{{artist}}**",
+    "{{- album}}",
+    "{{- tags}}",
+    "",
+    "🌐 **{{globalListeners}}** auditeurs (**{{globalScrobbles}}** scrobbles au total)",
+    "🤖 **{{lastgramListeners}}** utilisateurs de lastgram ont écouté ce titre",
+    "*(vous avez {{userScrobbles}} scrobbles pour ce titre)*"
+  ],
+  "compat": {
+    "message": [
+      "{{tierEmoji}} **{{userA}}** et **{{userB}}** ont une compatibilité de **{{percentage}}%** !",
+      "**Niveau** : {{tier}}",
+      "",
+      "{{- commonText}}"
+    ],
+    "tiers": {
+      "soulmates": "Âmes sœurs",
+      "highSchoolSweethearts": "Amoureux de lycée",
+      "marriedCouple": "Couple marié",
+      "closeFriends": "Amis proches",
+      "friends": "Amis",
+      "schoolAcquaintances": "Connaissances de classe",
+      "yourEx": "Votre ex",
+      "notReally": "Hmm... pas vraiment.",
+      "absolutelyNot": "Absolument pas !"
+    },
+    "artistLine": "- **{{name}}** (vous : {{playsA}}, eux : {{playsB}})",
+    "sharedArtists": [
+      "Vous écoutez tous les deux :",
+      "{{- artists}}"
+    ],
+    "noSharedArtists": "Vous n'avez aucun artiste en commun dans vos tops."
   }
 }

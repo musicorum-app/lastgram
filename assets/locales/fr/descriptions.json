@@ -18,5 +18,13 @@
   "mealbum": "Montre combien de fois vous avez écouté un album que quelqu'un écoute",
   "meartist": "Montre combien de fois vous avez écouté un artiste que quelqu'un écoute",
   "metrack": "Montre combien de fois vous avez écouté une piste que quelqu'un écoute",
-  "start": "Commencer à utiliser le bot"
+  "start": "Commencer à utiliser le bot",
+  "crowns": "Affiche le classement des couronnes dans le groupe actuel",
+  "eval": "chut",
+  "importcsv": "chut",
+  "whoknowsartist": "Tente de voler la couronne de l'artiste que vous écoutez et affiche le classement",
+  "globalwhoknows": "Affiche les meilleurs auditeurs mondiaux d'un artiste",
+  "emoji": "Change l'emoji qui apparaît quand vous aimez un titre",
+  "last": "Affiche les informations de profil Last.fm et les titres récents",
+  "peak": "Affiche le jour avec le plus de scrobbles pour un artiste/album/titre"
 }

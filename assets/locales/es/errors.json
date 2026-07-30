@@ -22,13 +22,16 @@
     "notLinked": "Lo siento, este comando solo está disponible para usuarios que han vinculado su cuenta de last.fm. Ejecuta `/linkfm` para vincular tu cuenta.",
     "onlyDMs": "Lo siento, este comando solo puede usarse en mensajes privados.",
     "developer": "Lo siento, este comando solo está disponible para el equipo de desarrollo de lastgram.",
-    "noDMs": "Lo siento, pero este comando no puede usarse en mensajes privados."
+    "noDMs": "Lo siento, pero este comando no puede usarse en mensajes privados.",
+    "crownBanned": "Lo siento, has sido baneado de usar comandos de corona. $t(errors:common.consultSupport)"
   },
   "command": {
     "missingArgument": "Faltan argumentos.\nEste comando debe usarse así: `{{- usage}}`",
     "generic": "Lo siento, ocurrió un error desconocido al procesar tu comando. $t(errors:common.consultSupport)",
     "invalidArgument": "Argumento inválido.\nEste comando debe usarse así: `{{- usage}}`",
-    "collage": "Lo siento, ocurrió un error desconocido al procesar tu collage. $t(errors:common.tryAgain)"
+    "collage": "Lo siento, ocurrió un error desconocido al procesar tu collage. $t(errors:common.tryAgain)",
+    "noScrobblesSelf": "Lo siento, todavía no has escuchado nada.",
+    "noScrobblesTarget": "Lo siento, el usuario que indicaste todavía no ha escuchado nada."
   },
   "lastfm": {
     "genericError": "Lo siento, ocurrió un error desconocido con last.fm. $t(errors:common.tryAgain)",

@@ -20,7 +20,7 @@
     "notLinked": "Você não tem uma conta last.fm vinculada."
   },
   "botinfo": {
-    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Uso de memória:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** mensagens do Telegram desde o último restart",
+    "data": "lastgram {{mode}}\n💻 **Uso de memória:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** mensagens do Telegram desde o último restart",
     "commit": "\n\n📌 **Versão:** `{{commitId}}`\n💬 {{commitMsg}}",
     "buttons": {
       "github": "Código fonte no GitHub"
@@ -86,6 +86,7 @@
     "noCrowns": "Você ainda não tem nenhuma coroa neste grupo!",
     "list": [
       "Coroas de **{{displayName}}** em **{{groupName}}**\n",
+      "🎖️ **Total de coroas:** {{crownCount}}\n",
       "{{- crownsText}}"
     ]
   },
@@ -116,5 +117,131 @@
   "emoji": {
     "invalid": "🤔 Hm, não reconheço esse emoji. $t(errors:common.tryAgain)",
     "done": "{{emoji}} Pronto!"
+  },
+  "last": [
+    "{{flagEmoji}} Dados de **{{fullName}}**",
+    "🎧 **{{scrobbles}}** scrobbles ({{scrobbleRate}} por dia)",
+    "📆 Conta criada **{{registrationDistance}}** ({{registrationDate}})",
+    "\n📊 Mais ouvidos",
+    "🧑‍🎤 **{{topArtist}}** ({{topArtistPlays}} execuções)",
+    "💽 **{{topAlbum}}** de {{topAlbumArtist}} ({{topAlbumPlays}} execuções)",
+    "🎵 **{{topTrack}}** de {{topTrackArtist}} ({{topTrackPlays}} execuções)",
+    "\n🗒️ Últimas faixas scrobbladas",
+    "{{- trackList}}"
+  ],
+  "globalwhoknows": {
+    "listener": "{{position}}. **{{name}}** - *{{playCount}} scrobbles*",
+    "list": [
+      "🌍 **Maiores ouvintes globais de {{artistName}}**",
+      "📊 **Total de ouvintes rastreados:** {{listenerCount}}\n",
+      "{{- listenersText}}"
+    ],
+    "noListeners": "🤔 Ainda ninguém deu scrobble em **{{artistName}}**!",
+    "noScrobbles": "🤔 Você não me deu um nome de artista e não está ouvindo nada agora. O que você quer que eu verifique?"
+  },
+  "crownsinfo": [
+    "👑 **Coroas neste grupo**",
+    "Total de coroas conquistadas: **{{total}}**\n",
+    "🏆 **Top Detentores de Coroas**",
+    "{{- topUsers}}\n",
+    "⚔️ **Coroas Mais Disputadas**",
+    "{{- switched}}\n",
+    "📈 **Coroas Mais Ouvidas**",
+    "{{- played}}"
+  ],
+  "crownworth": "👑 **Valor das coroas de {{user}}**: {{worth}} execuções no total.",
+  "unclaimed": {
+    "list": [
+      "🔍 **Top Artistas Não Reivindicados**",
+      "{{- list}}"
+    ],
+    "none": "Uau! Todo artista scrobblado neste grupo já tem uma coroa reivindicada."
+  },
+  "eval": [
+    "**Código**: <pre><code class=\"language-javascript\">{{code}}</code></pre>",
+    "**Saída**: <pre><code class=\"language-javascript\">{{output}}</code></pre>",
+    "⏱️ **Tempo gasto**: {{time}}ms"
+  ],
+  "peak": [
+    "📊 Dia de pico para **{{displayName}}**",
+    "🔥 **{{peakDate}}** - {{totalScrobbles}} scrobbles ({{listeningHours}}h em um único dia) {{-totalSirenEmoji}}",
+    "📅 Período: {{period}}",
+    "\n🎵 Faixas mais ouvidas nesse dia:",
+    "{{- topTracks}}",
+    "\n🧑‍🎤 Artistas mais ouvidos nesse dia:",
+    "{{- topArtists}}",
+    "\n💽 Álbuns mais ouvidos nesse dia:",
+    "{{- topAlbums}}{{-wandaVisionWarning}}{{-moreDataNote}}"
+  ],
+  "peak.noScrobbles": "🤔 Nenhum scrobble no {{period}}.",
+  "peak.wandaVision": "\n\n🚨 Será que esse usuário está em WandaVision? Ele scrobblou {{hours}} horas a mais do que é fisicamente possível em um dia.",
+  "peak.moreData": "\n\n*(Faltam alguns dados porque você tem scrobbles demais)*",
+  "lastgramban": {
+    "success": "🔨 O usuário **{{target}}** foi banido globalmente do lastgram."
+  },
+  "lastgramunban": {
+    "success": "✅ O usuário **{{target}}** foi desbanido e pode usar o lastgram novamente."
+  },
+  "crownban": {
+    "success": "🚫 O usuário **{{target}}** foi banido de usar comandos de coroa.",
+    "clearCrowns": "Limpar todas as coroas?",
+    "cleared": "🗑️ Todas as coroas do usuário com ID **{{target}}** foram removidas e reivindicadas por outros."
+  },
+  "crownunban": {
+    "success": "✅ O usuário **{{target}}** não está mais banido de comandos de coroa."
+  },
+  "artistinfo": [
+    "🧑‍🎤 **{{name}}**",
+    "{{- tags}}",
+    "🎎 Parecido com **{{- similar}}**",
+    "",
+    "🌐 **{{globalListeners}}** ouvintes (**{{globalScrobbles}}** scrobbles no total)",
+    "🤖 **{{lastgramListeners}}** usuários do lastgram já ouviram esse artista",
+    "*(você tem {{userScrobbles}} scrobbles desse artista)*",
+    "",
+    "{{bio}}"
+  ],
+  "albuminfo": [
+    "💽 **{{name}}** de **{{artist}}**",
+    "{{- tags}}",
+    "💿 **{{tracksCount}}** faixas",
+    "",
+    "🌐 **{{globalListeners}}** ouvintes (**{{globalScrobbles}}** scrobbles no total)",
+    "🤖 **{{lastgramListeners}}** usuários do lastgram já ouviram esse álbum",
+    "*(você tem {{userScrobbles}} scrobbles desse álbum)*"
+  ],
+  "trackinfo": [
+    "{{trackEmoji}} **{{name}}** de **{{artist}}**",
+    "{{- album}}",
+    "{{- tags}}",
+    "",
+    "🌐 **{{globalListeners}}** ouvintes (**{{globalScrobbles}}** scrobbles no total)",
+    "🤖 **{{lastgramListeners}}** usuários do lastgram já ouviram essa faixa",
+    "*(você tem {{userScrobbles}} scrobbles dessa faixa)*"
+  ],
+  "compat": {
+    "message": [
+      "{{tierEmoji}} **{{userA}}** e **{{userB}}** têm uma compatibilidade de **{{percentage}}%**!",
+      "**Nível**: {{tier}}",
+      "",
+      "{{- commonText}}"
+    ],
+    "tiers": {
+      "soulmates": "Almas Gêmeas",
+      "highSchoolSweethearts": "Namoradinhos de Colégio",
+      "marriedCouple": "Casal Casado",
+      "closeFriends": "Amigos Próximos",
+      "friends": "Amigos",
+      "schoolAcquaintances": "Conhecidos de Escola",
+      "yourEx": "Seu Ex",
+      "notReally": "Hmm... não muito.",
+      "absolutelyNot": "Com certeza não!"
+    },
+    "artistLine": "- **{{name}}** (você: {{playsA}}, eles: {{playsB}})",
+    "sharedArtists": [
+      "Vocês dois ouvem:",
+      "{{- artists}}"
+    ],
+    "noSharedArtists": "Vocês não têm artistas em comum no top."
   }
 }

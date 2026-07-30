@@ -46,6 +46,7 @@
     "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} скробблов* ({{count}} захватов)",
     "list": [
       "Короны **{{displayName}}** в **{{groupName}}**\n",
+      "🎖️ **Всего корон:** {{crownCount}}\n",
       "{{- crownsText}}"
     ],
     "noCrowns": "У вас пока нет корон в этой группе!"
@@ -72,7 +73,7 @@
     "noScrobbles": "🤔 Вы не указали имя исполнителя и ничего не слушаете сейчас. Что вы хотите проверить?"
   },
   "botinfo": {
-    "data": "lastgram {{mode}}\n\uD83D\uDCBB **Использование памяти:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n\uD83D\uDCE9 **{{updates}}** сообщений из Telegram с последнего перезапуска",
+    "data": "lastgram {{mode}}\n💻 **Использование памяти:** {{rss}} MB (RSS), {{heapTotal}} MB (heap total), {{heapUsed}} MB (heap used)\n📩 **{{updates}}** сообщений из Telegram с последнего перезапуска",
     "commit": "\n\n📌 **Версия:** `{{commitId}}`\n💬 {{commitMsg}}",
     "buttons": {
       "github": "Исходный код на GitHub"
@@ -112,5 +113,135 @@
       "album": "Альбом",
       "track": "Трек"
     }
+  },
+  "last": [
+    "{{flagEmoji}} Данные для **{{fullName}}**",
+    "🎧 **{{scrobbles}}** скробблов ({{scrobbleRate}} в день)",
+    "📆 Аккаунт создан **{{registrationDistance}}** ({{registrationDate}})",
+    "\n📊 Больше всего слушает",
+    "🧑‍🎤 **{{topArtist}}** ({{topArtistPlays}} прослушиваний)",
+    "💽 **{{topAlbum}}** — {{topAlbumArtist}} ({{topAlbumPlays}} прослушиваний)",
+    "🎵 **{{topTrack}}** — {{topTrackArtist}} ({{topTrackPlays}} прослушиваний)",
+    "\n🗒️ Последние скробблы",
+    "{{- trackList}}"
+  ],
+  "globalwhoknows": {
+    "listener": "{{position}}. **{{name}}** - *{{playCount}} скробблов*",
+    "list": [
+      "🌍 **Лучшие слушатели исполнителя {{artistName}} по всему миру**",
+      "📊 **Всего отслеженных слушателей:** {{listenerCount}}\n",
+      "{{- listenersText}}"
+    ],
+    "noListeners": "🤔 Пока никто не скробблил **{{artistName}}**!",
+    "noScrobbles": "🤔 Вы не указали имя исполнителя и сейчас ничего не слушаете. Что мне проверить?"
+  },
+  "crownsinfo": [
+    "👑 **Короны в этой группе**",
+    "Всего получено корон: **{{total}}**\n",
+    "🏆 **Топ по коронам**",
+    "{{- topUsers}}\n",
+    "⚔️ **Самые оспариваемые короны**",
+    "{{- switched}}\n",
+    "📈 **Самые прослушиваемые короны**",
+    "{{- played}}"
+  ],
+  "crownworth": "👑 **Ценность корон {{user}}**: {{worth}} прослушиваний всего.",
+  "unclaimed": {
+    "list": [
+      "🔍 **Топ незанятых исполнителей**",
+      "{{- list}}"
+    ],
+    "none": "Ого! Корона уже получена для каждого исполнителя, которого скробблили в этой группе."
+  },
+  "eval": [
+    "**Код**: <pre><code class=\"language-javascript\">{{code}}</code></pre>",
+    "**Вывод**: <pre><code class=\"language-javascript\">{{output}}</code></pre>",
+    "⏱️ **Затрачено времени**: {{time}}мс"
+  ],
+  "emoji": {
+    "invalid": "🤔 Это не похоже на действительный эмодзи. $t(errors:common.checkSpelling)",
+    "done": "{{emoji}} Готово!"
+  },
+  "peak": [
+    "📊 Пиковый день для **{{displayName}}**",
+    "🔥 **{{peakDate}}** - {{totalScrobbles}} скробблов ({{listeningHours}}ч за один день) {{-totalSirenEmoji}}",
+    "📅 Период: {{period}}",
+    "\n🎵 Топ треков в этот день:",
+    "{{- topTracks}}",
+    "\n🧑‍🎤 Топ исполнителей в этот день:",
+    "{{- topArtists}}",
+    "\n💽 Топ альбомов в этот день:",
+    "{{- topAlbums}}{{-wandaVisionWarning}}{{-moreDataNote}}"
+  ],
+  "peak.noScrobbles": "🤔 Нет скробблов за {{period}}.",
+  "peak.wandaVision": "\n\n🚨 Этот пользователь случайно не смотрит ВандаВижн? Он наскробблил на {{hours}} часов больше, чем физически возможно за день.",
+  "peak.moreData": "\n\n*(Часть данных отсутствует, потому что у вас слишком много скробблов)*",
+  "lastgramban": {
+    "success": "🔨 Пользователь **{{target}}** был глобально заблокирован в lastgram."
+  },
+  "lastgramunban": {
+    "success": "✅ Пользователь **{{target}}** разблокирован и снова может пользоваться lastgram."
+  },
+  "crownban": {
+    "success": "🚫 Пользователю **{{target}}** запрещено использовать команды корон.",
+    "clearCrowns": "Снять все короны?",
+    "cleared": "🗑️ Все короны пользователя с ID **{{target}}** были сняты и переданы дальше."
+  },
+  "crownunban": {
+    "success": "✅ Пользователь **{{target}}** больше не заблокирован для команд корон."
+  },
+  "artistinfo": [
+    "🧑‍🎤 **{{name}}**",
+    "{{- tags}}",
+    "🎎 Похож на **{{- similar}}**",
+    "",
+    "🌐 **{{globalListeners}}** слушателей (**{{globalScrobbles}}** скробблов всего)",
+    "🤖 **{{lastgramListeners}}** пользователей lastgram слушали этого исполнителя",
+    "*(у вас {{userScrobbles}} скробблов этого исполнителя)*",
+    "",
+    "{{bio}}"
+  ],
+  "albuminfo": [
+    "💽 **{{name}}** — {{artist}}",
+    "{{- tags}}",
+    "💿 **{{tracksCount}}** треков",
+    "",
+    "🌐 **{{globalListeners}}** слушателей (**{{globalScrobbles}}** скробблов всего)",
+    "🤖 **{{lastgramListeners}}** пользователей lastgram слушали этот альбом",
+    "*(у вас {{userScrobbles}} скробблов этого альбома)*"
+  ],
+  "trackinfo": [
+    "{{trackEmoji}} **{{name}}** — {{artist}}",
+    "{{- album}}",
+    "{{- tags}}",
+    "",
+    "🌐 **{{globalListeners}}** слушателей (**{{globalScrobbles}}** скробблов всего)",
+    "🤖 **{{lastgramListeners}}** пользователей lastgram слушали этот трек",
+    "*(у вас {{userScrobbles}} скробблов этого трека)*"
+  ],
+  "compat": {
+    "message": [
+      "{{tierEmoji}} У **{{userA}}** и **{{userB}}** совместимость **{{percentage}}%**!",
+      "**Уровень**: {{tier}}",
+      "",
+      "{{- commonText}}"
+    ],
+    "tiers": {
+      "soulmates": "Родственные души",
+      "highSchoolSweethearts": "Школьная любовь",
+      "marriedCouple": "Женаты",
+      "closeFriends": "Близкие друзья",
+      "friends": "Друзья",
+      "schoolAcquaintances": "Одноклассники",
+      "yourEx": "Ваш бывший",
+      "notReally": "Хм... не особо.",
+      "absolutelyNot": "Категорически нет!"
+    },
+    "artistLine": "- **{{name}}** (вы: {{playsA}}, они: {{playsB}})",
+    "sharedArtists": [
+      "Вы оба слушаете:",
+      "{{- artists}}"
+    ],
+    "noSharedArtists": "У вас нет общих топовых исполнителей."
   }
 }

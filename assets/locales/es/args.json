@@ -7,5 +7,8 @@
   },
   "whoknows": {
     "artist": "nombre del artista"
+  },
+  "emoji": {
+    "emoji": "emoji"
   }
 }

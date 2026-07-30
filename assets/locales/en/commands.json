@@ -136,8 +136,8 @@
     "noArgs": "🤔 You need to provide a track name to get its lyrics."
   },
   "crowns": {
-    "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubo)",
-    "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} roubos)",
+    "crown_one": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} steal)",
+    "crown_other": "👑 {{position}}. **{{artistName}}** - *{{playCount}} scrobbles* ({{count}} steals)",
     "list": [
       "**{{displayName}}**'s crowns on **{{groupName}}**",
       "🎖️ **Total crowns:** {{crownCount}}\n",

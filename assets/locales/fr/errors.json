@@ -22,13 +22,16 @@
     "notLinked": "Désolé, cette commande n'est disponible que pour les utilisateurs qui ont lié leur compte last.fm. Exécutez `/linkfm` pour lier votre compte.",
     "onlyDMs": "Désolé, cette commande ne peut être utilisée que dans les messages privés.",
     "developer": "Désolé, cette commande n'est disponible que pour l'équipe de développement lastgram.",
-    "noDMs": "Désolé, mais cette commande ne peut pas être utilisée dans les messages privés."
+    "noDMs": "Désolé, mais cette commande ne peut pas être utilisée dans les messages privés.",
+    "crownBanned": "Désolé, vous avez été banni des commandes de couronne. $t(errors:common.consultSupport)"
   },
   "command": {
     "missingArgument": "Arguments manquants.\nCette commande doit être utilisée comme ceci : `{{- usage}}`",
     "generic": "Désolé, une erreur inconnue s'est produite lors du traitement de votre commande. $t(errors:common.consultSupport)",
     "invalidArgument": "Argument invalide.\nCette commande doit être utilisée comme ceci : `{{- usage}}`",
-    "collage": "Désolé, une erreur inconnue s'est produite lors du traitement de votre collage. $t(errors:common.tryAgain)"
+    "collage": "Désolé, une erreur inconnue s'est produite lors du traitement de votre collage. $t(errors:common.tryAgain)",
+    "noScrobblesSelf": "Désolé, vous n'avez encore rien scrobblé.",
+    "noScrobblesTarget": "Désolé, l'utilisateur que vous avez indiqué n'a encore rien scrobblé."
   },
   "lastfm": {
     "genericError": "Désolé, une erreur inconnue s'est produite avec last.fm. $t(errors:common.tryAgain)",
