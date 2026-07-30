@@ -87,7 +87,7 @@
     },
     "link": "To link your account, click on the button below.\nAfter connecting your last.fm account, click on the *$t(core:buttons.done)* button.",
     "success": "Hey, `{{username}}`! Your last.fm account has been linked successfully.",
-    "linkingError": "Sorry, an error occurred while linking your account. Please try again.",
+    "linkingError": "I couldn't confirm the link. Make sure you clicked *Allow Access* on the last.fm page before pressing Done — if it's been a while since you got the link, it may have expired, so try `/reg` again.",
     "successWithUsername": "Hey, `{{username}}`! Your last.fm account has been linked successfully, but the username you've set on the bot didn't match. I've set it to `{{username}}`, which is your real one."
   },
   "config": {
