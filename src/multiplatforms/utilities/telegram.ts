@@ -24,11 +24,23 @@ export const handleTelegramMessage = async (botUser: string, data: Record<string
     if (data.text.toLowerCase().includes('lastfmplusbot')) return trashBotEasterEgg(data)
     // if the text is "st" or "now", use Math.random() and if its smaller than 15%, run the easter egg
     if (['st', 'now'].some((d) => data.text.toLowerCase().startsWith(d)) && Math.random() < 0.1) return trashBotEasterEgg(data)
-    if (!data.text.startsWith('/')) return
-    const [name, ...args] = data.text.replace('/', '').replace(`@${botUser}`, '').split(' ')
-    if (!commandRunner.hasCommand(name)) return
 
-    const ctx = Context.fromTelegramMessage(data, args || [], commandRunner)
+    if (data.text.startsWith('/')) {
+        const [name, ...args] = data.text.replace('/', '').replace(`@${botUser}`, '').split(' ')
+        if (!commandRunner.hasCommand(name)) return
+
+        const ctx = Context.fromTelegramMessage(data, args || [], commandRunner)
+        ctx.setCommand({ name: commandRunner.correctName(name)!, protectionLevel: 'unknown' })
+        await commandRunner.runCommand(name, ctx)
+
+        return ctx
+    }
+
+    const name = data.text.trim().toLowerCase().replace(`@${botUser}`.toLowerCase(), '')
+    const command = commandRunner.findCommand(name)
+    if (!command?.noPrefix) return
+
+    const ctx = Context.fromTelegramMessage(data, [], commandRunner)
     ctx.setCommand({ name: commandRunner.correctName(name)!, protectionLevel: 'unknown' })
     await commandRunner.runCommand(name, ctx)
 

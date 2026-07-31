@@ -36,4 +36,5 @@ export default async (ctx: Context) => {
 export const info = {
     description: "See your artist scrobbles and stats",
     aliases: ["meart", "euart"],
+    noPrefix: true,
 }

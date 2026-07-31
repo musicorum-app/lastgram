@@ -34,6 +34,13 @@ mock.module('@/logging/logging', () => ({
     debug: () => {},
     error: () => {},
     info: () => {},
+    warn: () => {},
+    bold: (s: string) => s,
+    italic: (s: string) => s,
+    underline: (s: string) => s,
+    strikethrough: (s: string) => s,
+    grey: (s: string) => s,
+    rainbow: (s: string) => s,
 }))
 
 mock.module('@/prisma/client', () => ({

@@ -37,4 +37,5 @@ export default async (ctx: Context) => {
 export const info = {
     description: "Compare your album scrobbles with a user",
     aliases: ["youalb", "vcalb"],
+    noPrefix: true,
 }

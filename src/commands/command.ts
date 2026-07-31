@@ -10,6 +10,7 @@ export interface Command extends MinimalCommand {
     aliases?: string[]
     args?: CommandArgs[]
     hidden?: boolean
+    noPrefix?: boolean
     interactionHandlers?: { [key: string]: (ctx: MinimalContext) => Promise<void> }
     disabledPlatforms?: string[]
 
