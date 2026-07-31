@@ -77,7 +77,10 @@ export interface RecentTrack {
 
 
 const makeRequest = async (path: string, params: Record<string, any> = {}) => {
-    const url = `${EPISTOLARES_ROOT_URL}${path}?${new URLSearchParams(params)}`
+    const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== '')
+    )
+    const url = `${EPISTOLARES_ROOT_URL}${path}?${new URLSearchParams(cleanParams)}`
     const resp = await fetch(url, {
         method: 'GET',
         headers: {
@@ -140,7 +143,7 @@ export const getAlbumInfo = async (username: string, artist: string, name: strin
     return data as AlbumInfo
 }
 
-export const getTrackInfo = async (username: string, artist: string, album: string, name: string) => {
+export const getTrackInfo = async (username: string, artist: string, album: string | undefined, name: string) => {
     const data = await makeRequest(`/track/info`, {
         username,
         artist,

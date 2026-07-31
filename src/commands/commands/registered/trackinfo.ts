@@ -12,7 +12,7 @@ export default async (ctx: Context, { rawArgs }: Args) => {
     const username = ctx.registeredUserData!.lastFmUsername
 
     let artistName = ""
-    let albumName = "" // optional for trackinfo, we can pass empty string if not known
+    let albumName: string | undefined = undefined
     let trackName = ""
 
     if (!rawArgs) {
@@ -20,13 +20,13 @@ export default async (ctx: Context, { rawArgs }: Args) => {
         if (!nowPlaying?.artist) return ctx.reply('errors:command.noScrobbles')
         artistName = nowPlaying.artist
         trackName = nowPlaying.name || ""
-        albumName = nowPlaying.album || ""
+        albumName = nowPlaying.album || undefined
     } else {
         const split = rawArgs.split(' - ')
         if (split.length < 2) return ctx.reply('errors:command.invalidArgument', { usage: '/trackinfo <artist> - <track>' })
         artistName = split[0].trim()
         trackName = split.slice(1).join(' - ').trim()
-        albumName = "" // when provided by args, we don't know the album yet
+        albumName = undefined
     }
 
     const data = await getTrackInfo(username, artistName, albumName, trackName)

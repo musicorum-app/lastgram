@@ -8,7 +8,8 @@
   "scripts": {
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "test": "bun test",
+    "test": "bun test src",
+    "test:e2e": "bun test tests/e2e",
     "database:generate": "bunx prisma generate",
     "database:deploy": "bunx prisma migrate deploy",
     "database:migrate": "bunx prisma migrate dev",
